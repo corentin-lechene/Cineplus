@@ -20,6 +20,25 @@ export class MovieService {
         return movies.results.map(movie => this.formatMovie(movie));
     }
 
+    static async fetchMovieById(id: string): Promise<Movie> {
+        try {
+            const url = `https://api.themoviedb.org/3/movie/${id}?language=fr`;
+            const options = {
+                method: 'GET',
+                headers: {
+                    accept: 'application/json',
+                    Authorization: `Bearer ${import.meta.env.VITE_MOVIE_DB_API}`
+                }
+            };
+            const res = await fetch(url, options);
+            const data = await res.json();
+            return this.formatMovie(data as MovieDb);
+        } catch(e) {
+            console.error(e);
+            return {} as Movie;
+        }
+    }
+
     static async fetchMoviesByInput(input: string): Promise<Movie[]> {
         try {
             const url = `https://api.themoviedb.org/3/search/movie?query=${input}&language=fr`;

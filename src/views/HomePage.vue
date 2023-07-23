@@ -63,7 +63,11 @@ const swiperOptions = ref({
             <SwiperSlide v-for="i in 2">
               <ion-card>
                 <ion-card-content class="bg-secondary">
-                  <img src="https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive.jpg" alt="img">
+                  <img
+                    src="https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive.jpg"
+                    alt="img"
+                    @click="$router.push(`movies/${i}`)"
+                  >
                 </ion-card-content>
               </ion-card>
             </SwiperSlide>
