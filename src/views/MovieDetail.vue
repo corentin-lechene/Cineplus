@@ -10,14 +10,24 @@ import {
   IonButton,
   IonFooter
 } from "@ionic/vue";
-import {onMounted, reactive} from "vue";
+import {computed, onMounted, reactive} from "vue";
 import {useRouter} from "vue-router";
 import Movie from "@/models/Movie";
 import {MovieDbService} from "@/services/MovieDbService";
+import {MovieService} from "@/services/MovieService";
+import MovieSave from "@/models/MovieSave";
 
 const state = reactive({
-  movie: {} as Movie
+  movie: {} as Movie,
+  movieViewed: {} as MovieSave | undefined,
 });
+
+const buttonText = computed(() => {
+  if(state?.movieViewed) {
+    return `Visionné le ${state.movieViewed.viewedAt}`;
+  }
+  return `J'ai vu ce film`;
+})
 
 const router = useRouter();
 const id = router.currentRoute.value.params.id as string;
@@ -30,6 +40,8 @@ onMounted(async () => {
   MovieDbService.fetchMovieById(id).then((movie) => {
     state.movie = movie;
   });
+
+  state.movieViewed = await MovieService.isMovieViewed(id);
 })
 </script>
 
@@ -63,7 +75,13 @@ onMounted(async () => {
 
     <ion-footer>
       <ion-toolbar color="dark">
-        <ion-button expand="full" class="text-black bg-primary rounded-xl" @click="addMovie()">J'ai vu ce film</ion-button>
+        <ion-button
+            expand="full"
+            class="text-black bg-primary rounded-xl"
+            @click="addMovie()"
+            :disabled="!!state.movieViewed"
+            v-text="buttonText"
+        />
       </ion-toolbar>
     </ion-footer>
 

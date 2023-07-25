@@ -6,11 +6,14 @@ import {MovieDbService} from "@/services/MovieDbService";
 import MovieListItem from "@/components/cards/MovieListItem.vue";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import 'swiper/css';
+import MovieSave from "@/models/MovieSave";
+import {MovieService} from "@/services/MovieService";
 
 const state = reactive({
   movieInput: "",
   movieList: [] as Movie[],
   popularMovies: [] as Movie[],
+  viewedMovies: [] as MovieSave[],
 });
 
 async function searchMovies(input: Event) {
@@ -34,6 +37,7 @@ const swiperOptions = ref({
 
 onMounted(() => {
   MovieDbService.fetchPopularMovies().then(movies => state.popularMovies = movies);
+  MovieService.getViewedMovies().then(movies => state.viewedMovies = movies);
 })
 </script>
 
@@ -100,26 +104,18 @@ onMounted(() => {
             :spaceBetween="30"
             :pagination="{ clickable: true, }"
           >
-            <SwiperSlide class="flex flex-col gap-y-2" v-for="i in 7">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Eiffel_Tower_Vertical.JPG" alt="img">
+            <SwiperSlide class="flex flex-col gap-y-2 relative" v-for="movie in state.viewedMovies">
+              <div v-if="movie.extra && movie.extra > 0" class="absolute text-danger right-1" style="font-size: 0.75em">+{{movie.extra}}€</div>
+              <img :src="movie.url" alt="img">
               <div class="flex flex-col ">
-                <div class="whitespace-nowrap overflow-hidden text-ellipsis">Mission impossible : vraiment trop bien</div>
-                <div class="text-xs text-gray">Visionné le 28 juin 2023</div>
+                <div class="whitespace-nowrap overflow-hidden text-ellipsis">{{ movie.title }}</div>
+                <div class="text-xs text-gray">Visionné le {{ movie.viewedAt }}</div>
               </div>
             </SwiperSlide>
           </Swiper>
         </ion-card>
       </div>
 
-      <!--
-       <div class="flex flex-col">
-                  <img class="w-32" src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Eiffel_Tower_Vertical.JPG"
-                       alt="img">
-                  <ion-card-content class="bg-secondary">
-                    <div>Mission impossible</div>
-                    <div>Visionné le 28 juin 2023</div>
-                  </ion-card-content>
-                </div>-->
     </ion-content>
   </ion-page>
 </template>

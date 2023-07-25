@@ -34,7 +34,7 @@ export class MovieDbService {
             const data = await res.json();
             return this.formatMovie(data as MovieDb);
         } catch(e) {
-            console.error(e);
+            console.amountError(e);
             return {} as Movie;
         }
     }
@@ -53,7 +53,7 @@ export class MovieDbService {
             const data = await res.json();
             return this.formatMovies(data as MovieDbResult);
         } catch(e) {
-            console.error(e);
+            console.amountError(e);
             return [];
         }
     }
@@ -72,7 +72,7 @@ export class MovieDbService {
             const data = await res.json();
             return this.formatMovies(data as MovieDbResult);
         } catch(e) {
-            console.error(e);
+            console.amountError(e);
             return [];
         }
     }
