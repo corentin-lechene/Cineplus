@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {IonContent, IonPage, IonSearchbar, IonCard, IonCardContent} from '@ionic/vue';
-import {onMounted, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import Movie from "@/models/Movie";
 import {MovieDbService} from "@/services/MovieDbService";
 import MovieListItem from "@/components/cards/MovieListItem.vue";
@@ -34,6 +34,10 @@ const swiperOptions = ref({
   },
   freeMode: true,
 });
+
+const totalRentability = computed(() => {
+  return (198.22 / state.viewedMovies.length).toFixed(2);
+})
 
 onMounted(() => {
   MovieDbService.fetchPopularMovies().then(movies => state.popularMovies = movies);
@@ -87,10 +91,13 @@ onMounted(() => {
           <div class="flex flex-col text-white">
             <div class="flex flex-row justify-between">
               <div>Suivi de la rentabilité</div>
-              <div>43,78€</div>
+              <div>{{ totalRentability }}€</div>
             </div>
             <div class="flex flex-row justify-between">
-              <div v-for="i in 15">...</div>
+              <div v-for="i in 15">
+                <span v-if="i <= state.viewedMovies.length" class="text-primary">...</span>
+                <span v-else class="text-white">...</span>
+              </div>
             </div>
           </div>
         </ion-card-content>
