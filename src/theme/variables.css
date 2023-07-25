@@ -83,3 +83,10 @@ ion-button {
   --border-radius: 7px !important;
   border-radius: 7px !important;
 }
+
+.input {
+  --color: white;
+  --background: #313131;
+  --border-radius: 7px;
+  --padding-start: 7px;
+}

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import {IonBadge} from "@ionic/vue";
 import Movie from "@/models/Movie";
 
 const props = defineProps<{ movie: Movie }>();

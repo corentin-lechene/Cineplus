@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import {IonContent, IonPage, IonHeader, IonButtons, IonBackButton, IonTitle, IonToolbar} from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonHeader,
+  IonButtons,
+  IonBackButton,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonFooter
+} from "@ionic/vue";
 import {onMounted, reactive} from "vue";
 import {useRouter} from "vue-router";
 import Movie from "@/models/Movie";
@@ -11,6 +21,10 @@ const state = reactive({
 
 const router = useRouter();
 const id = router.currentRoute.value.params.id as string;
+
+function addMovie() {
+  router.push({path: `/add-movies/${id}`});
+}
 
 onMounted(async () => {
   MovieDbService.fetchMovieById(id).then((movie) => {
@@ -49,7 +63,7 @@ onMounted(async () => {
 
     <ion-footer>
       <ion-toolbar color="dark">
-        <ion-button expand="full" class="text-black bg-primary rounded-xl">J'ai vu ce film</ion-button>
+        <ion-button expand="full" class="text-black bg-primary rounded-xl" @click="addMovie()">J'ai vu ce film</ion-button>
       </ion-toolbar>
     </ion-footer>
 
