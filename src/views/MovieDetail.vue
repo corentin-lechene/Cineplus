@@ -3,7 +3,7 @@ import {IonContent, IonPage, IonHeader, IonButtons, IonBackButton, IonTitle, Ion
 import {onMounted, reactive} from "vue";
 import {useRouter} from "vue-router";
 import Movie from "@/models/Movie";
-import {MovieService} from "@/services/MovieService";
+import {MovieDbService} from "@/services/MovieDbService";
 
 const state = reactive({
   movie: {} as Movie
@@ -13,7 +13,7 @@ const router = useRouter();
 const id = router.currentRoute.value.params.id as string;
 
 onMounted(async () => {
-  MovieService.fetchMovieById(id).then((movie) => {
+  MovieDbService.fetchMovieById(id).then((movie) => {
     state.movie = movie;
   });
 })

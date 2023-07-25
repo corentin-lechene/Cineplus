@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {IonContent, IonPage, IonSearchbar, IonCard, IonCardContent} from '@ionic/vue';
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import Movie from "@/models/Movie";
-import {MovieService} from "@/services/MovieService";
+import {MovieDbService} from "@/services/MovieDbService";
 import MovieListItem from "@/components/cards/MovieListItem.vue";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import 'swiper/css';
@@ -10,6 +10,7 @@ import 'swiper/css';
 const state = reactive({
   movieInput: "",
   movieList: [] as Movie[],
+  popularMovies: [] as Movie[],
 });
 
 async function searchMovies(input: Event) {
@@ -19,12 +20,10 @@ async function searchMovies(input: Event) {
 
   // state.movieList[0] = {"id":575264,"title":"Mission : Impossible - Dead Reckoning Partie 1","url":"https://image.tmdb.org/t/p/w500/bdYbHxECXsN169pVrTz2TobFqXb.jpg","description":"Ethan Hunt et son équipe de l’IMF se lancent dans leur mission la plus périlleuse à ce jour : traquer une effroyable nouvelle arme avant que celle-ci ne tombe entre de mauvaises mains et menace l’humanité entière. Le contrôle du futur et le destin du monde sont en jeu. Alors que les forces obscures de son passé ressurgissent, Ethan s’engage dans une course mortelle autour du globe. Confronté à un puissant et énigmatique ennemi, Ethan réalise que rien ne peut se placer au-dessus de sa mission - pas même la vie de ceux qu’il aime.","release_date":"08 July 2023","vote_average":"7.83"};
   const value = (input.target as HTMLInputElement).value;
-  state.movieList = await MovieService.fetchMoviesByInput(value);
+  state.movieList = await MovieDbService.fetchMoviesByInput(value);
 }
 
 const swiperOptions = ref({
-  // Options de configuration de swiper.js
-  // Vous pouvez les ajuster selon vos besoins
   slidesPerView: 1,
   spaceBetween: 5,
   pagination: {
@@ -32,6 +31,10 @@ const swiperOptions = ref({
   },
   freeMode: true,
 });
+
+onMounted(() => {
+  MovieDbService.fetchPopularMovies().then(movies => state.popularMovies = movies);
+})
 </script>
 
 <template>
@@ -60,13 +63,13 @@ const swiperOptions = ref({
         <div class="text-2xl text-white px-3">Films populaires</div>
         <div>
           <Swiper :options="swiperOptions">
-            <SwiperSlide v-for="i in 2">
+            <SwiperSlide v-for="movie in state.popularMovies">
               <ion-card>
                 <ion-card-content class="bg-secondary">
                   <img
-                    src="https://www.referenseo.com/wp-content/uploads/2019/03/image-attractive.jpg"
+                    :src="movie.backdropUrl"
                     alt="img"
-                    @click="$router.push(`movies/${i}`)"
+                    @click="$router.push(`movies/${movie.id}`)"
                   >
                 </ion-card-content>
               </ion-card>

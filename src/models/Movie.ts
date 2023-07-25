@@ -5,4 +5,5 @@ export default interface Movie {
     description: string;
     vote_average: string;
     release_date: string;
+    backdropUrl: string;
 }
