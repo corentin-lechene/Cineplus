@@ -27,7 +27,7 @@ export class MovieService {
             await MovieService.saveViewedMovies(movieSave);
             return true;
         } catch(e) {
-            console.amountError(e);
+            console.error(e);
             return false;
         }
     }
@@ -40,7 +40,7 @@ export class MovieService {
             const viewed = await storage.get(StorageEnum.viewedMovies);
             return viewed === null ? [] : JSON.parse(viewed) as MovieSave[];
         } catch(e) {
-            console.amountError(e);
+            console.error(e);
             return [];
         }
     }
@@ -59,7 +59,7 @@ export class MovieService {
             currViewedMovie.push(movieSave);
             await storage.set(StorageEnum.viewedMovies, JSON.stringify(currViewedMovie));
         } catch(e) {
-            console.amountError(e);
+            console.error(e);
         }
     }
 

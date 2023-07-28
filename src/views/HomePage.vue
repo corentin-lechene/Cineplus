@@ -8,9 +8,13 @@ import {Swiper, SwiperSlide} from "swiper/vue";
 import 'swiper/css';
 import MovieSave from "@/models/MovieSave";
 import {MovieService} from "@/services/MovieService";
+import {Storage} from "@ionic/storage";
+import {StorageEnum} from "@/models/StorageEnum";
 
 const state = reactive({
   movieInput: "",
+  rentability: 0,
+  prices: {annualPrice: 0, unitaryPlace: 0} as {annualPrice: number, unitaryPlace: number},
   movieList: [] as Movie[],
   popularMovies: [] as Movie[],
   viewedMovies: [] as MovieSave[],
@@ -36,12 +40,28 @@ const swiperOptions = ref({
 });
 
 const totalRentability = computed(() => {
-  return (198.22 / state.viewedMovies.length).toFixed(2);
+  const prices = state.prices;
+  if(prices && state.viewedMovies.length > 0) {
+    const totalPrice = state.viewedMovies.reduce((acc, m) => acc + prices.unitaryPlace + (m?.extra || 0), 0);
+    console.log("totalPrice: ", totalPrice);
+    return parseFloat((totalPrice - prices.annualPrice).toFixed(2));
+  }
+  return 0;
 })
 
-onMounted(() => {
+onMounted(async () => {
   MovieDbService.fetchPopularMovies().then(movies => state.popularMovies = movies);
   MovieService.getViewedMovies().then(movies => state.viewedMovies = movies);
+
+  const storage = new Storage();
+  await storage.create();
+
+  const prices: {annualPrice: string, unitaryPlace: string} | null = await storage.get(StorageEnum.prices);
+  state.prices.annualPrice = parseFloat(prices?.annualPrice || "0");
+  state.prices.unitaryPlace = parseFloat(prices?.unitaryPlace || "0");
+  if(state.prices) {
+    state.rentability = Math.ceil(parseFloat((state.prices.annualPrice / state.prices.unitaryPlace).toFixed(2)));
+  }
 })
 </script>
 
@@ -51,13 +71,13 @@ onMounted(() => {
 
       <div class="flex flex-row justify-between items-center text-white px-3 pt-8 pb-4">
         <div class="text-3xl">Mon Cinéma</div>
-        <div class="">...</div>
+        <div @click="$router.push('Settings')">...</div>
       </div>
 
       <ion-searchbar
           v-model="state.movieInput"
           class="mb-4"
-          debounce="500"
+          :debounce="500"
           color="secondary"
           placeholder="Rechercher"
           inputmode="text"
@@ -91,10 +111,10 @@ onMounted(() => {
           <div class="flex flex-col text-white">
             <div class="flex flex-row justify-between">
               <div>Suivi de la rentabilité</div>
-              <div>{{ totalRentability }}€</div>
+              <div :class="totalRentability >= 0 ? 'text-green-400' : 'text-danger'">{{ totalRentability }}€</div>
             </div>
             <div class="flex flex-row justify-between">
-              <div v-for="i in 15">
+              <div v-for="i in state.rentability">
                 <span v-if="i <= state.viewedMovies.length" class="text-primary">...</span>
                 <span v-else class="text-white">...</span>
               </div>
@@ -105,14 +125,14 @@ onMounted(() => {
 
       <div class="flex flex-col">
         <div class="text-2xl text-white px-3">Films visionnés</div>
-        <ion-card color="dark" class="text-white">
+        <ion-card v-if="state.viewedMovies.length > 0" color="dark" class="text-white">
           <Swiper
             :slidesPerView="2.3"
             :spaceBetween="30"
             :pagination="{ clickable: true, }"
           >
             <SwiperSlide class="flex flex-col gap-y-2 relative" v-for="movie in state.viewedMovies">
-              <div v-if="movie.extra && movie.extra > 0" class="absolute text-danger right-1" style="font-size: 0.75em">+{{movie.extra}}€</div>
+              <div v-if="movie.extra && movie.extra > 0" class="absolute text-danger right-1" style="font-size: 1em">+{{movie.extra}}€</div>
               <img :src="movie.url" alt="img">
               <div class="flex flex-col ">
                 <div class="whitespace-nowrap overflow-hidden text-ellipsis">{{ movie.title }}</div>
@@ -120,6 +140,9 @@ onMounted(() => {
               </div>
             </SwiperSlide>
           </Swiper>
+        </ion-card>
+        <ion-card v-else>
+          <ion-card-content class="bg-secondary">Vous n'avez pas encore visionné de film</ion-card-content>
         </ion-card>
       </div>
 

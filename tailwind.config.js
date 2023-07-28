@@ -9,6 +9,7 @@ export default {
       'sm': '7px',
       DEFAULT: '8px',
       'lg': '10px',
+      'xl': '15px',
     },
     extend: {
       colors: {

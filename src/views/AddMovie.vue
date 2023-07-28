@@ -25,7 +25,7 @@ import dayjs from "dayjs";
 
 const state = reactive({
   movie: {} as Movie,
-  amount: null,
+  amount: "",
   viewedAt: dayjs().toISOString(),
   amountError: "",
   viewedError: "",
@@ -46,7 +46,7 @@ async function saveMovie() {
   state.viewedError = "";
 
   //amount
-  if(state.amount !== null && state.amount <= 0) {
+  if(state.amount !== "" && parseFloat(state.amount) <= 0) {
     state.amountError = "Le montant doit être supérieur à 0";
     return;
   }
