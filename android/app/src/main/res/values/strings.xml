@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">cinema-en-illimite</string>
+    <string name="title_activity_main">cinema-en-illimite</string>
+    <string name="package_name">com.corentinlechene.cinemaenillimite</string>
+    <string name="custom_url_scheme">com.corentinlechene.cinemaenillimite</string>
+</resources>
