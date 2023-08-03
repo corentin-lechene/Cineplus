@@ -5,6 +5,8 @@
     "name": "Cine Pass (-26 ans)",
     "price": 16.90,
     "imageUrl": "cine_pass.png",
+    "payment": "monthly",
+    "expireAt": null,
     "ticketPrice": 10.80
   },
   {
@@ -13,6 +15,8 @@
     "name": "Cine Pass",
     "price": 19.90,
     "imageUrl": "cine_pass.png",
+    "payment": "monthly",
+    "expireAt": null,
     "ticketPrice": 14.20
   },
   {
@@ -21,6 +25,8 @@
     "name": "UGC Illimité (-26 ans)",
     "price": 17.90,
     "imageUrl": "ugc_illimite.png",
+    "payment": "monthly",
+    "expireAt": null,
     "ticketPrice": 9.60
   },
   {
@@ -29,6 +35,8 @@
     "name": "UGC Illimité",
     "price": 21.90,
     "imageUrl": "ugc_illimite.png",
+    "payment": "monthly",
+    "expireAt": null,
     "ticketPrice": 13.90
   }
 ]

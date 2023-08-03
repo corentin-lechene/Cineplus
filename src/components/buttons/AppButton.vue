@@ -1,13 +1,19 @@
 <template>
-  <button class="w-full py-3" :class="classes" :style="style">{{ text }}</button>
+  <button
+    class="w-full py-3"
+    :class="classes"
+    :style="style"
+    @click="emit('onTap')"
+  >{{ text }}
+  </button>
 </template>
 
 <script setup lang="ts">
 
-import {computed} from "vue";
+import {computed, onUnmounted} from "vue";
 type colors = "primary" | "secondary" | "tertiary" | "success" | "warning" | "danger" | "light" | "medium" | "dark";
 
-export interface AppButtonProps {
+interface AppButtonProps {
   color: colors;
   text: string;
   bgColor?: colors;
@@ -16,6 +22,7 @@ export interface AppButtonProps {
 }
 
 const props = defineProps<AppButtonProps>();
+const emit = defineEmits(["onTap"]);
 
 
 /* computed */
