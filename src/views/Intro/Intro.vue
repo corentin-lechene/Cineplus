@@ -1,23 +1,39 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {IonContent, IonFooter, IonHeader, IonLabel, IonModal, IonPage} from "@ionic/vue";
 import AppButton from "@/components/buttons/AppButton.vue";
-import {Subscription} from "@/models";
+import {Subscription, User} from "@/models";
 import SubscriptionsSlides from "@/components/slides/SubscriptionsSlides.vue";
 import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
+import {UserService} from "@/services/user.service";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 
 /* Data */
 let selectedSubscription = ref<Subscription>();
 let openModalSetting = ref(false);
 
-onMounted(async () => {
-  console.log('Intro page mounted');
-});
 
-function saveSubscription() {
-  console.log('saveSubscription', selectedSubscription.value);
+async function saveSubscription() {
+  //todo add notification
   openModalSetting.value = false;
+
+  if(!selectedSubscription.value) {
+    console.error('No subscription selected');
+    return;
+  }
+
+  const newUser: User = {
+    subscriptions: [selectedSubscription.value],
+    movies: [],
+    preferences: {
+      language: "fr"
+    }
+  };
+
+  await UserService.saveUser(newUser);
+  await router.replace('/home');
 }
 </script>
 

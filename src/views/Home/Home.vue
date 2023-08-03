@@ -1,9 +1,12 @@
 <script setup lang="ts">
+  import {IonContent, IonPage} from "@ionic/vue";
 
 </script>
 
 <template>
-  <div>Home page</div>
+  <ion-page>
+    <ion-content>page home</ion-content>
+  </ion-page>
 </template>
 
 <style scoped>
