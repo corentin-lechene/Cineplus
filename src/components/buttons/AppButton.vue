@@ -1,6 +1,6 @@
 <template>
   <button
-    class="w-full py-3"
+    class="w-full"
     :class="classes"
     :style="style"
     @click="emit('onTap')"
@@ -19,6 +19,7 @@ interface AppButtonProps {
   bgColor?: colors;
   fontSize?: "xs" | "sm" | "md" | "lg" | "xl";
   borderRadius?: "sm" | "md" | "lg" | "xl";
+  dense?: boolean;
 }
 
 const props = defineProps<AppButtonProps>();
@@ -40,11 +41,13 @@ const style = computed(() => {
     lg: "22px",
     xl: "25px"
   }
+  console.log(props?.dense)
   return {
     backgroundColor: `var(--ion-color-${props?.bgColor || "primary"})`,
     color: `var(--ion-color-${props.color})`,
-    borderRadius: borderSize[props?.borderRadius || "lg"],
-    fontSize: fontSize[props?.fontSize || "md"]
+    borderRadius: props?.dense ? borderSize['md'] : borderSize[props?.borderRadius || "lg"],
+    fontSize: props?.dense ? fontSize['sm'] : fontSize[props?.fontSize || "md"],
+    padding: props?.dense ? '0.50em 0' : '1em 0',
   }
 });
 const classes = computed(() => {
