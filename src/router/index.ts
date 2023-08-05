@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import Home from "@/views/Home/Home.vue";
 
+//todo create navigation guard
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -9,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/home',
-    component: Home
+    component: Home,
   },
   {
     path: '/intro',

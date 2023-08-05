@@ -7,12 +7,16 @@ import SubscriptionsSlides from "@/components/slides/SubscriptionsSlides.vue";
 import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
 import {UserService} from "@/services/user.service";
 import {useRouter} from "vue-router";
+import {checkbox} from "ionicons/icons";
+import {useUserStore} from "@/stores/user";
 
 const router = useRouter();
 
 /* Data */
 let selectedSubscription = ref<Subscription>();
 let openModalSetting = ref(false);
+
+const userStore = useUserStore();
 
 
 async function saveSubscription() {
@@ -32,7 +36,7 @@ async function saveSubscription() {
     }
   };
 
-  await UserService.saveUser(newUser);
+  await userStore.setUser(newUser);
   await router.replace('/home');
 }
 </script>

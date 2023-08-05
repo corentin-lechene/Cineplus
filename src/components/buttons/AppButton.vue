@@ -35,7 +35,7 @@ const style = computed(() => {
     xl: "12px"
   };
   const fontSize = {
-    xs: "12px",
+    xs: "13px",
     sm: "15px",
     md: "18px",
     lg: "22px",
@@ -46,7 +46,7 @@ const style = computed(() => {
     backgroundColor: `var(--ion-color-${props?.bgColor || "primary"})`,
     color: `var(--ion-color-${props.color})`,
     borderRadius: props?.dense ? borderSize['md'] : borderSize[props?.borderRadius || "lg"],
-    fontSize: props?.dense ? fontSize['sm'] : fontSize[props?.fontSize || "md"],
+    fontSize: props?.dense ? fontSize['xs'] : fontSize[props?.fontSize || "md"],
     padding: props?.dense ? '0.50em 0' : '1em 0',
   }
 });
