@@ -3,26 +3,35 @@ import {IonCard, IonCardContent, IonLabel} from "@ionic/vue";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import AppButton from "@/components/buttons/AppButton.vue";
 import 'swiper/css';
+
 import {useUserStore} from "@/stores/user";
+import {onMounted} from "vue";
 
 const userStore = useUserStore();
 
+onMounted(() => {
+  userStore.loadUser();
+})
 
 </script>
 
 <template>
   <ion-label color="dark" class="text-2xl px-4">Ma List</ion-label>
   <Swiper :slides-per-view="1.10" :space-between="-5" allow-touch-move>
-    <SwiperSlide v-for="movie in userStore.user!.watchlist">
+    <SwiperSlide v-for="movie in userStore.user?.watchlist || []">
       <ion-card color="warning" class="py-1">
         <ion-card-content class="flex justify-center">
-          <div class="relative flex justify-center">
+          <div class="relative flex justify-center w-full">
             <img
+              v-if="movie.backdropUrl"
               class="rounded-lg"
               :src="movie.backdropUrl"
               alt="img"
               @click="$router.push(`movies/${movie.id}`)"
             />
+            <div v-else class="flex h-40">
+              <ion-label class="mt-10" color="dark">Aucune image fournie</ion-label>
+            </div>
             <div class="flex justify-center absolute w-full h-2/6 bottom-0 rounded-b-lg bg-black bg-opacity-60">
               <ion-label class="text-center mt-1" color="light">{{ movie.title }}</ion-label>
             </div>
@@ -33,7 +42,6 @@ const userStore = useUserStore();
                 dense
             />
           </div>
-
         </ion-card-content>
       </ion-card>
     </SwiperSlide>

@@ -5,9 +5,7 @@ import AppButton from "@/components/buttons/AppButton.vue";
 import {Subscription, User} from "@/models";
 import SubscriptionsSlides from "@/components/slides/SubscriptionsSlides.vue";
 import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
-import {UserService} from "@/services/user.service";
 import {useRouter} from "vue-router";
-import {checkbox} from "ionicons/icons";
 import {useUserStore} from "@/stores/user";
 
 const router = useRouter();
@@ -33,7 +31,9 @@ async function saveSubscription() {
     movies: [],
     preferences: {
       language: "fr"
-    }
+    },
+    watchlist: [],
+    isConfigured: true
   };
 
   await userStore.setUser(newUser);

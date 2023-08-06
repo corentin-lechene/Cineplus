@@ -13,4 +13,5 @@ export interface User {
     movies: UserMovie[];
     watchlist: Movie[];
     preferences: Preferences;
+    isConfigured: boolean;
 }
