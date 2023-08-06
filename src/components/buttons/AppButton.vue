@@ -4,13 +4,16 @@
     :class="classes"
     :style="style"
     @click="emit('onTap')"
-  >{{ text }}
+  >
+    <ion-label color="dark">{{text}}</ion-label>
   </button>
 </template>
 
 <script setup lang="ts">
 
-import {computed, onUnmounted} from "vue";
+import {computed} from "vue";
+import {IonLabel} from "@ionic/vue";
+
 type colors = "primary" | "secondary" | "tertiary" | "success" | "warning" | "danger" | "light" | "medium" | "dark";
 
 interface AppButtonProps {
