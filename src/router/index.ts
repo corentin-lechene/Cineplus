@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
+import {createRouter, createWebHistory} from '@ionic/vue-router';
+import {RouteRecordRaw} from 'vue-router';
 import Home from "@/views/Home/Home.vue";
+import {isConfigured} from "@/router/guards";
 
 //todo create navigation guard
 const routes: Array<RouteRecordRaw> = [
@@ -11,6 +12,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     component: Home,
+    beforeEnter: isConfigured(),
   },
   {
     path: '/intro',
