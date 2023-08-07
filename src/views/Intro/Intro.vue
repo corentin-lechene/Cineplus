@@ -28,7 +28,7 @@ async function saveSubscription() {
 
   const newUser: User = {
     subscriptions: [selectedSubscription.value],
-    movies: [],
+    viewedMovies: [],
     preferences: {
       language: "fr"
     },

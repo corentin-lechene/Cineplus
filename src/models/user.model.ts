@@ -1,6 +1,6 @@
 import {Movie, Preferences, Subscription} from './index';
 
-export interface UserMovie {
+export interface ViewedMovie {
     subscription: Subscription;
     movie: Movie;
     viewedAt: Date;
@@ -10,7 +10,7 @@ export interface UserMovie {
 
 export interface User {
     subscriptions: Subscription[];
-    movies: UserMovie[];
+    viewedMovies: ViewedMovie[];
     watchlist: Movie[];
     preferences: Preferences;
     isConfigured: boolean;

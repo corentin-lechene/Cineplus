@@ -1,4 +1,4 @@
-import {TheMovieDb, TheMovieDbResponse} from "@/models/index";
+import {TheMovieDb, TheMovieDbResponse} from "@/models";
 
 export class TheMovieDbService {
     static async fetchMovieById(id: string): Promise<TheMovieDb | null> {

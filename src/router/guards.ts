@@ -1,4 +1,4 @@
-import {NavigationGuardWithThis, useRouter} from "vue-router";
+import {NavigationGuardWithThis} from "vue-router";
 import {useUserStore} from "@/stores/user";
 
 export function isConfigured(): NavigationGuardWithThis<undefined> {
