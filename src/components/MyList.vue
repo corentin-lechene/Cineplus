@@ -17,17 +17,23 @@ onMounted(() => {
 
 <template>
   <ion-label color="dark" class="text-2xl px-4">Ma List</ion-label>
-  <Swiper :slides-per-view="1.10" :space-between="-5" allow-touch-move>
+<!--  todo refaire ici l'espace est mauvais-->
+  <Swiper
+      v-if="userStore.user && userStore.user.watchlist.length > 0"
+      :slides-per-view="userStore.user.watchlist.length === 1 ? 1 : 1.10"
+      :space-between="-5"
+      allow-touch-move
+  >
     <SwiperSlide v-for="movie in userStore.user?.watchlist || []">
       <ion-card color="warning" class="py-1">
         <ion-card-content class="flex justify-center">
           <div class="relative flex justify-center w-full">
             <img
-              v-if="movie.backdropUrl"
-              class="rounded-lg"
-              :src="movie.backdropUrl"
-              alt="img"
-              @click="$router.push(`movies/${movie.id}`)"
+                v-if="movie.backdropUrl"
+                class="rounded-lg"
+                :src="movie.backdropUrl"
+                alt="img"
+                @click="$router.push(`movies/${movie.id}`)"
             />
             <div v-else class="flex h-40">
               <ion-label class="mt-10" color="dark">Aucune image fournie</ion-label>
@@ -46,4 +52,7 @@ onMounted(() => {
       </ion-card>
     </SwiperSlide>
   </Swiper>
+  <ion-card v-else>
+    <ion-card-content class="bg-secondary">Vous n'avez pas enregistré de film</ion-card-content>
+  </ion-card>
 </template>

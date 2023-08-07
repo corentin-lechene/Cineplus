@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import {computed, onMounted} from "vue";
 
 interface SubscriptionImageProps {
   imageUrl: string;

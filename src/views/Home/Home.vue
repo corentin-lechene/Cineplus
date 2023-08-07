@@ -2,6 +2,7 @@
 import {IonContent, IonPage} from "@ionic/vue";
 import HomeHeader from "@/views/Home/components/HomeHeader.vue";
 import MyList from "@/components/MyList.vue";
+import ViewedMovies from "@/components/ViewedMovies.vue";
 
 </script>
 
@@ -13,6 +14,8 @@ import MyList from "@/components/MyList.vue";
     <ion-content>
 
       <MyList />
+
+      <ViewedMovies />
 
     </ion-content>
   </ion-page>

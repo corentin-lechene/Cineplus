@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {computed, onMounted} from "vue";
-import {IonFooter, IonButtons, IonHeader, IonBackButton, IonTitle, IonSelect, IonSelectOption, IonItem, IonLabel, IonList, IonListHeader, IonInput} from "@ionic/vue";
+import {IonFooter, IonButtons, IonHeader, IonBackButton, IonTitle, IonItem, IonLabel, IonList, IonListHeader, IonInput} from "@ionic/vue";
 import {Subscription} from "@/models";
 import AppButton from "@/components/buttons/AppButton.vue";
 import SubscriptionImage from "@/components/SubscriptionImage.vue";
