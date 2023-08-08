@@ -54,7 +54,7 @@ onMounted(() => {
       </ion-card>
     </SwiperSlide>
   </Swiper>
-  <ion-card v-else>
-    <ion-card-content class="bg-secondary">Vous n'avez pas enregistré de film</ion-card-content>
+  <ion-card v-else class="flex justify-center h-40">
+    <ion-label color="medium" class="m-auto">Vous n'avez pas enregistré de film</ion-label>
   </ion-card>
 </template>
