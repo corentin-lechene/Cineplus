@@ -12,13 +12,18 @@ export class TheMovieDbService {
                 }
             };
             const res = await fetch(url, options);
+            if (!res.ok) {
+                return null;
+            }
+
             const data = await res.json();
             return data as TheMovieDb;
-        } catch(e) {
+        } catch (e) {
             console.error(e);
             return null;
         }
     }
+
 
     static async fetchMoviesByText(input: string): Promise<TheMovieDb[]> {
         try {
@@ -31,6 +36,10 @@ export class TheMovieDbService {
                 }
             };
             const res = await fetch(url, options);
+            if (!res.ok) {
+                return [];
+            }
+
             const data: TheMovieDbResponse = await res.json();
             return data?.results;
         } catch(e) {
@@ -50,6 +59,10 @@ export class TheMovieDbService {
                 }
             };
             const res = await fetch(url, options);
+            if (!res.ok) {
+                return [];
+            }
+
             const data: TheMovieDbResponse = await res.json();
             return data?.results;
         } catch(e) {

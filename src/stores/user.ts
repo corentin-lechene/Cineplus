@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
-import {User, ViewedMovie} from "@/models";
+import {TheMovieDb, User, ViewedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
 import {PickerColumn, PickerColumnOption} from "@ionic/vue";
-import dayjs from "dayjs";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -35,87 +34,6 @@ export const useUserStore = defineStore('user', {
     actions: {
         async loadUser() {
             this.user = this.user ?? await UserService.getUser();
-            this.user!.watchlist.push({
-                id: 1,
-                title: "Test",
-                overview: "Test",
-                posterUrl: "https://image.tmdb.org/t/p/w500/dlFcQNj29jS9t4VLcGUoFefeUTu.jpg",
-                backdropUrl: "https://image.tmdb.org/t/p/w500/dlFcQNj29jS9t4VLcGUoFefeUTu.jpg",
-                releasedAt: new Date(),
-                rating: 2,
-            });
-            this.user!.viewedMovies.push({
-                subscription: {
-                    id: 1,
-                    name: "Test",
-                    ticketPrice: 2,
-                    expireAt: null,
-                    payment: "monthly",
-                    price: 2,
-                    imageUrl: "",
-                    brand: "Test",
-                },
-                movie: {
-                    id: 1,
-                    title: "Test",
-                    overview: "Test",
-                    posterUrl: "https://image.tmdb.org/t/p/w500/bdYbHxECXsN169pVrTz2TobFqXb.jpg",
-                    backdropUrl: "https://image.tmdb.org/t/p/w500/dlFcQNj29jS9t4VLcGUoFefeUTu.jpg",
-                    releasedAt: new Date(),
-                    rating: 2,
-                },
-                viewedAt: dayjs().subtract(2, "year").toDate(),
-                extra: 9,
-                note: "q"
-            });
-            this.user!.viewedMovies.push({
-                subscription: {
-                    id: 1,
-                    name: "Test",
-                    ticketPrice: 2,
-                    expireAt: null,
-                    payment: "monthly",
-                    price: 2,
-                    imageUrl: "",
-                    brand: "Test",
-                },
-                movie: {
-                    id: 1,
-                    title: "Test",
-                    overview: "Test",
-                    posterUrl: "https://image.tmdb.org/t/p/w500/bdYbHxECXsN169pVrTz2TobFqXb.jpg",
-                    backdropUrl: "https://image.tmdb.org/t/p/w500/dlFcQNj29jS9t4VLcGUoFefeUTu.jpg",
-                    releasedAt: new Date(),
-                    rating: 2,
-                },
-                viewedAt: new Date(),
-                extra: 9,
-                note: "q"
-            });
-            this.user!.viewedMovies.push({
-                subscription: {
-                    id: 1,
-                    name: "Test",
-                    ticketPrice: 2,
-                    expireAt: null,
-                    payment: "monthly",
-                    price: 2,
-                    imageUrl: "",
-                    brand: "Test",
-                },
-                movie: {
-                    id: 1,
-                    title: "Test",
-                    overview: "Test",
-                    posterUrl: "https://image.tmdb.org/t/p/w500/bdYbHxECXsN169pVrTz2TobFqXb.jpg",
-                    backdropUrl: "https://image.tmdb.org/t/p/w500/dlFcQNj29jS9t4VLcGUoFefeUTu.jpg",
-                    releasedAt: new Date(),
-                    rating: 2,
-                },
-                viewedAt: new Date(),
-                extra: 9,
-                note: "q"
-            });
         },
         async getUser() {
             return this.user ?? await UserService.getUser();
@@ -125,5 +43,16 @@ export const useUserStore = defineStore('user', {
 
             this.user = user;
         },
+        /* movies */
+        addToWatchList(theMovieDb: TheMovieDb) {
+            if(!this.user) return;
+            this.user.watchlist.push(theMovieDb);
+            UserService.saveUser(this.user).catch();
+        },
+        removeFromWatchList(theMovieDb: TheMovieDb) {
+            if(!this.user) return;
+            this.user.watchlist = this.user.watchlist.filter(m => m.id !== theMovieDb.id);
+            UserService.saveUser(this.user).catch();
+        }
     }
 });

@@ -22,10 +22,14 @@ const routes: Array<RouteRecordRaw> = [
   //   path: '/subscriptions',
   //   component: () => import('@/views/Intro/Subscriptions')
   // },
-  // {
-  //   path: '/movie/:id',
-  //   component: () => import('@/views/Intro/Movie.vue')
-  // },
+  {
+    path: '/movie-details/:id',
+    component: () => import('@/views/MovieDetails/MovieDetails.vue')
+  },
+  {
+    path: '/search-movie',
+    component: () => import('@/views/SearchMovie/SearchMovie.vue')
+  },
   // {
   //   path: '/settings',
   //   component: () => import('@/views/Intro/Settings.vue')

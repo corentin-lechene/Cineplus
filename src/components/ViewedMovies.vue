@@ -3,7 +3,7 @@ import {IonCard, IonCardContent, IonLabel, IonPicker, PickerButton} from "@ionic
 import {Swiper, SwiperSlide} from "swiper/vue";
 
 import {useUserStore} from "@/stores/user";
-import {Events, onMounted, ref} from "vue";
+import {onMounted, ref} from "vue";
 import dayjs from "dayjs";
 
 const userStore = useUserStore();
@@ -15,7 +15,7 @@ const buttons = ref<PickerButton[]>([
   },
   {
     text: 'Valider',
-    handler: (row: {years: {value: string}}) => {
+    handler: (row: {years: {value: string, text: string}}) => {
       userStore.selectedYear.text = row.years.text;
       userStore.selectedYear.value = row.years.value;
     }
@@ -52,7 +52,7 @@ onMounted(() => {
   >
     <SwiperSlide v-for="viewedMovie in userStore.getViewedMovies">
       <div class="flex flex-col gap-y-2 rounded-xl">
-        <img class="rounded-md" :src="viewedMovie.movie.posterUrl" alt="img">
+        <img class="rounded-md" :src="viewedMovie.movie.posterUrl" alt="img" @click="$router.push(`movie-details/${viewedMovie.movie.id}`)">
         <div class="flex flex-col">
           <ion-label color="dark" class="whitespace-nowrap overflow-hidden text-ellipsis">
             {{ viewedMovie.movie.title }}

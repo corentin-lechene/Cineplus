@@ -1,4 +1,4 @@
-import {Movie, Preferences, Subscription} from './index';
+import {Movie, Preferences, Subscription, TheMovieDb} from './index';
 
 export interface ViewedMovie {
     subscription: Subscription;
@@ -11,7 +11,7 @@ export interface ViewedMovie {
 export interface User {
     subscriptions: Subscription[];
     viewedMovies: ViewedMovie[];
-    watchlist: Movie[];
+    watchlist: TheMovieDb[];
     preferences: Preferences;
     isConfigured: boolean;
 }
