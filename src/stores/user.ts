@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import {TheMovieDb, User, ViewedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
 import {PickerColumn, PickerColumnOption} from "@ionic/vue";
+import dayjs from "dayjs";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -11,8 +12,9 @@ export const useUserStore = defineStore('user', {
     getters: {
         getViewedMovies(): ViewedMovie[] {
             if(!this.user) return [];
+            console.log("this.user.viewedMovies: ", this.user.viewedMovies);
             return this.user.viewedMovies
-                .sort((a, b) => b.viewedAt.getTime() - a.viewedAt.getTime())
+                .sort((a, b) => dayjs(b.viewedAt).unix() - dayjs(a.viewedAt).unix())
                 .filter(vm => {
                     if(this.selectedYear.value === "all") return true;
                     return vm.viewedAt.getFullYear().toString() === this.selectedYear.value;
@@ -23,9 +25,9 @@ export const useUserStore = defineStore('user', {
             const name = "years";
             const columnOptions: PickerColumnOption[] = [{text: "Tous", value: "all"}];
             for (const userMovie of this.user.viewedMovies) {
-                const year = userMovie.viewedAt.getFullYear().toString();
+                const year = dayjs(userMovie.viewedAt).year();
                 if(!columnOptions.find(y => y.value === year)) {
-                    columnOptions.push({text: year, value: year});
+                    columnOptions.push({text: String(year), value: year});
                 }
             }
             return [{name, options: columnOptions}];
@@ -52,6 +54,16 @@ export const useUserStore = defineStore('user', {
         removeFromWatchList(theMovieDb: TheMovieDb) {
             if(!this.user) return;
             this.user.watchlist = this.user.watchlist.filter(m => m.id !== theMovieDb.id);
+            UserService.saveUser(this.user).catch();
+        },
+        addMovieToViewed(viewedMovie: ViewedMovie) {
+            if(!this.user) return;
+            this.user.viewedMovies.push(viewedMovie);
+            UserService.saveUser(this.user).catch();
+        },
+        removeMovieFromViewed(viewedMovie: ViewedMovie) {
+            if(!this.user) return;
+            this.user.viewedMovies = this.user.viewedMovies.filter(vm => vm.movie.id !== viewedMovie.movie.id);
             UserService.saveUser(this.user).catch();
         }
     }

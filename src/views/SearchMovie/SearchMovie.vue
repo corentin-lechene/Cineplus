@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import {IonContent, IonPage, IonToolbar, IonButtons, IonBackButton, IonSearchbar, IonProgressBar} from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonSearchbar,
+  IonProgressBar,
+  IonLabel
+} from "@ionic/vue";
 import AppHeader from "@/components/headers/AppHeader.vue";
 import {onMounted, ref} from "vue";
 
@@ -13,8 +22,12 @@ let searchMovies = ref<TheMovieDb[]>([]);
 
 onMounted(() => {
   TheMovieDbService.fetchPopularMovies()
-    .then((movies) => { popularMovies.value = movies.slice(0, 8); })
-    .finally(() => {  loadingMovies.value = false; });
+      .then((movies) => {
+        popularMovies.value = movies.slice(0, 8);
+      })
+      .finally(() => {
+        loadingMovies.value = false;
+      });
 });
 
 function searchMovie(input: Event) {
@@ -22,9 +35,11 @@ function searchMovie(input: Event) {
     return;
   }
 
+  loadingMovies.value = true;
   const value = (input.target as HTMLInputElement).value;
   TheMovieDbService.fetchMoviesByText(value)
-      .then(movies => searchMovies.value = movies);
+      .then(movies => searchMovies.value = movies)
+      .finally(() => loadingMovies.value = false);
 }
 
 
@@ -32,10 +47,10 @@ function searchMovie(input: Event) {
 
 <template>
   <ion-page>
-    <AppHeader class="flex flex-row justify-between">
+    <AppHeader class="flex flex-row justify-between pb-3">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button ></ion-back-button>
+          <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-searchbar
             placeholder="rechercher un film"
@@ -62,7 +77,8 @@ function searchMovie(input: Event) {
 
 
 <style scoped>
-  ion-toolbar {
-    --background: white;
-  }
+ion-toolbar {
+  --background: white;
+  --border-style: none;
+}
 </style>

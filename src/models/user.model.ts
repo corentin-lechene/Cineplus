@@ -1,8 +1,8 @@
-import {Movie, Preferences, Subscription, TheMovieDb} from './index';
+import {Preferences, Subscription, TheMovieDb} from './index';
 
 export interface ViewedMovie {
     subscription: Subscription;
-    movie: Movie;
+    movie: TheMovieDb;
     viewedAt: Date;
     extra: number;
     note: string;

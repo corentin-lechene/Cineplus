@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {IonCard, IonCardContent, IonLabel, IonPicker, PickerButton} from "@ionic/vue";
+import {IonCard, IonLabel, IonPicker, PickerButton} from "@ionic/vue";
 import {Swiper, SwiperSlide} from "swiper/vue";
 
 import {useUserStore} from "@/stores/user";
@@ -52,7 +52,7 @@ onMounted(() => {
   >
     <SwiperSlide v-for="viewedMovie in userStore.getViewedMovies">
       <div class="flex flex-col gap-y-2 rounded-xl">
-        <img class="rounded-md" :src="viewedMovie.movie.posterUrl" alt="img" @click="$router.push(`movie-details/${viewedMovie.movie.id}`)">
+        <img class="rounded-md" :src="`https://image.tmdb.org/t/p/w154${viewedMovie.movie.poster_path}`" alt="img" @click="$router.push(`movie-details/${viewedMovie.movie.id}`)">
         <div class="flex flex-col">
           <ion-label color="dark" class="whitespace-nowrap overflow-hidden text-ellipsis">
             {{ viewedMovie.movie.title }}

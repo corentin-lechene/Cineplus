@@ -3,6 +3,7 @@
     class="w-full"
     :class="classes"
     :style="style"
+    :disabled="disabled || false"
     @click="emit('onTap')"
   >
     <ion-label color="dark">{{text}}</ion-label>
@@ -23,6 +24,7 @@ interface AppButtonProps {
   fontSize?: "xs" | "sm" | "md" | "lg" | "xl";
   borderRadius?: "sm" | "md" | "lg" | "xl";
   dense?: boolean;
+  disabled?: boolean;
 }
 
 const props = defineProps<AppButtonProps>();
@@ -44,13 +46,12 @@ const style = computed(() => {
     lg: "22px",
     xl: "25px"
   }
-  console.log(props?.dense)
   return {
     backgroundColor: `var(--ion-color-${props?.bgColor || "primary"})`,
     color: `var(--ion-color-${props.color})`,
     borderRadius: props?.dense ? borderSize['md'] : borderSize[props?.borderRadius || "lg"],
     fontSize: props?.dense ? fontSize['xs'] : fontSize[props?.fontSize || "md"],
-    padding: props?.dense ? '0.50em 0' : '1em 0',
+    padding: props?.dense ? '0.50em 0' : '0.70em 0',
   }
 });
 const classes = computed(() => {
