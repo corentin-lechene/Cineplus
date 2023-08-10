@@ -3,6 +3,10 @@ import {useUserStore} from "@/stores/user";
 
 export function isConfigured(): NavigationGuardWithThis<undefined> {
     return async (to, from, next) => {
+        if(to.path === '/intro') {
+            return next();
+        }
+
         console.log("isConfigured guard");
         const userStore = useUserStore();
         const user = await userStore.getUser();

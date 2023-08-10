@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {TheMovieDb, User, ViewedMovie} from "@/models";
+import {Subscription, TheMovieDb, User, ViewedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
 import {PickerColumn, PickerColumnOption} from "@ionic/vue";
 import dayjs from "dayjs";
@@ -31,6 +31,13 @@ export const useUserStore = defineStore('user', {
                 }
             }
             return [{name, options: columnOptions}];
+        },
+
+        /* subscriptions */
+        getLastSubscription(): Subscription | null {
+            if(!this.user) return null;
+            const sub = this.user.subscriptions;
+            return sub[sub.length - 1] ?? null;
         }
     },
     actions: {
@@ -65,6 +72,11 @@ export const useUserStore = defineStore('user', {
             if(!this.user) return;
             this.user.viewedMovies = this.user.viewedMovies.filter(vm => vm.movie.id !== viewedMovie.movie.id);
             UserService.saveUser(this.user).catch();
+        },
+        /* app */
+        resetUser() {
+            this.user = null;
+            UserService.deleteUser().catch();
         }
     }
 });

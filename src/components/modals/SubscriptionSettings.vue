@@ -49,7 +49,7 @@ function updateTicketPrice(e: CustomEvent) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full">
+  <div v-if="value" class="flex flex-col items-center w-full">
     <ion-header class="h-20">
       <ion-buttons slot="start">
         <ion-back-button></ion-back-button>
@@ -111,6 +111,9 @@ function updateTicketPrice(e: CustomEvent) {
     <ion-footer class="px-4 py-4">
       <app-button class="h-full" color="dark" text="Terminer" @click="emit('close')" />
     </ion-footer>
+  </div>
+  <div v-else class="flex h-20">
+    <div class="m-auto">chargement...</div>
   </div>
 </template>
 

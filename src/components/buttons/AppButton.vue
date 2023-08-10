@@ -6,14 +6,14 @@
     :disabled="disabled || false"
     @click="emit('onTap')"
   >
-    <ion-label color="dark">{{text}}</ion-label>
+    <ion-text :color="color">{{text}}</ion-text>
   </button>
 </template>
 
 <script setup lang="ts">
 
 import {computed} from "vue";
-import {IonLabel} from "@ionic/vue";
+import {IonText} from "@ionic/vue";
 
 type colors = "primary" | "secondary" | "tertiary" | "success" | "warning" | "danger" | "light" | "medium" | "dark";
 
@@ -63,5 +63,7 @@ const classes = computed(() => {
 </script>
 
 <style scoped>
-
+  ion-button {
+    --ion-color-danger: true;
+  }
 </style>

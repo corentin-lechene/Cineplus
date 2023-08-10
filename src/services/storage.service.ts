@@ -20,4 +20,9 @@ export class StorageService {
     protected static async init() {
         return (new Storage()).create();
     }
+
+    static async delete(key: StorageKey) {
+        const storage = await StorageService.init();
+        return storage.remove(key);
+    }
 }

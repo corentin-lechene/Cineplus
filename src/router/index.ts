@@ -12,7 +12,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     component: Home,
-    beforeEnter: isConfigured(),
   },
   {
     path: '/intro',
@@ -30,15 +29,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/search-movie',
     component: () => import('@/views/SearchMovie/SearchMovie.vue')
   },
-  // {
-  //   path: '/settings',
-  //   component: () => import('@/views/Intro/Settings.vue')
-  // }
+  {
+    path: '/settings',
+    component: () => import('@/views/Settings/Settings.vue')
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
-})
+});
+
+router.beforeEach(isConfigured());
 
 export default router

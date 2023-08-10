@@ -9,4 +9,8 @@ export class UserService {
     static async saveUser(user: User): Promise<User | null> {
         return StorageService.save<User>(StorageKey.USER, user);
     }
+
+    static async deleteUser() {
+        return StorageService.delete(StorageKey.USER);
+    }
 }
