@@ -5,6 +5,6 @@ export interface Subscription {
     price: number;
     imageUrl: string;
     payment: 'monthly' | 'yearly';
-    expireAt: Date | null; // Iso String
+    expireAt: Date | null;
     ticketPrice: number;
 }

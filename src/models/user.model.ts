@@ -1,17 +1,9 @@
-import {Preferences, Subscription, TheMovieDb} from './index';
-
-export interface ViewedMovie {
-    subscription: Subscription;
-    movie: TheMovieDb;
-    viewedAt: Date;
-    extra: number;
-    note: string;
-}
+import {Movie, Preferences, Subscription, ViewedMovie} from './index';
 
 export interface User {
     subscriptions: Subscription[];
     viewedMovies: ViewedMovie[];
-    watchlist: TheMovieDb[];
+    watchlist: Movie[];
     preferences: Preferences;
     isConfigured: boolean;
 }
