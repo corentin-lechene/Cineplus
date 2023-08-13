@@ -41,6 +41,7 @@ export const useUserStore = defineStore('user', {
         }
     },
     actions: {
+        /* user */
         async loadUser() {
             this.user = this.user ?? await UserService.getUser();
         },
@@ -49,7 +50,10 @@ export const useUserStore = defineStore('user', {
         },
         async setUser(user: User) {
             await UserService.saveUser(user);
-
+            this.user = user;
+        },
+        async updateUser(user: User) {
+            await UserService.saveUser(user);
             this.user = user;
         },
         /* movies */

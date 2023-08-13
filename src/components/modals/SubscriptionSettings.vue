@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import {computed, onMounted} from "vue";
+import {computed} from "vue";
 import {IonFooter} from "@ionic/vue";
 import {Subscription} from "@/models";
 import AppButton from "@/components/buttons/AppButton.vue";
 import Header from "@/components/headers/Header.vue";
 import BaseInput from "@/components/inputs/BaseInput.vue";
-import dayjs from "@/configs/dayjs.config";
+
 import {SubscriptionService} from "@/services/subscription.service";
 import {ToastService} from "@/services/toast.service";
 
@@ -17,11 +17,6 @@ const modelValue = computed<Subscription>({
   set: (val) => emit("update:modelValue", val)
 });
 
-
-
-onMounted(() => {
-  modelValue.value.expireAt = dayjs('18/09/2023', 'DD/MM/YYYY').format('YYYY-MM-DD');
-});
 
 function beforeSave() {
   console.log("before save");

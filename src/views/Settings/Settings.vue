@@ -1,29 +1,28 @@
 <script setup lang="ts">
 
-import {
-  IonBackButton,
-  IonButtons,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonText,
-  IonLabel,
-  IonContent,
-  IonActionSheet
-} from "@ionic/vue";
-import BaseHeader from "@/components/headers/BaseHeader.vue";
-import SubscriptionImage from "@/components/SubscriptionImage.vue";
+import {IonPage, IonIcon, IonText, IonContent, IonActionSheet} from "@ionic/vue";
 import {onMounted, ref} from "vue";
 import {useUserStore} from "@/stores/user";
-import {Subscription} from "@/models";
-import AppButton from "@/components/buttons/AppButton.vue";
 import {useRouter} from "vue-router";
+import {add} from "ionicons/icons";
+
+import {Subscription} from "@/models";
+import Header from "@/components/headers/Header.vue";
+import AppButton from "@/components/buttons/AppButton.vue";
+import SubscriptionImage from "@/components/SubscriptionImage.vue";
+import Separator from "@/components/Separator.vue";
+import BaseModal from "@/components/modals/BaseModal.vue";
+import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
+import {ToastService} from "@/services/toast.service";
+import SubscriptionAdd from "@/components/modals/SubscriptionAdd.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
 
 const subscription = ref<Subscription | null>(null);
 const openModalReset = ref(false);
+const openModalSubscriptionSetting = ref(false);
+const openModalAddSubscription = ref(false);
 const actionSheetButtons = [
   {
     text: 'Delete',
@@ -44,11 +43,35 @@ const actionSheetButtons = [
 
 onMounted(() => {
   userStore.loadUser()
-      .then(() => subscription.value = userStore.getLastSubscription);
+      .then(() => subscription.value = userStore.lastSubscription);
 });
 
+
+function updateSubscription() {
+  if(!userStore.user || !subscription.value) {
+    return;
+  }
+
+  const index = userStore.user.subscriptions.findIndex(s => s.id === subscription.value!.id);
+  userStore.user.subscriptions[index] = subscription.value;
+  userStore.updateUser(userStore.user)
+      .catch(() => ToastService.error('Une erreur est survenue').catch())
+      .finally(() => openModalSubscriptionSetting.value = false);
+}
+
+function addSubscription(newSubscription: Subscription) {
+  if(!userStore.user) {
+    return;
+  }
+
+  userStore.user.subscriptions.push(newSubscription);
+  userStore.updateUser(userStore.user)
+      .then(() => subscription.value = newSubscription)
+      .catch(() => ToastService.error('Une erreur est survenue').catch())
+      .finally(() => openModalAddSubscription.value = false);
+}
 function resetApp(e: CustomEvent) {
-  if(e.detail.data.action === 'delete') {
+  if (e?.detail?.data?.action === 'delete') {
     openModalReset.value = true;
     userStore.resetUser();
     router.replace('/intro');
@@ -59,38 +82,38 @@ function resetApp(e: CustomEvent) {
 <template>
   <ion-page>
 
-    <BaseHeader class="flex flex-row justify-between">
-      <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
-        </ion-buttons>
-        <ion-title color="dark" class="text-2xl">Paramètres</ion-title>
-      </ion-toolbar>
-    </BaseHeader>
+    <Header title="Paramètres" back-button default-href="/home"/>
 
     <ion-content>
-      <div class="px-4">
+      <div class="px-4 flex flex-col gap-y-2">
 
         <div v-if="subscription" class="flex flex-col gap-y-2.5">
           <div class="flex flex-row justify-between items-center">
-            <ion-label color="dark" class="text-2xl">Mon abonnement</ion-label>
-<!--            <ion-icon :icon="add" size="large"></ion-icon>-->
+            <ion-text color="dark" class="text-2xl">Mon abonnement</ion-text>
+            <ion-icon :icon="add" size="large" @click="openModalAddSubscription = true"></ion-icon>
           </div>
-          <SubscriptionImage :image-url="subscription?.imageUrl || ''"/>
-          <ion-text color="medium" class="text-center">{{ subscription?.name }}</ion-text>
+          <SubscriptionImage :subscription="subscription" @click="openModalSubscriptionSetting = true"/>
         </div>
 
-
-        <div class="h-0.5 w-full bg-gray-400 my-5"></div>
+        <Separator class="my-2"/>
         <app-button color="danger" text="Réinitialiser" bg-color="light" @onTap="openModalReset = true"/>
       </div>
+
+      <!-- Modals     -->
+      <BaseModal v-model="openModalSubscriptionSetting">
+        <SubscriptionSettings v-model="subscription" @onSave="updateSubscription()"/>
+      </BaseModal>
+
+      <BaseModal v-model="openModalAddSubscription">
+        <SubscriptionAdd @onSave="addSubscription" />
+      </BaseModal>
     </ion-content>
 
     <ion-action-sheet
-      :buttons="actionSheetButtons"
-      :is-open="openModalReset"
-      header="Reinitialiser"
-      @didDismiss="resetApp"
+        :buttons="actionSheetButtons"
+        :is-open="openModalReset"
+        header="Reinitialiser"
+        @didDismiss="resetApp"
     />
   </ion-page>
 </template>

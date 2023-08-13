@@ -20,7 +20,7 @@ const props = defineProps<HeaderProps>();
       <ion-buttons v-if="backButton" slot="start">
         <ion-back-button text="Retour" :defaultHref="defaultHref" />
       </ion-buttons>
-      <ion-title color="dark" class="text-2xl font-medium">{{ title }}</ion-title>
+      <ion-title color="dark" class="text-2xl font-medium px-2">{{ title }}</ion-title>
     </ion-toolbar>
   </BaseHeader>
 </template>
