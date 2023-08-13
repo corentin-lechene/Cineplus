@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {IonLabel} from "@ionic/vue";
-import AppHeader from "@/components/headers/AppHeader.vue";
+import AppHeader from "@/components/headers/BaseHeader.vue";
 </script>
 
 <template>

@@ -9,7 +9,7 @@ import {
   IonProgressBar,
   IonLabel
 } from "@ionic/vue";
-import AppHeader from "@/components/headers/AppHeader.vue";
+import AppHeader from "@/components/headers/BaseHeader.vue";
 import {onMounted, ref} from "vue";
 
 import MovieListItem from "@/components/cards/MovieListItem.vue";

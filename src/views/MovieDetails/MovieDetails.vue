@@ -20,7 +20,7 @@ import {useRouter} from "vue-router";
 import {computed, onMounted, reactive, ref} from "vue";
 import {TheMovieDbService} from "@/services/the-movie-db.service";
 import {TheMovieDb, ViewedMovie} from "@/models";
-import AppHeader from "@/components/headers/AppHeader.vue";
+import AppHeader from "@/components/headers/BaseHeader.vue";
 import AddToList from "@/components/cards/AddToList.vue";
 import dayjs from "dayjs";
 import AppButton from "@/components/buttons/AppButton.vue";

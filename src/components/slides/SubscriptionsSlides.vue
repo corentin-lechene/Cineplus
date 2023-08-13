@@ -7,6 +7,8 @@ import {Swiper as SwiperClass} from "swiper/types";
 import subscriptionsData from "@/data/subscriptions.json";
 import 'swiper/css';
 import SubscriptionImage from "@/components/SubscriptionImage.vue";
+import BaseSlide from "@/components/slides/BaseSlide.vue";
+import {Subscription} from "@/models";
 
 
 const props = defineProps(['modelValue']);
@@ -28,16 +30,17 @@ function onSwiperChange(e: SwiperClass) {
 </script>
 
 <template>
-  <Swiper
-    :slides-per-view="1.15"
-    allow-touch-move
+<BaseSlide
+    v-model="value"
+    :items="subscriptionsData"
+    :slidesPerView="1.15"
+    :initialSlide="1"
+    :centeredSlides="true"
+    :space-between="10"
     @slideChange="onSwiperChange"
   >
-    <SwiperSlide v-for="sub in subscriptionsData">
-      <ion-card class="flex flex-col items-center shadow-none gap-y-1">
-        <SubscriptionImage :imageUrl="sub.imageUrl" />
-        <span class="text-xl">{{ sub.name }}</span>
-      </ion-card>
-    </SwiperSlide>
-  </Swiper>
+    <template #default="{item}: {item: Subscription}">
+      <SubscriptionImage :subscription="item"/>
+    </template>
+  </BaseSlide>
 </template>

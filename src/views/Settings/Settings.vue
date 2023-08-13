@@ -11,7 +11,7 @@ import {
   IonContent,
   IonActionSheet
 } from "@ionic/vue";
-import AppHeader from "@/components/headers/AppHeader.vue";
+import BaseHeader from "@/components/headers/BaseHeader.vue";
 import SubscriptionImage from "@/components/SubscriptionImage.vue";
 import {onMounted, ref} from "vue";
 import {useUserStore} from "@/stores/user";
@@ -59,14 +59,14 @@ function resetApp(e: CustomEvent) {
 <template>
   <ion-page>
 
-    <AppHeader class="flex flex-row justify-between">
+    <BaseHeader class="flex flex-row justify-between">
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
         </ion-buttons>
         <ion-title color="dark" class="text-2xl">Paramètres</ion-title>
       </ion-toolbar>
-    </AppHeader>
+    </BaseHeader>
 
     <ion-content>
       <div class="px-4">

@@ -53,15 +53,15 @@ export const useUserStore = defineStore('user', {
             this.user = user;
         },
         /* movies */
-        addToWatchList(theMovieDb: TheMovieDb) {
+        addToWatchList(theMovieDb?: TheMovieDb) {
             if(!this.user) return;
-            this.user.watchlist.push(theMovieDb);
-            UserService.saveUser(this.user).catch();
+            // this.user.watchlist.push(theMovieDb);
+            // UserService.saveUser(this.user).catch();
         },
-        removeFromWatchList(theMovieDb: TheMovieDb) {
+        removeFromWatchList(theMovieDb?: TheMovieDb) {
             if(!this.user) return;
-            this.user.watchlist = this.user.watchlist.filter(m => m.id !== theMovieDb.id);
-            UserService.saveUser(this.user).catch();
+            // this.user.watchlist = this.user.watchlist.filter(m => m.id !== parseInt(theMovieDb.id));
+            // UserService.saveUser(this.user).catch();
         },
         addMovieToViewed(viewedMovie: ViewedMovie) {
             if(!this.user) return;
