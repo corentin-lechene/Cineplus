@@ -28,9 +28,27 @@ export class TheMovieDbService {
         }
     }
 
-    static async fetchPopularMovies(): Promise<TheMovieDb[]> {
+    static async fetchPopularMovies(page: number = 1): Promise<TheMovieDb[]> {
         try {
-            const url = `https://api.themoviedb.org/3/movie/now_playing?language=fr&region=fr`;
+            const url = `https://api.themoviedb.org/3/movie/now_playing?language=fr&region=fr&page=${page}`;
+            const options = TheMovieDbService.setOptions();
+            const res = await fetch(url, options);
+            if (!res.ok) {
+                return [];
+            }
+
+            const data: TheMovieDbResponse = await res.json();
+            if(!data || !data.results) return [];
+            return data.results;
+        } catch(e) {
+            console.error(e);
+            return [];
+        }
+    }
+
+    static async fetchByText(text: string, page: number = 1): Promise<TheMovieDb[]> {
+        try {
+            const url = `https://api.themoviedb.org/3/search/movie?query=${text}&language=fr&page=${page}`;
             const options = TheMovieDbService.setOptions();
             const res = await fetch(url, options);
             if (!res.ok) {

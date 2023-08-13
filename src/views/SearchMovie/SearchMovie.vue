@@ -7,7 +7,9 @@ import {
   IonBackButton,
   IonSearchbar,
   IonProgressBar,
-  IonLabel
+  IonLabel,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent, InfiniteScrollCustomEvent,
 } from "@ionic/vue";
 import AppHeader from "@/components/headers/BaseHeader.vue";
 import {onMounted, ref} from "vue";
@@ -19,11 +21,14 @@ import {MovieService} from "@/services/movie.service";
 const loadingMovies = ref(true);
 let popularMovies = ref<Movie[]>([]);
 let searchMovies = ref<Movie[]>([]);
+let inputText = ref("");
+let searchMoviesPage = ref(1);
+let popularMoviesPage = ref(1);
 
 onMounted(() => {
   MovieService.fetchPopularMovies()
       .then((movies) => {
-        popularMovies.value = movies.slice(0, 8);
+        popularMovies.value = movies;
       })
       .finally(() => {
         loadingMovies.value = false;
@@ -36,12 +41,25 @@ function searchMovie(input: Event) {
   }
 
   loadingMovies.value = true;
+  searchMoviesPage.value = 1;
   const value = (input.target as HTMLInputElement).value;
-  // TheMovieDbService.fetchMoviesByText(value)
-  //     .then(movies => searchMovies.value = movies)
-  //     .finally(() => loadingMovies.value = false);
+  inputText.value = value;
+  MovieService.fetchByText(value)
+      .then(movies => searchMovies.value = movies)
+      .finally(() => loadingMovies.value = false);
 }
 
+function infiniteSearchMovie(e: InfiniteScrollCustomEvent) {
+  MovieService.fetchByText(inputText.value, ++searchMoviesPage.value)
+      .then(movies => searchMovies.value = searchMovies.value.concat(movies))
+      .finally(() => e.target.complete());
+}
+
+function infinitePopularMovies(e: InfiniteScrollCustomEvent) {
+  MovieService.fetchPopularMovies(++popularMoviesPage.value)
+      .then(movies => popularMovies.value = popularMovies.value.concat(movies))
+      .finally(() => e.target.complete());
+}
 
 </script>
 
@@ -65,10 +83,16 @@ function searchMovie(input: Event) {
       <div v-if="searchMovies.length > 0" class="flex flex-col gap-y-3 px-4 pb-4">
         <ion-label color="dark" class="text-xl italic">Résultats de recherche</ion-label>
         <MovieListItem v-for="movie in searchMovies" :key="movie.id" :movie="movie"/>
+        <ion-infinite-scroll @ionInfinite="infiniteSearchMovie">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </div>
       <div v-else class="flex flex-col gap-y-3 px-4 pb-4">
         <ion-label color="dark" class="text-xl italic">Les films populaires</ion-label>
         <MovieListItem v-for="movie in popularMovies" :key="movie.id" :movie="movie"/>
+        <ion-infinite-scroll @ionInfinite="infinitePopularMovies">
+          <ion-infinite-scroll-content></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
       </div>
 
     </ion-content>

@@ -16,28 +16,24 @@ export class MovieService {
         }
     }
 
-    // static async fetchMoviesByText(input: string): Promise<Movie[]> {
-    //     try {
-    //         const url = `https://api.themoviedb.org/3/search/movie?query=${input}&language=fr`;
-    //         const options = TheMovieDbService.setOptions();
-    //         const res = await fetch(url, options);
-    //         if (!res.ok) {
-    //             return [];
-    //         }
-    //
-    //         const data: TheMovieDbResponse = await res.json();
-    //         if(!data || !data.results) return [];
-    //         const movies = data.results.map(m => TheMovieDbService.toMovie(m));
-    //         return Promise.all(movies);
-    //     } catch(e) {
-    //         console.error(e);
-    //         return [];
-    //     }
-    // }
-
-    static async fetchPopularMovies(): Promise<Movie[]> {
+    static async fetchByText(input: string, page: number = 1): Promise<Movie[]> {
         try {
-            const response = await TheMovieDbService.fetchPopularMovies();
+            const response = await TheMovieDbService.fetchByText(input, page);
+            if(response.length === 0) {
+                return [];
+            }
+
+            const movies = response.map(m => MovieService.toMovie(m));
+            return Promise.all(movies);
+        } catch(e) {
+            console.error(e);
+            return [];
+        }
+    }
+
+    static async fetchPopularMovies(page: number = 1): Promise<Movie[]> {
+        try {
+            const response = await TheMovieDbService.fetchPopularMovies(page);
             if(response.length === 0) {
                 return [];
             }
