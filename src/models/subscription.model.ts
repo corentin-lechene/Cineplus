@@ -6,5 +6,5 @@ export interface Subscription {
     imageUrl: string;
     payment: 'monthly' | 'yearly';
     expireAt: string | null;
-    ticketPrice: number;
+    ticketPrice: number; //todo ticketPrice history
 }

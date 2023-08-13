@@ -2,7 +2,7 @@
 import {IonCard, IonLabel} from "@ionic/vue";
 import {Movie, TheMovieDb} from "@/models";
 import dayjs from "dayjs";
-import AddToList from "@/components/cards/AddToList.vue";
+import AddToList from "@/components/AddToList.vue";
 
 const props = defineProps<{ movie: Movie }>();
 

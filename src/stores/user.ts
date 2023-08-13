@@ -60,15 +60,15 @@ export const useUserStore = defineStore('user', {
         },
         removeFromWatchList(movie: Movie) {
             if(!this.user) return;
-            // this.user.watchlist = this.user.watchlist.filter(m => m.id !== parseInt(movie.id));
-            // UserService.saveUser(this.user).catch();
+            this.user.watchlist = this.user.watchlist.filter(m => m.id !== movie.id);
+            UserService.saveUser(this.user).catch();
         },
-        addMovieToViewed(viewedMovie: ViewedMovie) {
+        addToViewedMovie(viewedMovie: ViewedMovie) {
             if(!this.user) return;
             this.user.viewedMovies.push(viewedMovie);
             UserService.saveUser(this.user).catch();
         },
-        removeMovieFromViewed(viewedMovie: ViewedMovie) {
+        removeFromViewedMovie(viewedMovie: ViewedMovie) {
             if(!this.user) return;
             this.user.viewedMovies = this.user.viewedMovies.filter(vm => vm.movie.id !== viewedMovie.movie.id);
             UserService.saveUser(this.user).catch();

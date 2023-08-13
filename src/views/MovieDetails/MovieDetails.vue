@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import {IonContent, IonPage, IonFooter, IonText} from "@ionic/vue";
-import {onMounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
 
 import {Movie, ViewedMovie} from "@/models";
 import {MovieService} from "@/services/movie.service";
 import dayjs from "@/configs/dayjs.config";
+import {ToastService} from "@/services/toast.service";
 
-import AddToList from "@/components/cards/AddToList.vue";
+import AddToList from "@/components/AddToList.vue";
 import AppButton from "@/components/buttons/AppButton.vue";
 import Header from "@/components/headers/Header.vue";
+import BaseModal from "@/components/modals/BaseModal.vue";
+import MovieSave from "@/components/forms/MovieSave.vue";
 
 
 const router = useRouter();
@@ -19,9 +22,12 @@ const id = router.currentRoute.value.params.id as string;
 const userStore = useUserStore();
 
 let movie = ref<Movie | undefined>();
-let viewedMovie = ref<ViewedMovie | undefined>(undefined);
-const openModalViewMovie = ref(false);
+const openModalSaveMovie = ref(false);
 
+const viewedMovie = computed(() => {
+  if(!userStore.user) return null;
+  return userStore.user.viewedMovies.find(m => String(m.movie.id) === id);
+});
 
 onMounted(async () => {
   userStore.loadUser().catch();
@@ -32,11 +38,25 @@ onMounted(async () => {
     return;
   }
   movie.value = result;
-
-  if(userStore.user) {
-    viewedMovie.value = userStore.user.viewedMovies.find(m => String(m.movie.id) === id);
-  }
 });
+
+function saveMovie(form: {date: number, extra: number, note: string}) {
+  if(!userStore.lastSubscription) {
+    ToastService.error('Vous devez avoir un abonnement pour sauvegarder un film').catch();
+    return;
+  }
+
+  const viewedMovie: ViewedMovie = {
+    subscription: userStore.lastSubscription,
+    movie: movie.value!,
+    viewedAt: dayjs(form.date).toDate(),
+    extra: form.extra,
+    note: form.note,
+  }
+  userStore.addToViewedMovie(viewedMovie);
+  userStore.removeFromWatchList(movie.value!);
+  openModalSaveMovie.value = false;
+}
 
 
 </script>
@@ -80,16 +100,24 @@ onMounted(async () => {
           <ion-text color="dark" class="text-2xl mt-4 mb-2">Ma note personnelle</ion-text>
           <ion-text color="medium">{{ viewedMovie.note }}</ion-text>
         </div>
+
+        <div v-if="viewedMovie" class="flex flex-col">
+          <ion-text color="dark" class="text-2xl mt-4 mb-2">Achats supplémentaires</ion-text>
+          <ion-text color="medium">{{ viewedMovie.extra }}</ion-text>
+        </div>
       </div>
 
       <!-- modal       -->
+      <BaseModal v-model="openModalSaveMovie">
+        <MovieSave @onSave="saveMovie"/>
+      </BaseModal>
     </ion-content>
 
     <ion-footer class="py-4 px-4 flex">
       <ion-text v-if="viewedMovie" color="medium" class="italic text-lg m-auto">
         Visionné le {{ dayjs(viewedMovie.viewedAt).format('DD/MM/YYYY') }}
       </ion-text>
-      <app-button v-else color="dark" text="J'ai vu ce film" @onTap="openModalViewMovie = true" />
+      <app-button v-else color="dark" text="J'ai vu ce film" @onTap="openModalSaveMovie = true" />
     </ion-footer>
 
   </ion-page>
