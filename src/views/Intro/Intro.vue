@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
-import {IonContent, IonFooter, IonHeader, IonModal, IonPage, IonText} from "@ionic/vue";
+import {ref} from "vue";
+import {IonContent, IonFooter, IonHeader, IonPage, IonText, toastController} from "@ionic/vue";
 import AppButton from "@/components/buttons/AppButton.vue";
 import {Subscription, User} from "@/models";
 import SubscriptionsSlides from "@/components/slides/SubscriptionsSlides.vue";
 import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
-import BaseSlide from "@/components/slides/BaseSlide.vue";
-import subscriptionsData from "@/data/subscriptions.json";
 import BaseModal from "@/components/modals/BaseModal.vue";
+import {ToastService} from "@/services/toast.service";
 
 const router = useRouter();
 
@@ -24,8 +23,7 @@ async function saveSubscription() {
   openModalSetting.value = false;
 
   if(!selectedSubscription.value) {
-    //todo add notification
-    console.error('No subscription selected');
+    ToastService.error('Le formulaire est invalid').catch();
     return;
   }
 
@@ -40,6 +38,7 @@ async function saveSubscription() {
   };
 
   await userStore.setUser(newUser);
+  ToastService.success('Bienvenue sur Cine+').catch();
   await router.replace('/home');
 }
 </script>

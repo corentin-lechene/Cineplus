@@ -7,6 +7,7 @@ import Header from "@/components/headers/Header.vue";
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import dayjs from "@/configs/dayjs.config";
 import {SubscriptionService} from "@/services/subscription.service";
+import {ToastService} from "@/services/toast.service";
 
 const props = defineProps(['modelValue']);
 const emit = defineEmits(['update:modelValue', 'onSave']);
@@ -25,8 +26,7 @@ onMounted(() => {
 function beforeSave() {
   console.log("before save");
   if(!SubscriptionService.isValid(modelValue.value)) {
-    //todo notification error
-    console.log("Error");
+    ToastService.error('Le formulaire est invalide').catch();
     return;
   }
 

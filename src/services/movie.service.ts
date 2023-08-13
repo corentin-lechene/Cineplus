@@ -56,6 +56,7 @@ export class MovieService {
             id: parseInt(theMovieDb.id),
             title: theMovieDb.title,
             overview: theMovieDb.overview,
+            hasPoster: !!theMovieDb.poster_path,
             posterUrl: {
                 w92: `https://image.tmdb.org/t/p/w92${theMovieDb.poster_path}`,
                 w154: `https://image.tmdb.org/t/p/w154${theMovieDb.poster_path}`,
@@ -65,6 +66,7 @@ export class MovieService {
                 w780: `https://image.tmdb.org/t/p/w780${theMovieDb.poster_path}`,
                 original: `https://image.tmdb.org/t/p/original${theMovieDb.poster_path}`,
             },
+            hasBackdrop: !!theMovieDb.backdrop_path,
             backdropUrl: {
                 w300: `https://image.tmdb.org/t/p/w300${theMovieDb.backdrop_path}`,
                 w780: `https://image.tmdb.org/t/p/w780${theMovieDb.backdrop_path}`,

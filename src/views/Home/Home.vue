@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import {IonContent, IonPage} from "@ionic/vue";
 import HomeHeader from "@/views/Home/components/HomeHeader.vue";
-import {onMounted} from "vue";
-import {MovieService} from "@/services/movie.service";
-import dayjs from "@/configs/dayjs.config";
+import WatchlistSlides from "@/components/slides/WatchlistSlides.vue";
 
-onMounted(() => {
-  
-})
 
 </script>
 
@@ -18,7 +13,9 @@ onMounted(() => {
     
     <ion-content>
 
-
+      <div class="pl-4">
+        <WatchlistSlides />
+      </div>
 
     </ion-content>
   </ion-page>

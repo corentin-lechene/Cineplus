@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {Subscription, TheMovieDb, User, ViewedMovie} from "@/models";
+import {Movie, Subscription, User, ViewedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
 import {PickerColumn, PickerColumnOption} from "@ionic/vue";
 import dayjs from "dayjs";
@@ -53,14 +53,14 @@ export const useUserStore = defineStore('user', {
             this.user = user;
         },
         /* movies */
-        addToWatchList(theMovieDb?: TheMovieDb) {
+        addToWatchList(movie: Movie) {
             if(!this.user) return;
-            // this.user.watchlist.push(theMovieDb);
-            // UserService.saveUser(this.user).catch();
+            this.user.watchlist.push(movie);
+            UserService.saveUser(this.user).catch();
         },
-        removeFromWatchList(theMovieDb?: TheMovieDb) {
+        removeFromWatchList(movie: Movie) {
             if(!this.user) return;
-            // this.user.watchlist = this.user.watchlist.filter(m => m.id !== parseInt(theMovieDb.id));
+            // this.user.watchlist = this.user.watchlist.filter(m => m.id !== parseInt(movie.id));
             // UserService.saveUser(this.user).catch();
         },
         addMovieToViewed(viewedMovie: ViewedMovie) {

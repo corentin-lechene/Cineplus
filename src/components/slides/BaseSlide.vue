@@ -3,10 +3,11 @@
 import {computed} from "vue";
 import {Swiper, SwiperSlide} from "swiper/vue";
 import {Swiper as SwiperClass} from "swiper/types";
+import 'swiper/css';
 
 
 interface BaseSlideProps {
-  modelValue: any;
+  modelValue?: any;
   items: any[];
   slidesPerView: number;
   initialSlide?: number;
@@ -14,6 +15,7 @@ interface BaseSlideProps {
   spaceBetween?: number;
   autoplay?: boolean;
   loop?: boolean;
+  direction?: 'horizontal' | 'vertical';
 }
 
 interface BaseSlideEvents<T> {
@@ -41,17 +43,18 @@ function onSlideChange(e: SwiperClass) {
 <template>
   <Swiper
       :slides-per-view="props.slidesPerView"
-      :initial-slide="props.initialSlide"
       :centered-slides="props.centeredSlides"
       :centered-slides-bounds="props.centeredSlides"
       :space-between="props.spaceBetween"
       :autoplay="props.autoplay"
       :loop="props.autoplay"
+      :initial-slide="props.initialSlide || 0"
+      :direction="props.direction || 'horizontal'"
       free-mode
       allow-touch-move
       @slideChange="onSlideChange"
   >
-    <SwiperSlide v-for="item in items">
+    <SwiperSlide v-for="(item, i) in items" :key="item?.id || i">
       <slot name="default" :item="item"></slot>
     </SwiperSlide>
   </Swiper>

@@ -20,7 +20,9 @@ export interface Movie {
     title: string;
     overview: string;
     posterUrl: PosterSize;
+    hasPoster: boolean;
     backdropUrl: BackdropSize;
+    hasBackdrop: boolean;
     releasedAt: Date;
     rating: number;
 }
