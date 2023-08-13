@@ -19,13 +19,14 @@ import {
 import {useRouter} from "vue-router";
 import {computed, onMounted, reactive, ref} from "vue";
 import {TheMovieDbService} from "@/services/the-movie-db.service";
-import {TheMovieDb, ViewedMovie} from "@/models";
+import {Movie, TheMovieDb, ViewedMovie} from "@/models";
 import AppHeader from "@/components/headers/BaseHeader.vue";
 import AddToList from "@/components/cards/AddToList.vue";
 import dayjs from "dayjs";
 import AppButton from "@/components/buttons/AppButton.vue";
 import {arrowBack} from "ionicons/icons";
 import {useUserStore} from "@/stores/user";
+import {MovieService} from "@/services/movie.service";
 
 interface FormViewedMovie {
   date: string;
@@ -38,7 +39,7 @@ const id = router.currentRoute.value.params.id as string;
 
 const userStore = useUserStore();
 
-let movie = ref<TheMovieDb>();
+let movie = ref<Movie>();
 const openModalViewMovie = ref(false);
 
 const formViewedMovie = reactive<FormViewedMovie>({
@@ -68,12 +69,12 @@ const viewedAt = computed(() => {
 onMounted(async () => {
   userStore.loadUser().catch();
 
-  const theMovieDb = await TheMovieDbService.fetchMovieById(id);
-  if (!theMovieDb) {
+  const result = await MovieService.fetchMovieById(id);
+  if (!result) {
     router.back();
     return;
   }
-  movie.value = theMovieDb;
+  movie.value = result;
 });
 
 
@@ -114,26 +115,32 @@ function saveMovie() {
     <ion-content>
       <div v-if="movie" class="px-4">
         <div class="relative mb-2">
-          <img class="rounded-lg" :src="`https://image.tmdb.org/t/p/original${movie.backdrop_path || ''}`" alt="img"/>
+          <img
+              v-if="movie.hasBackdrop"
+              class="rounded-lg"
+              :src="movie.backdropUrl.original"
+              alt="img"
+          />
+          <div v-else class="text-center py-10">Image not found</div>
+
           <div class="absolute bottom-0 right-0">
-            <AddToList :the-movie-db="movie"/>
+            <AddToList :movie="movie"/>
           </div>
         </div>
         <ion-text class="mt-2 text-2xl">{{ movie.title }}</ion-text>
         <div class="flex flex-row justify-between">
           <ion-text color="medium" class="italic">
-            Sortie le {{ dayjs(movie.release_date).format('DD/MM/YYYY') }}
+            Sortie le {{ dayjs(movie.releasedAt).format('DD/MM/YYYY') }}
           </ion-text>
           <div>
-            <ion-text color="dark" class="text-lg">{{ movie.vote_average.toFixed(2) }}</ion-text>
+            <ion-text color="dark" class="text-lg">{{ movie.rating }}</ion-text>
             <ion-text color="medium" class="text-sm"> /10</ion-text>
           </div>
         </div>
 
         <div class="flex flex-col">
           <ion-text color="dark" class="text-2xl mt-4 mb-2">Synopsis</ion-text>
-          <ion-text color="dark" class="">{{ movie.overview }}</ion-text>
-
+          <ion-text color="medium">{{ movie.overview }}</ion-text>
         </div>
       </div>
 

@@ -74,7 +74,7 @@ export class MovieService {
                 original: `https://image.tmdb.org/t/p/original${theMovieDb.backdrop_path}`,
             },
             releasedAt: new Date(theMovieDb.release_date),
-            rating: theMovieDb.vote_average,
+            rating: parseFloat(theMovieDb.vote_average.toFixed(2)),
         }
     }
 }

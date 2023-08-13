@@ -10,7 +10,7 @@ export const useUserStore = defineStore('user', {
         selectedYear: {text: 'Tous', value: 'all'} as {text: string | 'all', value: string | 'all'}
     }),
     getters: {
-        getViewedMovies(): ViewedMovie[] {
+        viewedMovies(): ViewedMovie[] {
             if(!this.user) return [];
             console.log("this.user.viewedMovies: ", this.user.viewedMovies);
             return this.user.viewedMovies
@@ -34,7 +34,7 @@ export const useUserStore = defineStore('user', {
         },
 
         /* subscriptions */
-        getLastSubscription(): Subscription | null {
+        lastSubscription(): Subscription | null {
             if(!this.user) return null;
             const sub = this.user.subscriptions;
             return sub[sub.length - 1] ?? null;

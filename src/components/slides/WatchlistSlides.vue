@@ -4,8 +4,7 @@ import BaseSlide from "@/components/slides/BaseSlide.vue";
 import {Movie} from "@/models";
 import {useUserStore} from "@/stores/user";
 import {onMounted} from "vue";
-import {IonCard, IonLabel, IonText} from "@ionic/vue";
-import AppButton from "@/components/buttons/AppButton.vue";
+import {IonCard, IonText} from "@ionic/vue";
 
 const userStore = useUserStore();
 
@@ -49,8 +48,8 @@ onMounted(() => {
         </div>
       </template>
     </BaseSlide>
-    <ion-card v-else class="flex justify-center h-40 m-2 mx-4">
-      <ion-text color="medium" class="m-auto">Vous n'avez pas enregistré de film</ion-text>
+    <ion-card v-else class="flex justify-center h-40 m-0 mt-2 mr-4">
+      <ion-text color="medium" class="m-auto">Vous n'avez pas encore de film</ion-text>
     </ion-card>
   </div>
 </template>
