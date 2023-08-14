@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {computed} from "vue";
-import {IonFooter} from "@ionic/vue";
+import {IonFooter, IonText} from "@ionic/vue";
 import {Subscription} from "@/models";
 import AppButton from "@/components/buttons/AppButton.vue";
 import Header from "@/components/headers/Header.vue";
@@ -52,11 +52,23 @@ function beforeSave() {
       <BaseInput
         v-model="modelValue.expireAt"
         type="date"
-        label="Expiration"
         placeholder="Expiration"
-        required
         after-now
-      />
+      >
+        <template #label>
+          <div class="flex flex-row justify-between items-center">
+            <ion-text color="dark" class="text-xl">Expiration</ion-text>
+            <ion-text
+                v-if="modelValue.expireAt"
+                color="danger"
+                class="text-sm"
+                @click="modelValue.expireAt = null"
+            >
+              Supprimer
+            </ion-text>
+          </div>
+        </template>
+      </BaseInput>
     </div>
 
     <ion-footer class="px-4 py-4">

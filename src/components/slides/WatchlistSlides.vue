@@ -49,7 +49,7 @@ onMounted(() => {
       </template>
     </BaseSlide>
     <ion-card v-else class="flex justify-center h-40 m-0 mt-2 mr-4">
-      <ion-text color="medium" class="m-auto">Vous n'avez pas encore de film</ion-text>
+      <ion-text color="medium" class="m-auto">Vous n'avez pas encore ajouté de film</ion-text>
     </ion-card>
   </div>
 </template>

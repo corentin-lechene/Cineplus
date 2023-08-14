@@ -68,7 +68,7 @@ function infinitePopularMovies(e: InfiniteScrollCustomEvent) {
     <AppHeader class="flex flex-row justify-between pb-3">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
+          <ion-back-button text="Retour" default-href="/home"></ion-back-button>
         </ion-buttons>
         <ion-searchbar
             placeholder="rechercher un film"

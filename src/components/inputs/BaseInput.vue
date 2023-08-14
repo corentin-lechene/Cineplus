@@ -83,7 +83,10 @@ function checkValue(e: InputCustomEvent) {
 
 <template>
   <div class="flex flex-col gap-y-1">
-    <ion-text v-if="label" color="dark" class="text-lg">{{ label }}</ion-text>
+    <slot v-if="$slots.label" name="label"></slot>
+    <ion-text v-else-if="label" color="dark" class="text-lg">
+      {{ label }}{{required ? ' *' : ''}}
+    </ion-text>
     <div class="flex flex-col">
       <ion-input
         v-model="modelValue"

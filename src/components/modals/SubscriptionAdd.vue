@@ -8,7 +8,7 @@ import SubscriptionsSlides from "@/components/slides/SubscriptionsSlides.vue";
 import Separator from "@/components/Separator.vue";
 
 import {Subscription} from "@/models";
-import {IonFooter} from "@ionic/vue";
+import {IonFooter, IonText} from "@ionic/vue";
 import BaseInput from "@/components/inputs/BaseInput.vue";
 
 const emit = defineEmits(['onSave']);
@@ -46,11 +46,23 @@ const selectedSubscription = ref<Subscription>();
         <BaseInput
             v-model="selectedSubscription.expireAt"
             type="date"
-            label="Expiration"
             placeholder="Expiration"
-            required
             after-now
-        />
+        >
+          <template #label>
+            <div class="flex flex-row justify-between items-center">
+              <ion-text color="dark" class="text-xl">Expiration</ion-text>
+              <ion-text
+                  v-if="selectedSubscription.expireAt"
+                  color="danger"
+                  class="text-sm"
+                  @click="selectedSubscription.expireAt = null"
+              >
+                Supprimer
+              </ion-text>
+            </div>
+          </template>
+        </BaseInput>
       </div>
     </div>
 

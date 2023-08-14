@@ -5,8 +5,10 @@ export class SubscriptionService {
     static isValid(subscription: Subscription): boolean {
         if(subscription.price <= 0) return false;
         if(subscription.ticketPrice <= 0) return false;
-        if(!dayjs(subscription.expireAt).isValid()) return false;
-        if(dayjs(subscription.expireAt).isBefore(dayjs())) return false;
+        if(subscription.expireAt !== null) {
+            if(!dayjs(subscription.expireAt).isValid()) return false;
+            if(dayjs(subscription.expireAt).isBefore(dayjs())) return false;
+        }
         return true;
     }
 }
