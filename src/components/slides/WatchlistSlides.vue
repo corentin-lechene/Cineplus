@@ -20,30 +20,26 @@ onMounted(() => {
     <BaseSlide
         v-if="userStore.user && userStore.user.watchlist.length > 0"
         class="mt-2"
+        :class="{'mr-4': userStore.user.watchlist.length === 1}"
         :items="userStore.user?.watchlist || []"
         :slides-per-view="userStore.user.watchlist.length === 1 ? 1 : 1.10"
         :space-between="10"
-        autoplay
-        loop
     >
       <template #default="{item: movie}: {item: Movie}">
-        <!--  todo add bg color       -->
-        <div class="bg-red-100 w-full p-4 rounded-lg">
-          <div class="relative w-full">
-            <img
-                v-if="movie.hasBackdrop"
-                class="rounded-lg w-full"
-                :src="movie.backdropUrl.w300"
-                alt="img"
-            />
-            <div v-else class="flex h-36">
-              <ion-text class="m-auto text-center" color="dark">Aucune image fournie</ion-text>
-            </div>
+        <div class="relative w-full">
+          <img
+              v-if="movie.hasBackdrop"
+              class="rounded-lg w-full"
+              :src="movie.backdropUrl.w300"
+              alt="img"
+          />
+          <div v-else class="flex h-36">
+            <ion-text class="m-auto text-center" color="dark">Aucune image fournie</ion-text>
+          </div>
 
-            <!-- Absolute           -->
-            <div class="flex absolute bottom-0 rounded-b-lg bg-black bg-opacity-60 w-full h-1/4">
-              <ion-text class="m-auto" color="light">{{ movie.title }}</ion-text>
-            </div>
+          <!-- Absolute           -->
+          <div class="flex absolute bottom-0 rounded-b-lg bg-black bg-opacity-60 w-full h-1/4">
+            <ion-text class="m-auto" color="light">{{ movie.title }}</ion-text>
           </div>
         </div>
       </template>
