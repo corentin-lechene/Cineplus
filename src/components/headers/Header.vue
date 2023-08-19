@@ -2,15 +2,22 @@
 
 import {IonBackButton, IonButtons, IonTitle, IonToolbar} from "@ionic/vue";
 import BaseHeader from "@/components/headers/BaseHeader.vue";
+import {computed} from "vue";
 
 interface HeaderProps {
   title: string;
   backButton?: boolean;
   defaultHref?: string;
+  noText?: boolean;
+  text?: string;
 }
 
 const props = defineProps<HeaderProps>();
 
+const builtText = computed(() => {
+  if(!props.noText) return 'Retour';
+  return props.text || '';
+})
 
 </script>
 
@@ -18,7 +25,7 @@ const props = defineProps<HeaderProps>();
   <BaseHeader>
     <ion-toolbar>
       <ion-buttons v-if="backButton" slot="start">
-        <ion-back-button text="Retour" :defaultHref="defaultHref" />
+        <ion-back-button :text="builtText" :defaultHref="defaultHref" />
       </ion-buttons>
       <ion-title color="dark" class="text-2xl font-medium px-2">{{ title }}</ion-title>
     </ion-toolbar>

@@ -9,7 +9,12 @@ import BaseInput from "@/components/inputs/BaseInput.vue";
 import {SubscriptionService} from "@/services/subscription.service";
 import {ToastService} from "@/services/toast.service";
 
-const props = defineProps(['modelValue']);
+interface SubscriptionSettingsProps {
+  modelValue: Subscription;
+  mode: 'update' | 'create';
+}
+
+const props = defineProps<SubscriptionSettingsProps>();
 const emit = defineEmits(['update:modelValue', 'onSave']);
 
 const modelValue = computed<Subscription>({
@@ -20,6 +25,7 @@ const modelValue = computed<Subscription>({
 
 function beforeSave() {
   console.log("before save");
+  modelValue.value.createdAt = new Date();
   if(!SubscriptionService.isValid(modelValue.value)) {
     ToastService.error('Le formulaire est invalide').catch();
     return;
@@ -41,6 +47,16 @@ function beforeSave() {
         label="Prix de l'abonnement (par mois)"
         placeholder="Prix de l'abonnement"
         required
+      />
+      <BaseInput
+          v-model="modelValue.startAt"
+          type="date"
+          label="Début de l'abonnement"
+          placeholder="Début de l'abonnement"
+          required
+          :before-date="modelValue.expireAt"
+          before-date-error-message="La date doit être inférieur à l'expiration"
+          :disabled="mode === 'update'"
       />
       <BaseInput
         v-model.number="modelValue.ticketPrice"

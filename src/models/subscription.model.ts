@@ -5,6 +5,8 @@ export interface Subscription {
     price: number;
     imageUrl: string;
     payment: 'monthly' | 'yearly';
+    startAt: string;
     expireAt: string | null;
-    ticketPrice: number; //todo ticketPrice history
+    ticketPrice: number;
+    createdAt: Date;
 }

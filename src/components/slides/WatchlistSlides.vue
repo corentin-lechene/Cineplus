@@ -18,15 +18,15 @@ onMounted(() => {
   <div class="">
     <ion-text color="dark" class="text-2xl">Ma Liste</ion-text>
     <BaseSlide
-        v-if="userStore.user && userStore.user.watchlist.length > 0"
+        v-if="userStore.watchlist.length > 0"
         class="mt-2"
-        :class="{'mr-4': userStore.user.watchlist.length === 1}"
-        :items="userStore.user?.watchlist || []"
-        :slides-per-view="userStore.user.watchlist.length === 1 ? 1 : 1.10"
+        :class="{'mr-4': userStore.watchlist.length === 1}"
+        :items="userStore.watchlist"
+        :slides-per-view="userStore.watchlist.length === 1 ? 1 : 1.10"
         :space-between="10"
     >
       <template #default="{item: movie}: {item: Movie}">
-        <div class="relative w-full">
+        <div class="relative w-full" @click="$router.push(`movie-details/${movie.id}`)">
           <img
               v-if="movie.hasBackdrop"
               class="rounded-lg w-full"

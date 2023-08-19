@@ -19,9 +19,9 @@ onMounted(() => {
   <div class="">
     <ion-text color="dark" class="text-2xl">Mes séances</ion-text>
     <BaseSlide
-        v-if="userStore.user && userStore.user.viewedMovies.length > 0"
+        v-if="userStore.viewedMovies.length > 0"
         class="mt-2"
-        :items="userStore.user?.viewedMovies || []"
+        :items="userStore.viewedMovies"
         :slides-per-view="2.3"
         :space-between="30"
     >

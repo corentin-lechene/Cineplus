@@ -101,7 +101,7 @@ function resetApp(e: CustomEvent) {
 
       <!-- Modals     -->
       <BaseModal v-model="openModalSubscriptionSetting">
-        <SubscriptionSettings v-model="subscription" @onSave="updateSubscription()"/>
+        <SubscriptionSettings v-model="subscription" @onSave="updateSubscription()" mode="update"/>
       </BaseModal>
 
       <BaseModal v-model="openModalAddSubscription">

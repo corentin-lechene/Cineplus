@@ -26,13 +26,15 @@ interface BaseInputProps {
   mask?: string;
   placeholder: string;
   required?: boolean;
+  disabled?: boolean;
+
   afterNow?: boolean;
+  beforeDate?: string | null;
+  beforeDateErrorMessage?: string;
 }
 
 const props = defineProps<BaseInputProps>();
 const emit = defineEmits(['update:modelValue']);
-
-const error = ref("");
 
 const modelValue = computed({
   get: () => props.modelValue,
@@ -48,7 +50,6 @@ const builtType = computed<TextFieldTypes>(() => {
   };
   return types[props.type] as TextFieldTypes;
 });
-
 const builtMask = computed<string>(() => {
   const masks = {
     price: '#.##',
@@ -59,25 +60,24 @@ const builtMask = computed<string>(() => {
   return masks[props.type];
 });
 
-function checkValue(e: InputCustomEvent) {
-  error.value = "";
-  const value = e.detail.value;
-
-  if (props.required && !value) {
-    error.value = "Ce champ est requis";
-    return;
+const errorMessage = computed(() => {
+  if (props.required && !modelValue.value) {
+    return "Ce champ est requis";
   }
 
-  if(props.type === 'price' && parseFloat(value || "0") < 0) {
-    error.value = "Le prix ne peut pas être négatif";
-    return;
+  if(props.type === 'price' && parseFloat(modelValue.value || "0") < 0) {
+    return "Le prix ne peut pas être négatif";
   }
 
-  if(props.type === 'date' && props.afterNow && dayjs(value).isBefore(dayjs())) {
-    error.value = "La date ne peut pas être dans le passé";
-    return;
+  if(props.type === 'date' && props.afterNow && dayjs(modelValue.value).isBefore(dayjs())) {
+    return "La date ne peut pas être dans le passé";
   }
-}
+
+  if(props.type === 'date' && props.beforeDate && dayjs(modelValue.value).isAfter(props.beforeDate)) {
+    return props.beforeDateErrorMessage || 'La date ne peut pas être après la date';
+  }
+  return '';
+});
 
 </script>
 
@@ -93,10 +93,9 @@ function checkValue(e: InputCustomEvent) {
         :placeholder="placeholder"
         :type="builtType"
         :required="required"
-        @ionChange="checkValue($event)"
-        @ionInput="checkValue($event)"
+        :disabled="disabled || false"
       />
-      <ion-text v-if="error" color="danger" class="text-sm pl-1">{{ error }}</ion-text>
+      <ion-text v-if="errorMessage" color="danger" class="text-sm pl-1">{{ errorMessage }}</ion-text>
     </div>
   </div>
 </template>

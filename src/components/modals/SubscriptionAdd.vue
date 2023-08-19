@@ -19,7 +19,7 @@ const selectedSubscription = ref<Subscription>();
 
 <template>
   <div class="px-4">
-    <Header title="Abonnements"/>
+    <Header title="Abonnements" />
 
     <div class="flex flex-col gap-y-2">
       <div class="w-full h-full flex items-center bg-none" >
@@ -35,6 +35,15 @@ const selectedSubscription = ref<Subscription>();
             label="Prix de l'abonnement (par mois)"
             placeholder="Prix de l'abonnement"
             required
+        />
+        <BaseInput
+            v-model="selectedSubscription.startAt"
+            type="date"
+            label="Début de l'abonnement"
+            placeholder="Début de l'abonnement"
+            required
+            :before-date="selectedSubscription.expireAt"
+            before-date-error-message="La date doit être inférieur à l'expiration"
         />
         <BaseInput
             v-model.number="selectedSubscription.ticketPrice"
