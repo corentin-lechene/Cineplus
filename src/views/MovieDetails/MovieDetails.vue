@@ -7,7 +7,6 @@ import {useUserStore} from "@/stores/user";
 import {Movie, ViewedMovie} from "@/models";
 import {MovieService} from "@/services/movie.service";
 import dayjs from "@/configs/dayjs.config";
-import {ToastService} from "@/services/toast.service";
 
 import AddToList from "@/components/AddToList.vue";
 import AppButton from "@/components/buttons/AppButton.vue";

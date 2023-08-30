@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import {InputCustomEvent, IonInput, IonText} from "@ionic/vue";
-import {computed, ref} from "vue";
+import {IonInput, IonText} from "@ionic/vue";
+import {computed} from "vue";
 import dayjs from "@/configs/dayjs.config";
 
 type TypeFields = 'price' | 'text' | 'number' | 'date';
