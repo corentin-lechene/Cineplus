@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {IonContent, IonFooter, IonHeader, IonPage, IonText, toastController} from "@ionic/vue";
+import {IonContent, IonFooter, IonHeader, IonPage, IonText, IonIcon} from "@ionic/vue";
+import {close} from "ionicons/icons";
 import AppButton from "@/components/buttons/AppButton.vue";
 import {Subscription, User} from "@/models";
 import SubscriptionsSlides from "@/components/slides/SubscriptionsSlides.vue";
@@ -18,6 +19,26 @@ let openModalSetting = ref(false);
 
 const userStore = useUserStore();
 
+async function createUser(subscription?: Subscription) {
+  try {
+    const newUser: User = {
+      subscriptions: subscription ? [subscription] : [],
+      viewedMovies: [],
+      watchlist: [],
+      preferences: {
+        language: "fr"
+      },
+      isConfigured: true
+    };
+
+    await userStore.setUser(newUser);
+    ToastService.success('Bienvenue sur Cine+').catch();
+    await router.replace('/home');
+  } catch(e) {
+      console.error(e);
+      ToastService.error('Une erreur est survenue').catch();
+  }
+}
 
 async function saveSubscription() {
   openModalSetting.value = false;
@@ -27,27 +48,20 @@ async function saveSubscription() {
     return;
   }
 
-  const newUser: User = {
-    subscriptions: [selectedSubscription.value],
-    viewedMovies: [],
-    watchlist: [],
-    preferences: {
-      language: "fr"
-    },
-    isConfigured: true
-  };
-
-  await userStore.setUser(newUser);
-  ToastService.success('Bienvenue sur Cine+').catch();
-  await router.replace('/home');
+  selectedSubscription.value.id = 0;
+  await createUser(selectedSubscription.value);
 }
+
 </script>
 
 <template>
   <ion-page class="">
 
-    <ion-header class="px-4 py-4 flex">
+    <ion-header class="px-4 py-4 flex relative">
       <img class="h-48 mx-auto" src="@/assets/logos/cinema-en-illimite.png" alt="logo"/>
+      <div>
+        <ion-icon class="absolute top-5 right-5" :icon="close" size="large" @click="createUser()"></ion-icon>
+      </div>
     </ion-header>
 
     <ion-content>
@@ -62,7 +76,12 @@ async function saveSubscription() {
 
         <!-- modal       -->
         <BaseModal v-model="openModalSetting">
-          <SubscriptionSettings v-model="selectedSubscription" @onSave="saveSubscription()" />
+          <SubscriptionSettings
+              v-if="selectedSubscription"
+              v-model="selectedSubscription"
+              @onSave="saveSubscription()"
+              mode="create"
+          />
         </BaseModal>
       </div>
     </ion-content>

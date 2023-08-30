@@ -41,11 +41,6 @@ onMounted(async () => {
 });
 
 function saveMovie(form: {date: number, extra: number, note: string}) {
-  if(!userStore.lastSubscription) {
-    ToastService.error('Vous devez avoir un abonnement pour sauvegarder un film').catch();
-    return;
-  }
-
   const viewedMovie: ViewedMovie = {
     subscription: userStore.lastSubscription,
     movie: movie.value!,
@@ -105,6 +100,9 @@ function saveMovie(form: {date: number, extra: number, note: string}) {
           <ion-text color="dark" class="text-2xl mt-4 mb-2">Achats supplémentaires</ion-text>
           <ion-text color="medium">{{ viewedMovie.extra }}</ion-text>
         </div>
+      </div>
+      <div v-else>
+        loading...
       </div>
 
       <!-- modal       -->

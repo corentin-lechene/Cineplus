@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed} from "vue";
+import {computed, onMounted} from "vue";
 import {IonFooter, IonText} from "@ionic/vue";
 import {Subscription} from "@/models";
 import AppButton from "@/components/buttons/AppButton.vue";
@@ -8,11 +8,14 @@ import BaseInput from "@/components/inputs/BaseInput.vue";
 
 import {SubscriptionService} from "@/services/subscription.service";
 import {ToastService} from "@/services/toast.service";
+import {useUserStore} from "@/stores/user";
 
 interface SubscriptionSettingsProps {
   modelValue: Subscription;
   mode: 'update' | 'create';
 }
+
+const userStore = useUserStore();
 
 const props = defineProps<SubscriptionSettingsProps>();
 const emit = defineEmits(['update:modelValue', 'onSave']);
@@ -22,32 +25,30 @@ const modelValue = computed<Subscription>({
   set: (val) => emit("update:modelValue", val)
 });
 
+onMounted(() => {
+  userStore.loadUser();
+});
+
 
 function beforeSave() {
-  console.log("before save");
-  modelValue.value.createdAt = new Date();
-  if(!SubscriptionService.isValid(modelValue.value)) {
+  if (!SubscriptionService.isValid(modelValue.value)) {
     ToastService.error('Le formulaire est invalide').catch();
     return;
   }
 
-  emit('onSave');
+  if (props.mode === 'create') {
+    modelValue.value.createdAt = new Date();
+  }
+  emit('onSave', modelValue.value);
 }
 
 </script>
 
 <template>
   <div v-if="modelValue">
-    <Header title="Configuration" />
+    <Header title="Configuration"/>
 
     <div class="flex flex-col gap-y-4 px-4">
-      <BaseInput
-        v-model.number="modelValue.price"
-        type="price"
-        label="Prix de l'abonnement (par mois)"
-        placeholder="Prix de l'abonnement"
-        required
-      />
       <BaseInput
           v-model="modelValue.startAt"
           type="date"
@@ -59,17 +60,23 @@ function beforeSave() {
           :disabled="mode === 'update'"
       />
       <BaseInput
-        v-model.number="modelValue.ticketPrice"
-        type="price"
-        label="Prix d'une place"
-        placeholder="Prix d'une place"
-        required
+          v-model.number="modelValue.price"
+          type="price"
+          label="Prix de l'abonnement (par mois)"
+          placeholder="Prix de l'abonnement"
+          required
       />
       <BaseInput
-        v-model="modelValue.expireAt"
-        type="date"
-        placeholder="Expiration"
-        after-now
+          v-model.number="modelValue.ticketPrice"
+          type="price"
+          label="Prix d'une place"
+          placeholder="Prix d'une place"
+          required
+      />
+      <BaseInput
+          v-model="modelValue.expireAt"
+          type="date"
+          placeholder="Expiration"
       >
         <template #label>
           <div class="flex flex-row justify-between items-center">
@@ -88,7 +95,7 @@ function beforeSave() {
     </div>
 
     <ion-footer class="px-4 py-4">
-      <app-button class="h-full" color="dark" text="Terminer" @click="beforeSave()" />
+      <app-button class="h-full" color="dark" text="Terminer" @click="beforeSave()"/>
     </ion-footer>
 
   </div>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {IonPage, IonIcon, IonText, IonContent, IonActionSheet} from "@ionic/vue";
+import {IonPage, IonIcon, IonText, IonContent, IonActionSheet, IonCard} from "@ionic/vue";
 import {onMounted, ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import {useRouter} from "vue-router";
@@ -15,6 +15,9 @@ import BaseModal from "@/components/modals/BaseModal.vue";
 import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
 import {ToastService} from "@/services/toast.service";
 import SubscriptionAdd from "@/components/modals/SubscriptionAdd.vue";
+import dayjs from "@/configs/dayjs.config";
+import {SubscriptionService} from "@/services/subscription.service";
+import {DateUtil} from "@/utils/date.util";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -43,32 +46,45 @@ const actionSheetButtons = [
 
 onMounted(() => {
   userStore.loadUser()
-      .then(() => subscription.value = userStore.lastSubscription);
+      .then(() => subscription.value = JSON.parse(JSON.stringify(userStore.lastSubscription)));
 });
 
 
-function updateSubscription() {
-  if(!userStore.user || !subscription.value) {
-    return;
-  }
-
-  const index = userStore.user.subscriptions.findIndex(s => s.id === subscription.value!.id);
-  userStore.user.subscriptions[index] = subscription.value;
-  userStore.updateUser(userStore.user)
-      .catch(() => ToastService.error('Une erreur est survenue').catch())
-      .finally(() => openModalSubscriptionSetting.value = false);
-}
-
 function addSubscription(newSubscription: Subscription) {
-  if(!userStore.user) {
+  if(!userStore.user || !SubscriptionService.isValid(newSubscription)) {
+    ToastService.error('Une erreur est survenue').catch();
     return;
   }
 
+  // si update
+  if(openModalSubscriptionSetting.value && userStore.lastSubscription) {
+    const startAt = dayjs(userStore.lastSubscription.startAt);
+    const diff = DateUtil.getDiff(startAt.toDate(), userStore.lastSubscription.expireAt)
+    userStore.lastSubscription.expireAt = startAt
+        .add(diff, 'month')
+        .format('YYYY-MM-DD');
+
+    newSubscription.startAt = userStore.lastSubscription.expireAt;
+  }
+
+  //si create
+  if(openModalAddSubscription.value && userStore.lastSubscription) {
+    const startAt = dayjs(userStore.lastSubscription.startAt);
+    const diff = DateUtil.getDiff(startAt.toDate(), userStore.lastSubscription.expireAt)
+    userStore.lastSubscription.expireAt = startAt
+        .add(diff, 'month')
+        .format('YYYY-MM-DD');
+  }
+
+  newSubscription.id = userStore.user.subscriptions.length;
   userStore.user.subscriptions.push(newSubscription);
   userStore.updateUser(userStore.user)
-      .then(() => subscription.value = newSubscription)
+      .then(() => subscription.value = JSON.parse(JSON.stringify(newSubscription)))
       .catch(() => ToastService.error('Une erreur est survenue').catch())
-      .finally(() => openModalAddSubscription.value = false);
+      .finally(() => {
+        openModalSubscriptionSetting.value = false;
+        openModalAddSubscription.value = false;
+      });
 }
 function resetApp(e: CustomEvent) {
   if (e?.detail?.data?.action === 'delete') {
@@ -94,6 +110,12 @@ function resetApp(e: CustomEvent) {
           </div>
           <SubscriptionImage :subscription="subscription" @click="openModalSubscriptionSetting = true"/>
         </div>
+        <div v-else>
+          <ion-text color="dark" class="text-2xl">Mon abonnement</ion-text>
+          <ion-card class="m-0 flex h-40">
+            <ion-icon class="m-auto" :icon="add" size="large" @click="openModalAddSubscription = true"></ion-icon>
+          </ion-card>
+        </div>
 
         <Separator class="my-2"/>
         <app-button color="danger" text="Réinitialiser" bg-color="light" @onTap="openModalReset = true"/>
@@ -101,7 +123,12 @@ function resetApp(e: CustomEvent) {
 
       <!-- Modals     -->
       <BaseModal v-model="openModalSubscriptionSetting">
-        <SubscriptionSettings v-model="subscription" @onSave="updateSubscription()" mode="update"/>
+        <SubscriptionSettings
+            v-if="subscription"
+            v-model="subscription"
+            @onSave="addSubscription"
+            mode="update"
+        />
       </BaseModal>
 
       <BaseModal v-model="openModalAddSubscription">

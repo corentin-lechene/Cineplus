@@ -26,7 +26,7 @@ onMounted(() => {
         :space-between="10"
     >
       <template #default="{item: movie}: {item: Movie}">
-        <div class="relative w-full" @click="$router.push(`movie-details/${movie.id}`)">
+        <div v-if="movie" class="relative w-full" @click="$router.push(`movie-details/${movie.id}`)">
           <img
               v-if="movie.hasBackdrop"
               class="rounded-lg w-full"
@@ -42,6 +42,7 @@ onMounted(() => {
             <ion-text class="m-auto" color="light">{{ movie.title }}</ion-text>
           </div>
         </div>
+        <div v-else>Loading...</div>
       </template>
     </BaseSlide>
     <ion-card v-else class="flex justify-center h-40 m-0 mt-2 mr-4">

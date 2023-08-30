@@ -69,7 +69,7 @@ const errorMessage = computed(() => {
     return "Le prix ne peut pas être négatif";
   }
 
-  if(props.type === 'date' && props.afterNow && dayjs(modelValue.value).isBefore(dayjs())) {
+  if(props.type === 'date' && props.afterNow && dayjs(modelValue.value).isBefore(dayjs(), 'day')) {
     return "La date ne peut pas être dans le passé";
   }
 

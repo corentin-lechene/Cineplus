@@ -30,13 +30,6 @@ const selectedSubscription = ref<Subscription>();
 
       <div v-if="selectedSubscription" class="flex flex-col gap-y-4 px-4">
         <BaseInput
-            v-model.number="selectedSubscription.price"
-            type="price"
-            label="Prix de l'abonnement (par mois)"
-            placeholder="Prix de l'abonnement"
-            required
-        />
-        <BaseInput
             v-model="selectedSubscription.startAt"
             type="date"
             label="Début de l'abonnement"
@@ -44,6 +37,13 @@ const selectedSubscription = ref<Subscription>();
             required
             :before-date="selectedSubscription.expireAt"
             before-date-error-message="La date doit être inférieur à l'expiration"
+        />
+        <BaseInput
+            v-model.number="selectedSubscription.price"
+            type="price"
+            label="Prix de l'abonnement (par mois)"
+            placeholder="Prix de l'abonnement"
+            required
         />
         <BaseInput
             v-model.number="selectedSubscription.ticketPrice"

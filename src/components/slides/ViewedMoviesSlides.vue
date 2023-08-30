@@ -26,7 +26,7 @@ onMounted(() => {
         :space-between="30"
     >
       <template #default="{item: viewedMovie}: {item: ViewedMovie}">
-        <div class="flex flex-col gap-y-2 rounded-xl">
+        <div v-if="viewedMovie" class="flex flex-col gap-y-2 rounded-xl">
           <img
               v-if="viewedMovie.movie.hasPoster"
               class="rounded-md"
@@ -45,6 +45,7 @@ onMounted(() => {
             </ion-text>
           </div>
         </div>
+        <div v-else>Loading...</div>
       </template>
     </BaseSlide>
     <ion-card v-else class="flex justify-center h-40 m-0 mt-2 mr-4">

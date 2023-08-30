@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": -1,
     "brand": "PATHE",
     "name": "Cine Pass (-26 ans)",
     "price": 16.90,
@@ -10,7 +10,7 @@
     "ticketPrice": 10.80
   },
   {
-    "id": 2,
+    "id": -2,
     "brand": "PATHE",
     "name": "Cine Pass",
     "price": 19.90,
@@ -20,7 +20,7 @@
     "ticketPrice": 14.20
   },
   {
-    "id": 3,
+    "id": -3,
     "brand": "UGC",
     "name": "UGC Illimité (-26 ans)",
     "price": 17.90,
@@ -30,7 +30,7 @@
     "ticketPrice": 9.60
   },
   {
-    "id": 4,
+    "id": -4,
     "brand": "UGC",
     "name": "UGC Illimité",
     "price": 21.90,

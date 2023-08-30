@@ -8,8 +8,7 @@ export class SubscriptionService {
         if(!subscription.startAt || !dayjs(subscription.startAt).isValid()) return false;
         if(subscription.expireAt !== null) {
             if(!dayjs(subscription.expireAt).isValid()) return false;
-            if(dayjs(subscription.expireAt).isBefore(dayjs())) return false;
-            if(dayjs(subscription.startAt).isAfter(subscription.expireAt)) return false;
+            if(!dayjs(subscription.startAt).isBefore(subscription.expireAt, 'day')) return false;
         }
         return true;
     }
