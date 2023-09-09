@@ -142,6 +142,8 @@ function resetApp(e: CustomEvent) {
         header="Reinitialiser"
         @didDismiss="resetApp"
     />
+
+    <ion-text class="italic" @click="$router.push('/privacy')">politique de confidentialité</ion-text>
   </ion-page>
 </template>
 

@@ -68,3 +68,8 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-dark-shade: #d7d8da;
   --ion-color-dark-tint: #f5f6f9;
 }
+
+.header-xs, .header-md, .header-lg, .header-xl {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
