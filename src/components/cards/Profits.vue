@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {computed, onMounted} from "vue";
 import {useUserStore} from "@/stores/user";
-import {IonCard, IonText, IonIcon} from "@ionic/vue";
-import {ellipsisVertical} from "ionicons/icons";
+import {IonCard, IonText} from "@ionic/vue";
 
 const userStore = useUserStore();
 
@@ -14,22 +13,30 @@ function getProfits() {
 
 }
 
+const profits = computed(() => {
+  if(!userStore) return 0;
+  if(!userStore.lastSubscription) {
+    return userStore.viewedMovies.reduce((acc, vm) => {
+      return (vm.extra ?? 0) + acc;
+    }, 0)
+  }
+  return userStore.profits;
+});
+
 
 </script>
 
 <template>
-  <ion-card class="flex flex-row justify-between items-center rounded-lg m-0 pl-4 py-3 mr-4">
-    <div class="flex flex-col gap-y-0.5">
+  <ion-card class="mx-0 p-4">
+    <ion-card-content class="m-0">
       <ion-text color="dark" class="text-2xl">Rentabilité</ion-text>
+      <br>
       <ion-text color="medium" class="text-xl">
         Estimée à
-        <ion-text :color="userStore.profits > 0 ? 'success' : 'danger'">{{ userStore.profits }}</ion-text>
+        <ion-text :color="profits >= 0 ? 'success' : 'danger'">{{ profits }}</ion-text>
         €
       </ion-text>
-    </div>
-    <div class="w-10">
-      <ion-icon :icon="ellipsisVertical" size="large"></ion-icon>
-    </div>
+    </ion-card-content>
   </ion-card>
 </template>
 

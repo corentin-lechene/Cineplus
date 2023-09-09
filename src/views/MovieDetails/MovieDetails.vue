@@ -77,7 +77,7 @@ function saveMovie(form: {date: number, extra: number, note: string}) {
         <ion-text class="mt-2 text-2xl">{{ movie.title }}</ion-text>
         <div class="flex flex-row justify-between">
           <ion-text color="medium" class="italic">
-            Sortie le {{ dayjs(movie.releasedAt).format('DD/MM/YYYY') }}
+            Sortie le {{ dayjs(movie.releasedAt).format('DD MMM YYYY') }}
           </ion-text>
           <div>
             <ion-text color="dark" class="text-lg">{{ movie.rating }}</ion-text>

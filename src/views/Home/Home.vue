@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {IonContent, IonPage} from "@ionic/vue";
+import {IonContent, IonPage, IonCol, IonGrid} from "@ionic/vue";
 import HomeHeader from "@/views/Home/components/HomeHeader.vue";
 import WatchlistSlides from "@/components/slides/WatchlistSlides.vue";
 import ViewedMoviesSlides from "@/components/slides/ViewedMoviesSlides.vue";
@@ -11,17 +11,15 @@ import Profits from "@/components/cards/Profits.vue";
 <template>
   <ion-page>
 
-    <HomeHeader />
-    
-    <ion-content>
+    <HomeHeader/>
 
-      <div class="flex flex-col gap-y-8 pl-4">
-        <WatchlistSlides />
+    <ion-content class="ion-padding-horizontal" fullscreen>
 
-        <Profits />
+      <WatchlistSlides/>
 
-        <ViewedMoviesSlides />
-      </div>
+      <Profits />
+
+      <ViewedMoviesSlides/>
 
     </ion-content>
   </ion-page>

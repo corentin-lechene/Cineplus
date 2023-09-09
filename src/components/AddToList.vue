@@ -70,7 +70,7 @@ async function onTap() {
 </script>
 
 <template>
-  <ion-fab-button class="add-list" size="small" :color="bgColor" @click="onTap()">
+  <ion-fab-button class="add-list" size="small" :color="bgColor" @click.stop="onTap()">
     <ion-icon :icon="icon" size="small"></ion-icon>
   </ion-fab-button>
 </template>
