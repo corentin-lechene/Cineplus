@@ -1,11 +1,13 @@
 <script setup lang="ts">
 
-import {IonHeader} from "@ionic/vue";
+import {IonHeader, IonToolbar} from "@ionic/vue";
 
 </script>
 
 <template>
   <ion-header class="ion-padding">
-    <slot></slot>
+    <ion-toolbar>
+      <slot></slot>
+    </ion-toolbar>
   </ion-header>
 </template>
