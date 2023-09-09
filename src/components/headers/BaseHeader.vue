@@ -5,7 +5,7 @@ import {IonHeader} from "@ionic/vue";
 </script>
 
 <template>
-  <ion-header class="flex items-center px-4 py-6">
+  <ion-header class="ion-padding">
     <slot></slot>
   </ion-header>
 </template>
