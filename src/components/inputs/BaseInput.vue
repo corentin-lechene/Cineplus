@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {IonInput, IonText} from "@ionic/vue";
+import {getPlatforms, IonInput, IonText} from "@ionic/vue";
 import {computed} from "vue";
 import dayjs from "@/configs/dayjs.config";
 
@@ -41,9 +41,15 @@ const modelValue = computed({
   set: (val) => emit("update:modelValue", val)
 });
 
+const isIos = computed(() => {
+  const platforms = getPlatforms();
+  const ios = ["ios", "ipad", "iphone"];
+  return platforms.find(p => ios.includes(p));
+})
+
 const builtType = computed<TextFieldTypes>(() => {
   const types = {
-    price: 'number',
+    price: isIos.value ? 'number' : 'tel',
     number: 'number',
     date: 'date',
     text: 'text',
