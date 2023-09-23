@@ -111,13 +111,13 @@ function saveMovie(form: {date: number, extra: number, note: string}) {
           <ion-text color="medium">{{ viewedMovie.note }}</ion-text>
         </div>
 
-        <div v-if="viewedMovie" class="flex flex-col">
+        <div v-if="viewedMovie && viewedMovie.extra && viewedMovie.extra > 0" class="flex flex-col">
           <ion-text color="dark" class="text-2xl mt-4 mb-2">Achats supplémentaires</ion-text>
           <ion-text color="medium">{{ viewedMovie.extra }}</ion-text>
         </div>
       </div>
       <div v-else>
-        loading...
+        <ion-text color="dark">Chargement...</ion-text>
       </div>
 
       <!-- modal       -->

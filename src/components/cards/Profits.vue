@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed, onMounted} from "vue";
 import {useUserStore} from "@/stores/user";
-import {IonCard, IonText} from "@ionic/vue";
+import {IonCard, IonText, IonCardContent} from "@ionic/vue";
 
 const userStore = useUserStore();
 
