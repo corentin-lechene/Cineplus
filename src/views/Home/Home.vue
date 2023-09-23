@@ -13,7 +13,7 @@ import Profits from "@/components/cards/Profits.vue";
 
     <HomeHeader/>
 
-    <ion-content class="ion-padding-horizontal" fullscreen>
+    <ion-content class="ion-padding-horizontal">
 
       <WatchlistSlides/>
 

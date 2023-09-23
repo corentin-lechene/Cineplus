@@ -65,7 +65,7 @@ function infinitePopularMovies(e: InfiniteScrollCustomEvent) {
 
 <template>
   <ion-page>
-    <AppHeader class="flex flex-row justify-between pb-3">
+    <AppHeader class="flex flex-row justify-between pb-3 pr-2.5">
       <ion-toolbar>
         <ion-buttons slot="start">
           <ion-back-button text="" default-href="/home"></ion-back-button>
@@ -79,22 +79,30 @@ function infinitePopularMovies(e: InfiniteScrollCustomEvent) {
       </ion-toolbar>
     </AppHeader>
 
-    <ion-content>
-      <div v-if="searchMovies.length > 0" class="flex flex-col gap-y-3 px-4 pb-4">
-        <ion-label color="dark" class="text-xl italic">Résultats de recherche</ion-label>
-        <MovieListItem v-for="movie in searchMovies" :key="movie.id" :movie="movie"/>
+    <ion-content class="ion-padding-horizontal">
+      <div v-if="searchMovies.length > 0" class="pb-4">
+        <ion-label color="dark" class="text-xl italic">Résultats de la recherche</ion-label>
+        <div v-for="movie in searchMovies" :key="movie.id" class="py-1">
+          <MovieListItem :movie="movie"/>
+        </div>
         <ion-infinite-scroll @ionInfinite="infiniteSearchMovie">
           <ion-infinite-scroll-content></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </div>
-      <div v-else class="flex flex-col gap-y-3 px-4 pb-4">
+
+      <div v-else-if="popularMovies.length > 0" class="pb-4">
         <ion-label color="dark" class="text-xl italic">Les films populaires</ion-label>
-        <MovieListItem v-for="movie in popularMovies" :key="movie.id" :movie="movie"/>
+        <div v-for="movie in popularMovies" :key="movie.id" class="py-1">
+          <MovieListItem :movie="movie"/>
+        </div>
         <ion-infinite-scroll @ionInfinite="infinitePopularMovies">
           <ion-infinite-scroll-content></ion-infinite-scroll-content>
         </ion-infinite-scroll>
       </div>
 
+      <div v-else class="flex h-full">
+        <ion-label color="dark" class="text-xl italic m-auto">Aucun film</ion-label>
+      </div>
     </ion-content>
   </ion-page>
 </template>
