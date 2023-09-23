@@ -24,7 +24,7 @@ const props = defineProps<{ movie: Movie }>();
           <ion-label v-else color="dark" class="w-20 rounded text-sm italic">Pas d'image</ion-label>
         </ion-col>
 
-        a<ion-col class="ml-1.5">
+        <ion-col class="ml-1.5">
           <div class="flex flex-col relative">
             <ion-label color="dark" class="text-lg leading-snug">{{ movie.title }}</ion-label>
             <ion-text color="dark" class="">
