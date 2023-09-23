@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {IonContent, IonPage, IonFooter, IonText} from "@ionic/vue";
+import {IonContent, IonPage, IonFooter, IonText, IonCol, IonLabel} from "@ionic/vue";
 import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
@@ -31,12 +31,15 @@ const viewedMovie = computed(() => {
 onMounted(async () => {
   userStore.loadUser().catch();
 
-  const result = await MovieService.fetchMovieById(id);
-  if (!result) {
+  try {
+    const result = await MovieService.fetchMovieById(id);
+    if (!result) return router.back();
+
+    movie.value = result;
+  } catch(e) {
+    console.error(e)
     router.back();
-    return;
   }
-  movie.value = result;
 });
 
 function saveMovie(form: {date: number, extra: number, note: string}) {
@@ -74,16 +77,29 @@ function saveMovie(form: {date: number, extra: number, note: string}) {
             <AddToList :movie="movie"/>
           </div>
         </div>
-        <ion-text class="mt-2 text-2xl">{{ movie.title }}</ion-text>
-        <div class="flex flex-row justify-between">
-          <ion-text color="medium" class="italic">
-            Sortie le {{ dayjs(movie.releasedAt).format('DD MMM YYYY') }}
-          </ion-text>
-          <div>
-            <ion-text color="dark" class="text-lg">{{ movie.rating }}</ion-text>
-            <ion-text color="medium" class="text-sm"> /10</ion-text>
-          </div>
-        </div>
+        <ion-grid class="p-0">
+          <ion-row>
+            <ion-col>
+              <div class="flex flex-col relative">
+                <ion-label color="dark" class="text-2xl leading-snug">{{ movie.title }}</ion-label>
+                <ion-text color="dark" class="">
+              <span v-for="(genre, i) in movie.genres" >
+                {{genre.name}}{{i === movie.genres.length - 1 ? '' : ', '}}
+              </span>
+                </ion-text>
+
+                <ion-label color="medium" class="text-sm">
+                  Sortie le {{ dayjs(movie.releasedAt).format('DD MMM YYYY') }}
+                </ion-label>
+              </div>
+            </ion-col>
+
+            <ion-col size="2">
+              <ion-text color="dark" class="text-lg">{{ movie.rating.toFixed(1) }}</ion-text>
+              <ion-text color="medium" class="text-sm"> /10</ion-text>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
 
         <div class="flex flex-col">
           <ion-text color="dark" class="text-2xl mt-4 mb-2">Synopsis</ion-text>

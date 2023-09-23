@@ -1,4 +1,4 @@
-import {TheMovieDb, TheMovieDbResponse} from "@/models";
+import {Genre, TheMovieDb, TheMovieDbResponse} from "@/models";
 
 export class TheMovieDbService {
     protected static setOptions() {
@@ -64,4 +64,19 @@ export class TheMovieDbService {
         }
     }
 
+    static async fetchGenres(): Promise<Genre[]> {
+        try {
+            const url = `https://api.themoviedb.org/3/genre/movie/list?language=fr`;
+            const options = TheMovieDbService.setOptions();
+            const res = await fetch(url, options);
+            if (!res.ok) return [];
+
+            const data: { genres: Genre[] } = await res.json();
+            if(!data || !data.genres) return [];
+            return data.genres;
+        } catch(e) {
+            console.error(e);
+            return [];
+        }
+    }
 }

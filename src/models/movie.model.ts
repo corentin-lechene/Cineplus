@@ -1,3 +1,5 @@
+import {Genre} from "@/models/the-movie-db.model";
+
 export interface PosterSize {
     w92: string;
     w154: string;
@@ -24,5 +26,6 @@ export interface Movie {
     backdropUrl: BackdropSize;
     hasBackdrop: boolean;
     releasedAt: Date;
+    genres: Genre[]
     rating: number;
 }

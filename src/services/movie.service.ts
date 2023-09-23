@@ -1,5 +1,6 @@
 import {Movie, TheMovieDb} from "@/models";
 import {TheMovieDbService} from "@/services/the-movie-db.service";
+import {useGenreStore} from "@/stores/genre";
 
 export class MovieService {
     static async fetchMovieById(id: string): Promise<Movie | null> {
@@ -48,6 +49,8 @@ export class MovieService {
 
     /*  */
     static async toMovie(theMovieDb: TheMovieDb): Promise<Movie> {
+        const genreStore = useGenreStore();
+        await genreStore.loadGenres();
         return {
             id: parseInt(theMovieDb.id),
             title: theMovieDb.title,
@@ -71,6 +74,7 @@ export class MovieService {
             },
             releasedAt: new Date(theMovieDb.release_date),
             rating: parseFloat(theMovieDb.vote_average.toFixed(2)),
+            genres: theMovieDb.genres || genreStore.toGenres(theMovieDb.genre_ids),
         }
     }
 }
