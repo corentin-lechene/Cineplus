@@ -23,7 +23,10 @@ const builtText = computed(() => {
 
 <template>
   <BaseHeader>
-    <ion-toolbar>
+    <ion-toolbar v-if="$slots.default">
+      <slot name="default"></slot>
+    </ion-toolbar>
+    <ion-toolbar v-else>
       <ion-buttons v-if="backButton" slot="start">
         <ion-back-button :text="builtText" :defaultHref="defaultHref"/>
       </ion-buttons>

@@ -2,10 +2,16 @@
 
 import {IonHeader} from "@ionic/vue";
 
+interface BaseHeaderProps {
+  noPadding?: boolean;
+}
+
+const props = defineProps<BaseHeaderProps>();
+
 </script>
 
 <template>
-  <ion-header class="ion-padding-vertical">
+  <ion-header :class="{'ion-padding-vertical': !props.noPadding}">
     <slot></slot>
   </ion-header>
 </template>

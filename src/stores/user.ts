@@ -11,6 +11,10 @@ export const useUserStore = defineStore('user', {
         selectedYear: {text: 'Tous', value: 'all'} as { text: string | 'all', value: string | 'all' }
     }),
     getters: {
+        fullName(): string {
+            if (!this.user || (!this.user.firstname && !this.user.lastname)) return 'John Doe';
+            return `${this.user.firstname ?? ''} ${this.user.lastname ?? ''}`;
+        },
         /* movies */
         watchlist(): Movie[] {
             if (!this.user) return [];
@@ -91,6 +95,7 @@ export const useUserStore = defineStore('user', {
         /* user */
         async loadUser() {
             this.user = this.user ?? await UserService.getUser();
+            console.log("this.user: ", this.user);
         },
         async getUser() {
             return this.user ?? await UserService.getUser();

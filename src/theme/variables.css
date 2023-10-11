@@ -54,7 +54,7 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-medium-shade: #808289;
   --ion-color-medium-tint: #9d9fa6;
 
-  --ion-color-light: #f4f5f8;
+  --ion-color-light: #fbfbfd;
   --ion-color-light-rgb: 244,245,248;
   --ion-color-light-contrast: #000000;
   --ion-color-light-contrast-rgb: 0,0,0;
@@ -70,6 +70,11 @@ http://ionicframework.com/docs/theming/ */
 }
 
 .header-xs, .header-md, .header-lg, .header-xl {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.footer-xs, .footer-md, .footer-lg, .footer-xl {
   box-shadow: none;
   -webkit-box-shadow: none;
 }

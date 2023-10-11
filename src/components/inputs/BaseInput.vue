@@ -5,6 +5,7 @@ import {computed} from "vue";
 import dayjs from "@/configs/dayjs.config";
 
 type TypeFields = 'price' | 'text' | 'number' | 'date';
+type colors = "primary" | "secondary" | "tertiary" | "success" | "warning" | "danger" | "light" | "medium" | "dark";
 type TextFieldTypes =
     | 'date'
     | 'email'
@@ -23,10 +24,12 @@ interface BaseInputProps {
   modelValue: any;
   type: TypeFields;
   label?: string;
+  bgColor?: colors;
   mask?: string;
   placeholder: string;
   required?: boolean;
   disabled?: boolean;
+  debounce?: number;
 
   afterNow?: boolean;
   beforeDate?: string | null;
@@ -41,6 +44,7 @@ const modelValue = computed({
   set: (val) => emit("update:modelValue", val)
 });
 
+const bgColor = computed(() => `var(--ion-color-${props.bgColor || 'tertiary'})`);
 const isIos = computed(() => {
   const platforms = getPlatforms();
   const ios = ["ios", "ipad", "iphone"];
@@ -100,6 +104,7 @@ const errorMessage = computed(() => {
         :type="builtType"
         :required="required"
         :disabled="disabled || false"
+        :debounce="debounce || 0"
       />
       <ion-text v-if="errorMessage" color="danger" class="text-sm pl-1">{{ errorMessage }}</ion-text>
     </div>
@@ -109,7 +114,7 @@ const errorMessage = computed(() => {
 <style scoped>
 
 ion-input {
-  --background: var(--ion-color-tertiary);
+  --background: v-bind(bgColor);
   --padding-start: 10px;
   --padding-end: 10px;
   --border-radius: 7px;

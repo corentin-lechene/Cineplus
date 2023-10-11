@@ -1,149 +1,149 @@
 <script setup lang="ts">
 
-import {IonPage, IonIcon, IonText, IonContent, IonActionSheet, IonCard} from "@ionic/vue";
-import {onMounted, ref} from "vue";
-import {useUserStore} from "@/stores/user";
 import {useRouter} from "vue-router";
-import {add} from "ionicons/icons";
+import {useUserStore} from "@/stores/user";
+import {computed} from "vue";
+import { IonPage, IonContent } from "@ionic/vue";
 
-import {Subscription} from "@/models";
 import Header from "@/components/headers/Header.vue";
-import AppButton from "@/components/buttons/AppButton.vue";
-import SubscriptionImage from "@/components/SubscriptionImage.vue";
-import Separator from "@/components/Separator.vue";
-import BaseModal from "@/components/modals/BaseModal.vue";
-import SubscriptionSettings from "@/components/modals/SubscriptionSettings.vue";
-import {ToastService} from "@/services/toast.service";
-import SubscriptionAdd from "@/components/modals/SubscriptionAdd.vue";
-import dayjs from "@/configs/dayjs.config";
-import {SubscriptionService} from "@/services/subscription.service";
-import {DateUtil} from "@/utils/date.util";
+import BaseList from "@/components/lists/BaseList.vue";
+import {
+  cardOutline,
+  cashOutline, handLeftOutline,
+  helpCircleOutline,
+  informationOutline,
+  languageOutline,
+  notificationsOutline,
+  personOutline,
+  sunnyOutline,
+} from "ionicons/icons";
+import ListItem from "@/components/lists/ListItem.vue";
+
 
 const router = useRouter();
+
 const userStore = useUserStore();
 
-const subscription = ref<Subscription | null>(null);
-const openModalReset = ref(false);
-const openModalSubscriptionSetting = ref(false);
-const openModalAddSubscription = ref(false);
-const actionSheetButtons = [
-  {
-    text: 'Delete',
-    role: 'destructive',
-    data: {
-      action: 'delete',
+
+const fullName = computed(() => userStore.fullName);
+const subscription = computed(() => userStore.lastSubscription);
+
+
+/* lists */
+
+const listAccountItems = computed(() => {
+  return [
+    {
+      label: 'Profil',
+      route: 'my-account',
+      value: fullName.value,
+      icon: personOutline,
+      clickable: true,
     },
+    {
+      label: 'Abonnements',
+      route: 'my-subscriptions',
+      value: subscription.value?.name || 'Aucun abonnement',
+      icon: cardOutline,
+      clickable: true,
+      last: true
+    }
+  ]
+})
+const listPreferencesItems = [
+  {
+    label: 'Notifications',
+    value: 'Activées',
+    icon: notificationsOutline,
+    disabled: true,
   },
   {
-    text: 'Cancel',
-    role: 'cancel',
-    data: {
-      action: 'cancel',
-    },
+    label: 'Langue',
+    value: 'Français',
+    icon: languageOutline,
+    disabled: true,
   },
+  {
+    label: 'Mode sombre',
+    value: false,
+    icon: sunnyOutline,
+    disabled: true,
+    last: true
+  }
+]
+const listHelpItems = [
+  {
+    label: 'FAQ',
+    value: undefined,
+    icon: helpCircleOutline,
+    disabled: true,
+    clickable: true,
+  },
+  {
+    label: 'A propos',
+    value: undefined,
+    icon: informationOutline,
+    disabled: true,
+    clickable: true,
+    last: true
+  }
 ];
-
-
-onMounted(() => {
-  userStore.loadUser()
-      .then(() => subscription.value = JSON.parse(JSON.stringify(userStore.lastSubscription)));
-});
-
-
-function addSubscription(newSubscription: Subscription) {
-  if(!userStore.user || !SubscriptionService.isValid(newSubscription)) {
-    ToastService.error('Une erreur est survenue').catch();
-    return;
+const listLegalItems = [
+  {
+    label: 'Publicité',
+    value: 'Désactivée',
+    clickable: true,
+    icon: cashOutline,
+    disabled: true,
+  },
+  {
+    label: 'Politique de confidentialité',
+    value: undefined,
+    route: 'privacy-policy',
+    icon: handLeftOutline,
+    clickable: true,
+    last: true
   }
+]
 
-  // si update
-  if(openModalSubscriptionSetting.value && userStore.lastSubscription) {
-    const startAt = dayjs(userStore.lastSubscription.startAt);
-    const diff = DateUtil.getDiff(startAt.toDate(), userStore.lastSubscription.expireAt)
-    userStore.lastSubscription.expireAt = startAt
-        .add(diff, 'month')
-        .format('YYYY-MM-DD');
 
-    newSubscription.startAt = userStore.lastSubscription.expireAt;
-  }
-
-  //si create
-  if(openModalAddSubscription.value && userStore.lastSubscription) {
-    const startAt = dayjs(userStore.lastSubscription.startAt);
-    const diff = DateUtil.getDiff(startAt.toDate(), userStore.lastSubscription.expireAt)
-    userStore.lastSubscription.expireAt = startAt
-        .add(diff, 'month')
-        .format('YYYY-MM-DD');
-  }
-
-  newSubscription.id = userStore.user.subscriptions.length;
-  userStore.user.subscriptions.push(newSubscription);
-  userStore.updateUser(userStore.user)
-      .then(() => subscription.value = JSON.parse(JSON.stringify(newSubscription)))
-      .catch(() => ToastService.error('Une erreur est survenue').catch())
-      .finally(() => {
-        openModalSubscriptionSetting.value = false;
-        openModalAddSubscription.value = false;
-      });
-}
-function resetApp(e: CustomEvent) {
-  if (e?.detail?.data?.action === 'delete') {
-    openModalReset.value = true;
-    userStore.resetUser();
-    router.replace('/intro');
+function openSetting(item: any) {
+  if (item.route) {
+    router.push({ path: `/settings/${item.route}` });
+  } else {
+    console.error("Cant find route");
   }
 }
+
+
 </script>
 
 <template>
   <ion-page>
 
-    <Header title="Paramètres" back-button default-href="/home"/>
+    <Header title="Paramètres" back-button default-href="/home" no-text />
 
-    <ion-content>
-      <div class="px-4 flex flex-col gap-y-2">
+    <ion-content color="tertiary">
 
-        <div v-if="subscription" class="flex flex-col gap-y-2.5">
-          <div class="flex flex-row justify-between items-center">
-            <ion-text color="dark" class="text-2xl">Mon abonnement</ion-text>
-            <ion-icon :icon="add" size="large" @click="openModalAddSubscription = true"></ion-icon>
-          </div>
-          <SubscriptionImage :subscription="subscription" @click="openModalSubscriptionSetting = true"/>
-        </div>
-        <div v-else>
-          <ion-text color="dark" class="text-2xl">Mon abonnement</ion-text>
-          <ion-card class="m-0 flex h-40">
-            <ion-icon class="m-auto" :icon="add" size="large" @click="openModalAddSubscription = true"></ion-icon>
-          </ion-card>
-        </div>
+      <BaseList title="Mon compte">
+        <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
+      </BaseList>
 
-        <Separator class="my-2"/>
-        <app-button color="danger" text="Réinitialiser" bg-color="light" @onTap="openModalReset = true"/>
-      </div>
+      <BaseList title="Préférences">
+        <ListItem v-bind="listPreferencesItems[0]" />
+        <ListItem v-bind="listPreferencesItems[1]" />
+        <ListItem v-bind="listPreferencesItems[2]" last />
+      </BaseList>
 
-      <!-- Modals     -->
-      <BaseModal v-model="openModalSubscriptionSetting">
-        <SubscriptionSettings
-            v-if="subscription"
-            v-model="subscription"
-            @onSave="addSubscription"
-            mode="update"
-        />
-      </BaseModal>
+      <BaseList title="Aide">
+        <ListItem v-for="(item, i) in listHelpItems" :key="i" v-bind="item" @onClick="openSetting" />
+      </BaseList>
 
-      <BaseModal v-model="openModalAddSubscription">
-        <SubscriptionAdd @onSave="addSubscription" />
-      </BaseModal>
+      <BaseList title="Mention légal">
+        <ListItem v-for="(item, i) in listLegalItems" :key="i" v-bind="item" @onClick="openSetting" />
+      </BaseList>
+
     </ion-content>
-
-    <ion-action-sheet
-        :buttons="actionSheetButtons"
-        :is-open="openModalReset"
-        header="Reinitialiser"
-        @didDismiss="resetApp"
-    />
-
-    <ion-text class="italic" @click="$router.push('/privacy')">politique de confidentialité</ion-text>
   </ion-page>
 </template>
 

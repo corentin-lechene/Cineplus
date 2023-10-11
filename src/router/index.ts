@@ -3,7 +3,6 @@ import {RouteRecordRaw} from 'vue-router';
 import Home from "@/views/Home/Home.vue";
 import {isConfigured} from "@/router/guards";
 
-//todo create navigation guard
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -35,10 +34,18 @@ const routes: Array<RouteRecordRaw> = [
   },*/
   {
     path: '/settings',
-    component: () => import('@/views/Settings/Settings.vue')
+    component: () => import('@/views/Settings/Settings.vue'),
   },
   {
-    path: '/privacy',
+    path: '/settings/my-account',
+    component: () => import('@/views/Settings/components/MyAccount.vue')
+  },
+  {
+    path: '/settings/my-subscriptions',
+    component: () => import('@/views/Settings/components/MySubscriptions.vue')
+  },
+  {
+    path: '/settings/privacy-policy',
     component: () => import('@/views/PrivacyPolicy/PrivacyPolicy.vue')
   }
 ]

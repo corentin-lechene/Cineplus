@@ -7,13 +7,10 @@ export function isConfigured(): NavigationGuardWithThis<undefined> {
             return next();
         }
 
-        console.log("isConfigured guard");
         const userStore = useUserStore();
-        const user = await userStore.getUser();
-
-        console.log("isConfigured (user): ", user);
-        if(!user || !user.isConfigured) {
-            return next('/intro');
+        await userStore.loadUser();
+        if(!userStore.user || !userStore.user.isConfigured) {
+            return next({path: '/intro'});
         }
 
         next();
