@@ -10,11 +10,11 @@ const props = defineProps<{ movie: Movie }>();
 </script>
 
 <template>
-  <ion-card class="rounded-lg m-0">
+  <ion-card class="rounded-lg m-0" @click="$router.push(`movie-details/${movie.id}`)">
     <ion-grid class="p-0">
       <ion-row>
 
-        <ion-col size="auto" class="m-0" @click="$router.push(`movie-details/${movie.id}`)">
+        <ion-col size="auto" class="m-0">
           <img
               v-if="movie.hasPoster"
               class="w-20 rounded"

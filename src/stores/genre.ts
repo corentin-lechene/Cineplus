@@ -16,8 +16,6 @@ export const useGenreStore = defineStore('genre', {
                 await TheMovieDbService.fetchGenres();
         },
         toGenres(genreIds: number[]): Genre[] {
-            console.log("genreIds: ", genreIds);
-            console.log("this.genres: ", this.genres);
             if(this.genres.length <= 0) return [];
             return genreIds.map(id => this.genres.find(g => g.id === id)!);
         },
