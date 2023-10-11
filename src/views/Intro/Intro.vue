@@ -10,6 +10,7 @@ import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
 import BaseModal from "@/components/modals/BaseModal.vue";
 import {ToastService} from "@/services/toast.service";
+import Header from "@/components/headers/Header.vue";
 
 const router = useRouter();
 
@@ -57,15 +58,13 @@ async function saveSubscription() {
 <template>
   <ion-page class="">
 
-    <ion-header class="px-4 py-4 flex relative">
-      <img class="h-48 mx-auto" src="@/assets/logos/cinema-en-illimite.png" alt="logo"/>
-      <div>
-        <ion-icon class="absolute top-5 right-5" :icon="close" size="large" @click="createUser()"></ion-icon>
-      </div>
-    </ion-header>
+    <Header title="">
+      <ion-icon class="absolute top-5 right-5" :icon="close" size="large" slot="end" @click="createUser()"></ion-icon>
+    </Header>
 
     <ion-content>
       <div class="flex flex-col items-center h-full">
+        <img class="h-48 mx-auto" src="@/assets/logos/cinema-en-illimite.png" alt="logo"/>
         <ion-text class="text-4xl mb-2">Configuration</ion-text>
         <ion-text class="text-xl">Choisir l'abonnement</ion-text>
 

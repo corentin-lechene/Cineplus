@@ -1,8 +1,6 @@
 <script lang="ts" setup>
 
 import {computed, onMounted} from "vue";
-import {IonCard} from "@ionic/vue";
-import {Swiper, SwiperSlide} from "swiper/vue";
 import {Swiper as SwiperClass} from "swiper/types";
 import subscriptionsData from "@/data/subscriptions.json";
 import 'swiper/css';
@@ -20,6 +18,7 @@ const value = computed({
 });
 
 onMounted(() => {
+  console.log("subscriptionsData: ", subscriptionsData);
   value.value = subscriptionsData[0];
 })
 

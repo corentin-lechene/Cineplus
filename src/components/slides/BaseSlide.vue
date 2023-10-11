@@ -54,7 +54,7 @@ function onSlideChange(e: SwiperClass) {
       allow-touch-move
       @slideChange="onSlideChange"
   >
-    <SwiperSlide v-for="(item, i) in items" :key="item?.id || i">
+    <SwiperSlide v-for="(item, i) in items" :key="i">
       <slot name="default" :item="item"></slot>
     </SwiperSlide>
   </Swiper>

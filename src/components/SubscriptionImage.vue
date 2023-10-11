@@ -13,7 +13,8 @@ const props = defineProps<SubscriptionImageProps>();
 
 <template>
   <div class="flex flex-col gap-y-2">
-    <img v-if="subscription.brand === 'UGC'" src="@/assets/images/ugc_illimite.png" alt="sub-img"/>
+    <img v-if="subscription.imageUrl === 'ugc_illimite.png'" src="@/assets/images/ugc_illimite.png" alt="sub-img"/>
+    <img v-else-if="subscription.imageUrl === 'ugc_illimite_26.png'" src="@/assets/images/ugc_illimite_26.png" alt="sub-img"/>
     <img v-else-if="subscription.brand === 'PATHE'" src="@/assets/images/cine_pass.png" alt="sub-img"/>
     <div v-else class="text-center py-20">Image not found</div>
     <ion-text color="medium" class="text-md text-center">{{subscription.name}}</ion-text>
