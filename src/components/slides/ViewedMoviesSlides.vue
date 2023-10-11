@@ -34,7 +34,7 @@ onMounted(() => {
       class="mt-2"
       :items="userStore.viewedMovies"
       :slides-per-view="2.3"
-      :space-between="30"
+      :space-between="20"
   >
     <template #default="{item: viewedMovie}: {item: ViewedMovie}">
       <div v-if="viewedMovie" class="flex flex-col gap-y-2 rounded-xl">
