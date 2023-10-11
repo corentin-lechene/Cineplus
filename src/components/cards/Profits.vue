@@ -27,7 +27,7 @@ const profits = computed(() => {
 </script>
 
 <template>
-  <ion-card class="mx-0 p-4">
+  <ion-card class="mx-0 p-2">
     <ion-card-content class="m-0">
       <ion-text color="dark" class="text-2xl">Rentabilité</ion-text>
       <br>
