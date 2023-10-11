@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {IonContent, IonFooter, IonHeader, IonPage, IonText, IonIcon} from "@ionic/vue";
+import {IonContent, IonFooter, IonPage, IonText, IonIcon} from "@ionic/vue";
 import {close} from "ionicons/icons";
 import AppButton from "@/components/buttons/AppButton.vue";
 import {Subscription, User} from "@/models";

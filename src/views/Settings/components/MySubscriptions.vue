@@ -6,7 +6,6 @@ import Header from "@/components/headers/Header.vue";
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import SubscriptionImage from "@/components/SubscriptionImage.vue";
-import BaseModal from "@/components/modals/BaseModal.vue";
 import BaseList from "@/components/lists/BaseList.vue";
 
 const userStore = useUserStore();
@@ -38,10 +37,6 @@ const openSubHistory = ref(false);
         <!-- Autre abonnements       -->
       </div>
 
-
-<!--      <BaseModal v-model="openSubHistory">
-        <div>historique</div>
-      </BaseModal>-->
     </ion-content>
   </ion-page>
 </template>
