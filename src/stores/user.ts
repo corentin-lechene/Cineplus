@@ -4,6 +4,7 @@ import {UserService} from "@/services/user.service";
 import {PickerColumn, PickerColumnOption} from "@ionic/vue";
 import dayjs from "dayjs";
 import {DateUtil} from "@/utils/date.util";
+import {SubscriptionService} from "@/services/subscription.service";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -95,7 +96,6 @@ export const useUserStore = defineStore('user', {
         /* user */
         async loadUser() {
             this.user = this.user ?? await UserService.getUser();
-            console.log("this.user: ", this.user);
         },
         async getUser() {
             return this.user ?? await UserService.getUser();
@@ -128,6 +128,15 @@ export const useUserStore = defineStore('user', {
             if (!this.user) return;
             this.user.viewedMovies = this.user.viewedMovies.filter(vm => vm.movie.id !== viewedMovie.movie.id);
             UserService.saveUser(this.user).catch();
+        },
+        /* subs */
+        async newSubscription(subscription: Subscription) {
+          if(!this.user) return;
+          if(!SubscriptionService.isValid(subscription)) {
+              throw new Error('Invalid subscription');
+          }
+          this.user.subscriptions.push(subscription);
+          await UserService.saveUser(this.user);
         },
         /* app */
         resetUser() {

@@ -123,7 +123,7 @@ function openSetting(item: any) {
 
     <Header title="Paramètres" back-button default-href="/home" no-text />
 
-    <ion-content color="tertiary">
+    <ion-content color="tertiary" class="ion-padding">
 
       <BaseList title="Mon compte">
         <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
