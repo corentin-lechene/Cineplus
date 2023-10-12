@@ -17,6 +17,7 @@ import {onMounted, ref} from "vue";
 import MovieListItem from "@/components/cards/MovieListItem.vue";
 import {Movie} from "@/models";
 import {MovieService} from "@/services/movie.service";
+import {MovieUtil} from "@/utils/movie.util";
 
 const loadingMovies = ref(true);
 let popularMovies = ref<Movie[]>([]);
@@ -28,7 +29,7 @@ let popularMoviesPage = ref(1);
 onMounted(() => {
   MovieService.fetchPopularMovies()
       .then((movies) => {
-        popularMovies.value = movies;
+        popularMovies.value = movies.sort(MovieUtil.sortByReleaseDate);
       })
       .finally(() => {
         loadingMovies.value = false;
@@ -45,7 +46,7 @@ function searchMovie(input: Event) {
   const value = (input.target as HTMLInputElement).value;
   inputText.value = value;
   MovieService.fetchByText(value)
-      .then(movies => searchMovies.value = movies)
+      .then(movies => searchMovies.value = movies.sort(MovieUtil.sortByReleaseDate))
       .finally(() => loadingMovies.value = false);
 }
 
