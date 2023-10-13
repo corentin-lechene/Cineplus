@@ -2,7 +2,7 @@
 
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
-import {computed} from "vue";
+import {computed, ref} from "vue";
 import { IonPage, IonContent } from "@ionic/vue";
 
 import Header from "@/components/headers/Header.vue";
@@ -18,6 +18,7 @@ import {
   sunnyOutline,
 } from "ionicons/icons";
 import ListItem from "@/components/lists/ListItem.vue";
+import AppButton from "@/components/buttons/AppButton.vue";
 
 
 const router = useRouter();
@@ -27,6 +28,25 @@ const userStore = useUserStore();
 
 const fullName = computed(() => userStore.fullName);
 const subscription = computed(() => userStore.lastSubscription);
+
+const openResetModal = ref(false);
+
+const resetActions = [
+  {
+    text: 'Confirmer',
+    role: 'destructive',
+    data: {
+      action: 'delete',
+    },
+  },
+  {
+    text: 'Annuler',
+    role: 'cancel',
+    data: {
+      action: 'cancel',
+    },
+  },
+];
 
 
 /* lists */
@@ -115,6 +135,14 @@ function openSetting(item: any) {
   }
 }
 
+function resetApp(e: CustomEvent) {
+  if (e?.detail?.data?.action === 'delete') {
+    openResetModal.value = true;
+    userStore.resetUser();
+    router.replace('/intro');
+  }
+}
+
 
 </script>
 
@@ -123,7 +151,7 @@ function openSetting(item: any) {
 
     <Header title="Paramètres" back-button default-href="/home" no-text />
 
-    <ion-content color="tertiary" class="ion-padding">
+    <ion-content color="tertiary" class="ion-padding" :force-overscroll="false">
 
       <BaseList title="Mon compte">
         <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
@@ -143,6 +171,14 @@ function openSetting(item: any) {
         <ListItem v-for="(item, i) in listLegalItems" :key="i" v-bind="item" @onClick="openSetting" />
       </BaseList>
 
+      <app-button color="danger" text="Réinitialiser" bg-color="light" @onTap="openResetModal = true"/>
+
+      <ion-action-sheet
+        :is-open="openResetModal"
+        :buttons="resetActions"
+        header="Reinitialiser"
+        @didDismiss="resetApp"
+      />
     </ion-content>
   </ion-page>
 </template>
