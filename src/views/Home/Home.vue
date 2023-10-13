@@ -13,7 +13,7 @@ import Profits from "@/components/cards/Profits.vue";
 
     <HomeHeader/>
 
-    <ion-content class="ion-padding" color="tertiary">
+    <ion-content class="ion-padding" color="tertiary" :force-overscroll="false">
 
       <WatchlistSlides/>
 
