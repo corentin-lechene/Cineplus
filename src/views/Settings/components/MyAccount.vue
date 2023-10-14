@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {IonContent, IonPage} from "@ionic/vue";
+import {IonContent, IonPage, IonNote} from "@ionic/vue";
 import Header from "@/components/headers/Header.vue";
 import BaseInput from "@/components/inputs/BaseInput.vue";
 import {ref} from "vue";

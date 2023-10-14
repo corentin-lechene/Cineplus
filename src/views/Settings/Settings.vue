@@ -3,7 +3,7 @@
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
 import {computed, ref} from "vue";
-import { IonPage, IonContent } from "@ionic/vue";
+import { IonPage, IonContent, IonActionSheet } from "@ionic/vue";
 
 import Header from "@/components/headers/Header.vue";
 import BaseList from "@/components/lists/BaseList.vue";
