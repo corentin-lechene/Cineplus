@@ -1,0 +1,42 @@
+[
+  {
+    "id": -1,
+    "brand": "PATHE",
+    "name": "Cine Pass (-26 ans)",
+    "price": 16.90,
+    "imageUrl": "cine_pass.png",
+    "payment": "monthly",
+    "expireAt": null,
+    "ticketPrice": 10.80
+  },
+  {
+    "id": -2,
+    "brand": "PATHE",
+    "name": "Cine Pass",
+    "price": 19.90,
+    "imageUrl": "cine_pass.png",
+    "payment": "monthly",
+    "expireAt": null,
+    "ticketPrice": 14.20
+  },
+  {
+    "id": -3,
+    "brand": "UGC",
+    "name": "UGC Illimité (-26 ans)",
+    "price": 17.90,
+    "imageUrl": "ugc_illimite_26.png",
+    "payment": "monthly",
+    "expireAt": null,
+    "ticketPrice": 9.60
+  },
+  {
+    "id": -4,
+    "brand": "UGC",
+    "name": "UGC Illimité",
+    "price": 21.90,
+    "imageUrl": "ugc_illimite.png",
+    "payment": "monthly",
+    "expireAt": null,
+    "ticketPrice": 13.90
+  }
+]

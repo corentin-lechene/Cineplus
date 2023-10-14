@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.corentinlechene.cinemaenillimite',
-  appName: 'cinema-en-illimite',
+  appId: 'com.corentinlechene.cineplus',
+  appName: 'cineplus',
   webDir: 'dist',
   server: {
     androidScheme: 'https'
