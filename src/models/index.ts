@@ -3,4 +3,4 @@ export * from './movie.model';
 export * from './subscription.model';
 export * from './preference.model';
 export * from './the-movie-db.model'
-export * from './viewedMovie.model'
+export * from './watched-movie.model'
