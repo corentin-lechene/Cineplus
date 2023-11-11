@@ -1,5 +1,5 @@
 export interface TheMovieDbExtra {
-    belongs_to_collection: any | null; // Remplacez "any" par le type approprié si nécessaire
+    belongs_to_collection: any | null;
     budget: number;
     genres: Genre[];
     homepage: string | null;
@@ -60,3 +60,6 @@ export interface Genre {
     id: number;
     name: string;
 }
+
+export type PosterSize = 'w92' | 'w154' | 'w185' | 'w342' | 'w500' | 'w780' | 'original';
+export type BackdropSize = 'w300' | 'w780' | 'w1280' | 'original';
