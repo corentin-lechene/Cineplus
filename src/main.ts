@@ -1,8 +1,8 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router';
 
-import { IonicVue } from '@ionic/vue';
+import {IonContent, IonicVue, IonPage} from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -28,7 +28,11 @@ const pinia = createPinia()
 const app = createApp(App)
   .use(pinia)
   .use(IonicVue)
-  .use(router);
+    .use(router)
+
+app
+    .component('ion-content', IonContent)
+    .component('ion-page', IonPage);
 
 router.isReady().then(() => {
   app.mount('#app');
