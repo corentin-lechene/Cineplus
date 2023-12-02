@@ -8,6 +8,6 @@ export class WatchList {
     }
 
     static of(movie: Movie) {
-        return new WatchList(movie,);
+        return new WatchList(movie);
     }
 }
