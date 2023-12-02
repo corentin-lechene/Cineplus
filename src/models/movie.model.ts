@@ -29,8 +29,9 @@ export class Movie {
         this.rating = rating;
     }
 
-    static of(id: number, title: string, overview: string, backdropUrls: BackdropUrls, posterUrls: PosterUrls, releasedAt: Date, genres: Genre[], rating: number) {
-        return new Movie(id, title, overview, backdropUrls, posterUrls, releasedAt, genres, rating);
+    //todo refaire le lien de l'image
+    static of(id: number, title: string, overview: string, posterPath: string, releasedAt: Date, genres: Genre[], rating: number) {
+        return new Movie(id, title, overview, Movie.getBackdropUrls(posterPath), Movie.getPosterUrls(posterPath), releasedAt, genres, rating);
     }
 
     private static getBackdropUrls(backdropPath: string | null): BackdropUrls {
