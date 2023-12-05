@@ -1,10 +1,10 @@
-import {BackdropSize, Genre, PosterSize} from "@/models/the-movie-db.model";
+import {TheMovieDb} from "@/models/the-movie-db.model";
 
 export type BackdropUrls = {
-    [key in BackdropSize]: string
+    [key in TheMovieDb.BackdropSize]: string
 } | null;
 export type PosterUrls = {
-    [key in PosterSize]: string
+    [key in TheMovieDb.PosterSize]: string
 } | null;
 
 
@@ -15,10 +15,10 @@ export class Movie {
     backdropUrls: BackdropUrls;
     posterUrls: PosterUrls;
     releasedAt: Date;
-    genres: Genre[];
+    genres: TheMovieDb.Genre[];
     rating: number;
 
-    private constructor(id: number, title: string, overview: string, backdropUrls: BackdropUrls, posterUrls: PosterUrls, releasedAt: Date, genres: Genre[], rating: number) {
+    private constructor(id: number, title: string, overview: string, backdropUrls: BackdropUrls, posterUrls: PosterUrls, releasedAt: Date, genres: TheMovieDb.Genre[], rating: number) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -30,12 +30,12 @@ export class Movie {
     }
 
     //todo refaire le lien de l'image
-    static of(id: number, title: string, overview: string, posterPath: string, releasedAt: Date, genres: Genre[], rating: number) {
-        return new Movie(id, title, overview, Movie.getBackdropUrls(posterPath), Movie.getPosterUrls(posterPath), releasedAt, genres, rating);
+    static of(id: number, title: string, overview: string, backdropPath: string, posterPath: string, releasedAt: Date, genres: TheMovieDb.Genre[], rating: number) {
+        return new Movie(id, title, overview, Movie.getBackdropUrls(backdropPath), Movie.getPosterUrls(posterPath), releasedAt, genres, rating);
     }
 
-    private static getBackdropUrls(backdropPath: string | null): BackdropUrls {
-        if (backdropPath === null) {
+    private static getBackdropUrls(backdropPath: string): BackdropUrls {
+        if (!backdropPath) {
             return null;
         }
         return {
@@ -46,8 +46,8 @@ export class Movie {
         }
     }
 
-    private static getPosterUrls(posterPath: string | null): PosterUrls {
-        if (posterPath === null) {
+    private static getPosterUrls(posterPath: string): PosterUrls {
+        if (!posterPath) {
             return null;
         }
         return {

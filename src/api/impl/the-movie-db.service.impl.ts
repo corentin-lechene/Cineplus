@@ -47,7 +47,7 @@ export class TheMovieDbServiceImpl implements MovieApiService {
             const url = `${this.baseUrl}/movie/${id}?language=fr`;
             const res = await fetch(url, this.options);
             if (!res.ok) {
-                return Movie.of(0, '', '', '', new Date(), [], 0);
+                return Movie.of(0, '', '', '', '', new Date(), [], 0);
             }
 
             const data: TheMovieDb.Movie = await res.json();
@@ -79,6 +79,7 @@ export class TheMovieDbServiceImpl implements MovieApiService {
             parseInt(movie.id),
             movie.title,
             movie.overview,
+            movie.backdrop_path || '',
             movie.poster_path || '',
             new Date(movie.release_date),
             [],
