@@ -17,7 +17,7 @@ defineEmits();
 <template>
   <BaseList :items="movies" :section="section" :title="title">
     <template #default="{item}: {item: Movie}">
-      <MovieListItem :movie="item" thumbnail/>
+      <MovieListItem :movie="item" thumbnail @click="$router.push(`/movies/${item.id}/details`)"/>
     </template>
   </BaseList>
 </template>

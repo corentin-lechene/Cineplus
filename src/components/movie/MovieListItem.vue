@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {IonItem, IonItemOptions, IonItemSliding, IonText,} from "@ionic/vue";
 import {Movie} from "@/models";
-import dayjs from "dayjs";
+import dayjs from "@/configs/dayjs.config";
 import MovieImage from "@/components/movie/MovieImage.vue";
 import {computed} from "vue";
 
