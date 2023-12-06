@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/home',
     component: HomePage,
-  }
+  },
   /*{
     path: '/movies/search',
     component: () => import('@/views/Movies/SearchMovies.vue'),
@@ -53,55 +53,55 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/movies/watched',
     component: () => import('@/views/Movies/WatchedMovies.vue'),
-  },
-  {
-    path: '/movies/:movie_id/movie-details',
-    component: () => import('@/views/MovieDetails/MovieDetails.vue'),
-  },
-  {
-    path: '/dashboard',
-    component: () => import('@/views/Dashboard/Dashboard.vue'),
-  },
-  {
-    path: '/settings',
-    component: () => import('@/views/Settings/Settings.vue'),
-  },
-  {
-    path: 'account',
-    component: () => import('@/views/Settings/Account.vue'),
-  },
-  {
-    path: 'loyalty-cards',
-    component: () => import('@/views/Settings/LoyaltyCards.vue'),
-  },
-  {
-    path: 'loyalty-cards/new',
-    component: () => import('@/views/Settings/NewLoyaltyCard.vue'),
-  },
-  {
-    path: 'subscription',
-    component: () => import('@/views/Settings/Subscription.vue'),
-  },
-  {
-    path: 'subscription/new',
-    component: () => import('@/views/Settings/NewSubscription.vue'),
-  },
-  {
-    path: 'advertisement',
-    component: () => import('@/views/Settings/Advertisement.vue'),
-  },
-  {
-    path: 'dark-mode',
-    component: () => import('@/views/Settings/DarkMode.vue'),
-  },
-  {
-    path: 'language',
-    component: () => import('@/views/Settings/Language.vue'),
-  },
-  {
-    path: 'notifications',
-    component: () => import('@/views/Settings/Notifications.vue'),
   },*/
+  {
+      path: '/movies/:movie_id/details',
+      component: () => import('@/views/MovieDetailsPage/MovieDetailsPage.vue'),
+  },
+    /*{
+      path: '/dashboard',
+      component: () => import('@/views/Dashboard/Dashboard.vue'),
+    },
+    {
+      path: '/settings',
+      component: () => import('@/views/Settings/Settings.vue'),
+    },
+    {
+      path: 'account',
+      component: () => import('@/views/Settings/Account.vue'),
+    },
+    {
+      path: 'loyalty-cards',
+      component: () => import('@/views/Settings/LoyaltyCards.vue'),
+    },
+    {
+      path: 'loyalty-cards/new',
+      component: () => import('@/views/Settings/NewLoyaltyCard.vue'),
+    },
+    {
+      path: 'subscription',
+      component: () => import('@/views/Settings/Subscription.vue'),
+    },
+    {
+      path: 'subscription/new',
+      component: () => import('@/views/Settings/NewSubscription.vue'),
+    },
+    {
+      path: 'advertisement',
+      component: () => import('@/views/Settings/Advertisement.vue'),
+    },
+    {
+      path: 'dark-mode',
+      component: () => import('@/views/Settings/DarkMode.vue'),
+    },
+    {
+      path: 'language',
+      component: () => import('@/views/Settings/Language.vue'),
+    },
+    {
+      path: 'notifications',
+      component: () => import('@/views/Settings/Notifications.vue'),
+    },*/
 ];
 
 
