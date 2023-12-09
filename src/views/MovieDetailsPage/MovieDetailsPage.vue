@@ -2,15 +2,28 @@
 
 import {computed, onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import {IonButton, IonContent, IonIcon, IonPage, IonText} from "@ionic/vue";
+import {
+  IonButton,
+  IonContent,
+  IonIcon,
+  IonPage,
+  IonText,
+  IonCard,
+  IonCardContent,
+  IonCardTitle,
+  IonCardHeader,
+} from "@ionic/vue";
 import {MovieContainer} from "@/containers/movie.container";
 import MovieImage from "@/components/movie/MovieImage.vue";
 import {Movie} from "@/models";
 import dayjs from "@/configs/dayjs.config";
-import {ellipseOutline} from "ionicons/icons";
+import {addSharp, arrowBackSharp, ellipseOutline} from "ionicons/icons";
+import {useUserStore} from "@/stores/user";
 
 const route = useRoute();
 const router = useRouter();
+
+const userStore = useUserStore();
 
 const movie = ref<Movie | null>(null);
 
@@ -23,6 +36,18 @@ const releaseDate = computed(() => {
   return `Sort le ${dateFormatted}`;
 });
 
+
+function handleAddToWatchList() {
+  if(!movie.value || !userStore.user) return;
+  if(userStore.user.watchList.some(watchList => watchList.movie.id === movie.value?.id)) {
+    //todo Display alert to remove it
+    console.warn("Display warning to remove it");
+    userStore.removeFromWatchList(movie.value);
+  } else {
+    userStore.addToWatchList(movie.value);
+  }
+}
+
 onMounted(async () => {
   const movieId = route.params.movie_id;
   if (!movieId || movieId === "" || typeof movieId !== "string") {
@@ -30,40 +55,16 @@ onMounted(async () => {
   }
 
   const movieService = MovieContainer.getMovieService();
-  movie.value = {
-    "id": 507089,
-    "title": "Five Nights at Freddy's",
-    "overview": "Mike, jeune homme perturbé, s’occupe de sa sœur Abby, âgée de 10 ans. Il est toujours hanté par la disparition, jamais élucidée, de son petit frère, survenue il y a une dizaine d’années. Récemment licencié, il a absolument besoin de retrouver un emploi pour ne pas perdre la garde d’Abby. Il accepte donc un poste de gardien de nuit, dans un restaurant désaffecté : Freddy Fazbear’s Pizzeria. Mais Mike ne tarde pas à comprendre que les apparences y sont terriblement trompeuses. Avec l’aide de Vanessa Shelly, agent de police, il est confronté, la nuit, à des phénomènes surnaturels inexplicables et bascule dans un univers cauchemardesque...",
-    "backdropUrls": {
-      "w300": "https://image.tmdb.org/t/p/w300/t5zCBSB5xMDKcDqe91qahCOUYVV.jpg",
-      "w780": "https://image.tmdb.org/t/p/w780/t5zCBSB5xMDKcDqe91qahCOUYVV.jpg",
-      "w1280": "https://image.tmdb.org/t/p/w1280/t5zCBSB5xMDKcDqe91qahCOUYVV.jpg",
-      "original": "https://image.tmdb.org/t/p/original/t5zCBSB5xMDKcDqe91qahCOUYVV.jpg"
-    },
-    "posterUrls": {
-      "w92": "https://image.tmdb.org/t/p/w92/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg",
-      "w154": "https://image.tmdb.org/t/p/w154/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg",
-      "w185": "https://image.tmdb.org/t/p/w185/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg",
-      "w342": "https://image.tmdb.org/t/p/w342/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg",
-      "w500": "https://image.tmdb.org/t/p/w500/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg",
-      "w780": "https://image.tmdb.org/t/p/w780/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg",
-      "original": "https://image.tmdb.org/t/p/original/tEY81I7lpiHaLJa7AZ3O4vWXmJo.jpg"
-    },
-    "releasedAt": new Date("2023-10-25T00:00:00.000Z"),
-    "genres": [
-      {id: 0, name: 'Truc'},
-      {id: 1, name: 'Drame'},
-      {id: 2, name: 'Machin'},
-      {id: 3, name: 'Bidule'},
-    ],
-    "rating": 7.841
-  };
+  movie.value = await movieService.fetchMovieById(movieId);
 });
 </script>
-
+<!-- fixme essayer de faire d'une différente manière
+ mettre l'image en background plutot ?
+ mettre les boutons en haut en fixe ?
+ -->
 <template>
   <ion-page>
-    <ion-content>
+    <ion-content fullscreen>
       <div v-if="movie === null">
         loading...
       </div>
@@ -71,6 +72,14 @@ onMounted(async () => {
         <!-- Image and title       -->
         <div class="relative">
           <MovieImage :image-url="movie.posterUrls?.w500 || ''" class="rounded-lg"/>
+          <!-- Buttons header        -->
+          <div class="absolute top-0 w-full p-5">
+            <div class="flex justify-between">
+              <ion-icon :icon="arrowBackSharp" size="large" @click="$router.back()"></ion-icon>
+              <ion-icon :icon="addSharp" size="large" @click="handleAddToWatchList()"></ion-icon>
+            </div>
+          </div>
+          <!-- Title and button         -->
           <div class="absolute bottom-0 w-full bg-gradient-to-t from-black to-transparent">
             <div class="flex flex-col p-5">
               <ion-text class="text-2xl font-bold" color="light">{{ movie.title }}</ion-text>
@@ -88,6 +97,15 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+
+        <ion-card class="rounded-xl">
+          <ion-card-header>
+            <ion-card-title>{{ movie.title }}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            {{ movie.overview }}
+          </ion-card-content>
+        </ion-card>
 
       </div>
     </ion-content>

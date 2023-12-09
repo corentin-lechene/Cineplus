@@ -2,6 +2,7 @@ import {createRouter, createWebHistory} from '@ionic/vue-router';
 import {RouteRecordRaw} from 'vue-router';
 import HomePage from '@/views/HomePage/HomePage.vue'
 import MainLayout from "@/layouts/MainLayout.vue";
+import {isConfigured} from "@/router/guards";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -110,6 +111,6 @@ const router = createRouter({
   routes
 });
 
-// router.beforeEach(isConfigured());
+router.beforeEach(isConfigured());
 
 export default router
