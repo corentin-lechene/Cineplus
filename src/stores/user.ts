@@ -1,7 +1,10 @@
 import {defineStore} from 'pinia'
-import {Movie, User} from "@/models";
+import {LoyaltyCard, Movie, Subscription, User, WatchedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
 import {WatchlistActions} from "@/stores/user-actions/watchlist.action";
+import {WatchedActions} from "@/stores/user-actions/watched.action";
+import {LoyaltyCardActions} from "@/stores/user-actions/loyalty-card.action";
+import {SubscriptionActions} from "@/stores/user-actions/subscription.action";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -35,7 +38,25 @@ export const useUserStore = defineStore('user', {
             WatchlistActions.removeFromWatchlist(this.user, movie);
             UserService.saveUser(this.user).catch(console.error);
         },
-        // markAsWatched: markAsWatched.bind(this),
-        // addLoyaltyCard: addLoyaltyCard.bind(this),
+        addToWatchedList(movie: WatchedMovie) {
+            if (!this.user) return;
+            WatchedActions.addToWatchedList(this.user, movie);
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        removeFromWatchedList(movie: Movie) {
+            if (!this.user) return;
+            WatchedActions.removeFromWatchedList(this.user, movie);
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        createLoyaltyCard(loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            LoyaltyCardActions.createLoyaltyCard(this.user, loyaltyCard)
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        attachSubscription(subscription: Subscription, loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            SubscriptionActions.attachSubscription(subscription, loyaltyCard);
+            UserService.saveUser(this.user).catch(console.error);
+        }
     }
 });

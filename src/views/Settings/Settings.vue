@@ -5,11 +5,10 @@ import {useUserStore} from "@/stores/user";
 import {computed, ref} from "vue";
 import { IonPage, IonContent, IonActionSheet } from "@ionic/vue";
 
-import Header from "@/components/headers/Header.vue";
 import BaseList from "@/components/lists/BaseList.vue";
 import {
   cardOutline,
-  cashOutline, handLeftOutline,
+  handLeftOutline,
   helpCircleOutline,
   informationOutline,
   languageOutline,
@@ -19,15 +18,17 @@ import {
 } from "ionicons/icons";
 import ListItem from "@/components/lists/ListItem.vue";
 import AppButton from "@/components/buttons/AppButton.vue";
-
+import BaseHeader from "@/components/common/BaseHeader.vue";
 
 const router = useRouter();
-
 const userStore = useUserStore();
 
-
-const fullName = computed(() => userStore.fullName);
-const subscription = computed(() => userStore.lastSubscription);
+const fullName = computed(() => {
+  if(!userStore.user || userStore.user.loyaltyCards.length <= 0) return ""
+  return userStore.user.loyaltyCards.at(-1)!.firstname
+      + ' ' +
+      userStore.user.loyaltyCards.at(-1)!.lastname
+});
 
 const openResetModal = ref(false);
 
@@ -58,12 +59,11 @@ const listAccountItems = computed(() => {
       route: 'my-account',
       value: fullName.value,
       icon: personOutline,
-      clickable: true,
     },
     {
-      label: 'Abonnements',
-      route: 'my-subscriptions',
-      value: subscription.value?.name || 'Aucun abonnement',
+      label: 'Carte de fidélité',
+      route: 'loyalty-cards',
+      value: "",
       icon: cardOutline,
       clickable: true,
       last: true
@@ -73,7 +73,7 @@ const listAccountItems = computed(() => {
 const listPreferencesItems = [
   {
     label: 'Notifications',
-    value: 'Activées',
+    value: 'Désactivées',
     icon: notificationsOutline,
     disabled: true,
   },
@@ -109,13 +109,13 @@ const listHelpItems = [
   }
 ];
 const listLegalItems = [
-  {
-    label: 'Publicité',
-    value: 'Désactivée',
-    clickable: true,
-    icon: cashOutline,
-    disabled: true,
-  },
+  // {
+  //   label: 'Publicité',
+  //   value: 'Désactivée',
+  //   clickable: true,
+  //   icon: cashOutline,
+  //   disabled: true,
+  // },
   {
     label: 'Politique de confidentialité',
     value: undefined,
@@ -129,7 +129,7 @@ const listLegalItems = [
 
 function openSetting(item: any) {
   if (item.route) {
-    router.push({ path: `/settings/${item.route}` });
+    router.push(item.route);
   } else {
     console.error("Cant find route");
   }
@@ -138,8 +138,9 @@ function openSetting(item: any) {
 function resetApp(e: CustomEvent) {
   if (e?.detail?.data?.action === 'delete') {
     openResetModal.value = true;
-    userStore.resetUser();
     router.replace('/intro');
+  } else {
+    openResetModal.value = false;
   }
 }
 
@@ -149,7 +150,7 @@ function resetApp(e: CustomEvent) {
 <template>
   <ion-page>
 
-    <Header title="Paramètres" back-button default-href="/home" no-text />
+    <BaseHeader title="Paramètres" />
 
     <ion-content color="tertiary" class="ion-padding" :force-overscroll="false">
 

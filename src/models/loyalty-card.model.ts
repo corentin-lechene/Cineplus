@@ -24,6 +24,6 @@ export class LoyaltyCard {
     }
 
     static of(id: number, firstname: string, lastname: string, brand: string, imageUrl: string, cardNumber?: string) {
-        return new LoyaltyCard(id, firstname, lastname, brand, imageUrl, [], new Date());
+        return new LoyaltyCard(id, firstname, lastname, brand, imageUrl, [], new Date(), cardNumber);
     }
 }

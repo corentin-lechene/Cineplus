@@ -28,8 +28,7 @@ import Header from "@/components/headers/Header.vue";
         <p>Politique de confidentialité en vigueur à partir du 2023-09-06</p>
 
         <h2>Nous Contacter</h2>
-        <p>Si vous avez des questions ou des suggestions concernant notre Politique de Confidentialité, n'hésitez pas à <a href="mailto:corentin.lechene.pro@gmail.com">nous contacter</a>.</p>
-        <p>Cette page de politique de confidentialité a été créée sur <a href="https://privacypolicytemplate.net/">privacypolicytemplate.net</a> et modifiée/générée par App Privacy Policy Generator.</p>
+        <p>Si vous avez des questions ou des suggestions concernant notre Politique de Confidentialité, n'hésitez pas à <a href="mailto:corentin.lechene.pro@gmail.com">me contacter</a>.</p>
       </div>
 
     </ion-content>

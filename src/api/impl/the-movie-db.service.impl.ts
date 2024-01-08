@@ -1,5 +1,6 @@
 import {Movie, TheMovieDb} from "@/models";
 import {MovieApiService} from "@/api/movie.api.service";
+import dayjs from "@/configs/dayjs.config";
 
 export class TheMovieDbServiceImpl implements MovieApiService {
     private readonly baseUrl: string;
@@ -81,7 +82,7 @@ export class TheMovieDbServiceImpl implements MovieApiService {
             movie.overview,
             movie.backdrop_path || '',
             movie.poster_path || '',
-            new Date(movie.release_date),
+            dayjs(movie.release_date).toDate(),
             [],
             movie.vote_average
         );

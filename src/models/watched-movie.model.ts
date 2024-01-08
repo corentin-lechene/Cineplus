@@ -11,7 +11,7 @@ export class WatchedMovie {
     subscription?: Subscription;
     room?: string;
     seat?: string;
-    extraDepense?: number;
+    extraExpense?: number;
     note?: string;
 
     private constructor(movie: Movie, cinema: Cinema, watchedAt: Date, ticketPrice: number, subscription?: Subscription, room?: string, seat?: string, extraDepense?: number, note?: string) {
@@ -22,7 +22,7 @@ export class WatchedMovie {
         this.subscription = subscription;
         this.room = room;
         this.seat = seat;
-        this.extraDepense = extraDepense;
+        this.extraExpense = extraDepense;
         this.note = note;
     }
 

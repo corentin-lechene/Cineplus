@@ -6,7 +6,6 @@ import {
   IonHeader,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonLabel,
   IonSearchbar,
   IonToolbar,
   SearchbarCustomEvent
@@ -59,10 +58,8 @@ onMounted(async () => {
 
 <template>
   <ion-page>
-    <ion-header class="ion-no-border" translucent>
-      <ion-toolbar>
-        <ion-label v-if="currentView === 'popular'" class="text-3xl">Recherche
-        </ion-label>
+    <ion-header class="ion-no-border">
+      <ion-toolbar class="h-auto">
         <ion-searchbar
           v-model="input"
           :debounce="250"
@@ -76,7 +73,6 @@ onMounted(async () => {
         />
       </ion-toolbar>
     </ion-header>
-
     <ion-content color="light">
 
       <!-- Popular     -->
@@ -88,8 +84,8 @@ onMounted(async () => {
       <!-- Infinite for popular and search     -->
       <ion-infinite-scroll v-if="currentView !== 'recent'" @ionInfinite="nextPage($event)">
         <ion-infinite-scroll-content
-          loadingSpinner="bubbles"
-          loadingText="Chargement des films..."
+            loadingSpinner="bubbles"
+            loadingText="Chargement des films..."
         ></ion-infinite-scroll-content>
       </ion-infinite-scroll>
 

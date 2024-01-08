@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 
 import {IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonRow, IonToolbar} from "@ionic/vue";
+import ViewedMoviesSlides from "@/components/slides/ViewedMoviesSlides.vue";
+import WatchlistSlides from "@/components/slides/WatchlistSlides.vue";
 </script>
 
 <template>
@@ -25,8 +27,12 @@ import {IonCol, IonContent, IonGrid, IonHeader, IonLabel, IonRow, IonToolbar} fr
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :force-overscroll="false" class="rounded-lg">
-      Bonjour
+    <ion-content :force-overscroll="false" class="rounded-lg ion-padding">
+
+      <WatchlistSlides />
+
+      <ViewedMoviesSlides />
+
     </ion-content>
 
   </ion-page>
