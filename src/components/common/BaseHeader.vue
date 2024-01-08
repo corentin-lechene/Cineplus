@@ -16,7 +16,7 @@ defineEmits(['onAdd'])
 </script>
 
 <template>
-  <ion-header class="ion-no-border">
+  <ion-header class="ion-no-border" mode="ios">
     <ion-toolbar class="h-auto">
       <div class="flex justify-between py-4 px-2">
         <ion-buttons slot="start">

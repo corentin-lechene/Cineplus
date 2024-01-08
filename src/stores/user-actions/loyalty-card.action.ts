@@ -10,4 +10,8 @@ export class LoyaltyCardActions {
             user.loyaltyCards[index] = loyaltyCard;
         }
     }
+
+    static deleteLoyaltyCard(user: User, loyaltyCard: LoyaltyCard) {
+        user.loyaltyCards = user.loyaltyCards.filter(lc => lc.id !== loyaltyCard.id);
+    }
 }

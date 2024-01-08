@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {IonModal, IonPage} from "@ionic/vue";
+import {IonModal} from "@ionic/vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import BaseContent from "@/components/common/BaseContent.vue";
 import {computed, onMounted, ref} from "vue";
@@ -22,7 +22,7 @@ const openSubscriptionSaveModal = ref(false);
 
 const subscriptions = computed<Subscription[]>(() => {
   if(!loyaltyCard.value) return [];
-  return loyaltyCard.value.subscriptions.toSorted((a, b) => {
+  return loyaltyCard.value.subscriptions.sort((a, b) => {
     return new Date(b.startAt).getDate() - new Date(a.startAt).getDate()
   })
 })
@@ -64,7 +64,11 @@ function saveSubscription(subscription: Subscription) {
 
         <BaseList :items="subscriptions" title="Mes abonnements">
           <template #default="{item: subscription}: {item: Subscription}">
-            <SubscriptionListItem :subscription="subscription" @onClick="$router.push(`/loyalty-cards/${loyaltyCard.id}/subscriptions/${$event.id}`)"/>
+            <SubscriptionListItem
+                :subscription="subscription"
+                slider
+                @onClick="$router.push(`/loyalty-cards/${loyaltyCard.id}/subscriptions/${$event.id}`)"
+            />
           </template>
         </BaseList>
       </div>

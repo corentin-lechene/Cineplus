@@ -12,11 +12,10 @@ import {
   IonList,
   IonListHeader,
   IonModal,
+  IonNote,
   IonTextarea,
   IonToolbar,
-  IonNote,
 } from "@ionic/vue";
-import {supabase} from "@/supabase"
 
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import BaseContent from "@/components/common/BaseContent.vue";
@@ -69,9 +68,9 @@ onMounted(async () => {
       const movieService = MovieContainer.getMovieService();
       movie.value = await movieService.fetchMovieById(route.query.movie_id as string);
 
-      if(!userStore.user) return;
+      if (!userStore.user) return;
       const watchedMovie = userStore.user.watchedMovies.find(wc => wc.movie.id === parseInt(route.query.movie_id as string))
-      if(!watchedMovie) return;
+      if (!watchedMovie) return;
 
       cinema.value = watchedMovie.cinema;
       subscription.value = watchedMovie.subscription;
@@ -81,7 +80,7 @@ onMounted(async () => {
       room.value = watchedMovie.room || "";
       seat.value = watchedMovie.seat || "";
       extraExpense.value = watchedMovie.extraExpense || 0
-      note.value = watchedMovie.note || "" ;
+      note.value = watchedMovie.note || "";
     } catch (e) {
       console.error(e);
       router.back();
@@ -125,19 +124,6 @@ async function saveMovie() {
   await router.replace(`/movies/${movie.value?.id}/details`);
 }
 
-
-async function fetchCinema() {
-  try {
-    const result = await supabase
-        .from('Cinema')
-        .select('*')
-
-    if (!result.data) return;
-    cinemas.value = result.data
-  } catch (e) {
-    console.error(e);
-  }
-}
 </script>
 
 <template>
@@ -180,7 +166,8 @@ async function fetchCinema() {
             <ion-input v-model="extraExpense" label="Dépense"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-textarea v-model="note" :rows="3" label="Note personnelle" placeholder="Votre ressenti ?"></ion-textarea>
+            <ion-textarea v-model="note" :rows="3" label="Note personnelle"
+                          placeholder="Votre ressenti ?"></ion-textarea>
           </ion-item>
         </ion-list>
       </div>
@@ -192,7 +179,8 @@ async function fetchCinema() {
           :is-open="openCinemasModal"
           @didDismiss="openCinemasModal = false"
       >
-        <CinemaList :cinemas="cinemas" @onSelected="cinema = $event; openCinemasModal = false; ticketPrice = $event.ticketPrice || 0"/>
+        <CinemaList :cinemas="cinemas"
+                    @onSelected="cinema = $event; openCinemasModal = false; ticketPrice = $event.ticketPrice || 0"/>
       </ion-modal>
       <!--      -->
       <ion-modal
@@ -203,7 +191,9 @@ async function fetchCinema() {
       >
         <BaseHeader arrow-back-button title="Tous les abonnements"/>
         <div class="ion-padding " style="background: var(--ion-color-light)">
-          <ion-note v-if="allSubscriptions.length === 0" class="h-20 block text-center">Vous n'avez pas encore d'abonnement</ion-note>
+          <ion-text v-if="allSubscriptions.length === 0" class="h-20 block text-center">
+            Vous n'avez pas encore d'abonnement
+          </ion-text>
           <ion-list v-else class="rounded-xl drop-shadow-card">
             <SubscriptionListItem v-for="sub in allSubscriptions" :subscription="sub"
                                   @click="subscription = sub; openSubscriptionsModal = false;"/>

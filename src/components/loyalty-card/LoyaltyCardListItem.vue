@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 
-import {IonItem, IonItemOptions, IonItemSliding, IonText} from "@ionic/vue";
+import {IonItem, IonItemOptions, IonItemOption, IonItemSliding, IonText} from "@ionic/vue";
 import {LoyaltyCard} from "@/models";
+import {useUserStore} from "@/stores/user";
 
 interface LoyaltyCardListItemProps {
   loyaltyCard: LoyaltyCard,
@@ -20,10 +21,14 @@ const props = withDefaults(defineProps<LoyaltyCardListItemProps>(), {
 
 defineEmits(['onClick'])
 
+function deleteLoyaltyCard() {
+  useUserStore().deleteLoyaltyCard(props.loyaltyCard);
+}
+
 </script>
 
 <template>
-  <ion-item-sliding>
+  <ion-item-sliding :disabled="!props.slider">
     <ion-item
         :button="props.clickable"
         :disabled="props.disabled"
@@ -48,6 +53,7 @@ defineEmits(['onClick'])
       </div>
     </ion-item>
     <ion-item-options>
+      <ion-item-option color="danger" @click="deleteLoyaltyCard()">Supprimer</ion-item-option>
     </ion-item-options>
   </ion-item-sliding>
 </template>

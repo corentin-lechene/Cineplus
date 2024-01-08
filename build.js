@@ -6,22 +6,38 @@ config();
 
 async function buildApplication() {
     try {
-        const platform = "ios";
+        /**
+         *
+         * @type {"android" | "ios"}
+         */
+        const platform = process.argv.slice(2).at(0);
+        if(!['android', 'ios'].includes(platform)) {
+            console.error("Unknown platform");
+            process.exit(1);
+        }
+
         await removeFolder(`./dist`);
         await removeFolder(`./${platform}`);
 
         await runCommand(`ionic build`);
         await runCommand(`npx cap add ${platform}`);
-        await runCommand(`npx cap copy`);
-        await runCommand(`npx cap sync`);
-        await copyImage(
-            "resources/logo.png",
-            "ios/App/App/Assets.xcassets/AppIcon.appiconset/logo.png"
-        );
-        await useImage(
-            "logo.png",
-            "ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json"
-        );
+        await runCommand(`npx cap sync ${platform}`);
+
+        switch (platform) {
+            case "android":
+
+                break;
+            case "ios":
+                await copyImage(
+                    "resources/logo.png",
+                    "ios/App/App/Assets.xcassets/AppIcon.appiconset/logo.png"
+                );
+                await useImage(
+                    "logo.png",
+                    "ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json"
+                );
+                break;
+        }
 
         await runCommand(`npx cap open ${platform}`);
 

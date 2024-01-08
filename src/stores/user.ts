@@ -57,6 +57,16 @@ export const useUserStore = defineStore('user', {
             if (!this.user) return;
             SubscriptionActions.attachSubscription(subscription, loyaltyCard);
             UserService.saveUser(this.user).catch(console.error);
+        },
+        deleteLoyaltyCard(loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            LoyaltyCardActions.deleteLoyaltyCard(this.user, loyaltyCard);
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        deleteSubscription(subscription: Subscription) {
+            if (!this.user) return;
+            SubscriptionActions.delete(subscription, this.user);
+            UserService.saveUser(this.user).catch(console.error);
         }
     }
 });

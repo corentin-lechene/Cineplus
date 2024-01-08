@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 
-import {IonItem, IonItemOptions, IonItemSliding, IonText} from "@ionic/vue";
+import {IonItem, IonItemOption, IonItemOptions, IonItemSliding, IonText} from "@ionic/vue";
 import {Subscription} from "@/models";
 import {computed} from "vue";
 import dayjs from "@/configs/dayjs.config";
+import {useUserStore} from "@/stores/user";
 
 interface SubscriptionListItemProps {
   subscription: Subscription,
@@ -31,6 +32,10 @@ const subscriptionDate = computed(() => {
 
 defineEmits(['onClick'])
 
+function deleteSubscription() {
+  useUserStore().deleteSubscription(props.subscription);
+}
+
 </script>
 
 <template>
@@ -55,6 +60,7 @@ defineEmits(['onClick'])
       </div>
     </ion-item>
     <ion-item-options>
+      <ion-item-option color="danger" @click="deleteSubscription()">Supprimer</ion-item-option>
     </ion-item-options>
   </ion-item-sliding>
 </template>

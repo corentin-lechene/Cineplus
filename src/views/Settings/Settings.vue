@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
 import {computed, ref} from "vue";
-import { IonPage, IonContent, IonActionSheet } from "@ionic/vue";
+import {IonActionSheet, IonContent} from "@ionic/vue";
 
 import BaseList from "@/components/lists/BaseList.vue";
 import {
@@ -24,10 +24,10 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const fullName = computed(() => {
-  if(!userStore.user || userStore.user.loyaltyCards.length <= 0) return ""
-  return userStore.user.loyaltyCards.at(-1)!.firstname
+  if (!userStore.user || userStore.user.loyaltyCards.length <= 0) return ""
+  return userStore.user.loyaltyCards[userStore.user.loyaltyCards.length - 1]!.firstname
       + ' ' +
-      userStore.user.loyaltyCards.at(-1)!.lastname
+      userStore.user.loyaltyCards[userStore.user.loyaltyCards.length - 1]!.lastname
 });
 
 const openResetModal = ref(false);
@@ -150,35 +150,35 @@ function resetApp(e: CustomEvent) {
 <template>
   <ion-page>
 
-    <BaseHeader title="Paramètres" />
+    <BaseHeader title="Paramètres"/>
 
-    <ion-content color="tertiary" class="ion-padding" :force-overscroll="false">
+    <ion-content :force-overscroll="false" class="ion-padding" color="tertiary">
 
       <BaseList title="Mon compte">
         <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
       </BaseList>
 
       <BaseList title="Préférences">
-        <ListItem v-bind="listPreferencesItems[0]" />
-        <ListItem v-bind="listPreferencesItems[1]" />
-        <ListItem v-bind="listPreferencesItems[2]" last />
+        <ListItem v-bind="listPreferencesItems[0]"/>
+        <ListItem v-bind="listPreferencesItems[1]"/>
+        <ListItem last v-bind="listPreferencesItems[2]"/>
       </BaseList>
 
       <BaseList title="Aide">
-        <ListItem v-for="(item, i) in listHelpItems" :key="i" v-bind="item" @onClick="openSetting" />
+        <ListItem v-for="(item, i) in listHelpItems" :key="i" v-bind="item" @onClick="openSetting"/>
       </BaseList>
 
       <BaseList title="Mention légal">
-        <ListItem v-for="(item, i) in listLegalItems" :key="i" v-bind="item" @onClick="openSetting" />
+        <ListItem v-for="(item, i) in listLegalItems" :key="i" v-bind="item" @onClick="openSetting"/>
       </BaseList>
 
-      <app-button color="danger" text="Réinitialiser" bg-color="light" @onTap="openResetModal = true"/>
+      <app-button bg-color="light" color="danger" text="Réinitialiser" @onTap="openResetModal = true"/>
 
       <ion-action-sheet
-        :is-open="openResetModal"
-        :buttons="resetActions"
-        header="Reinitialiser"
-        @didDismiss="resetApp"
+          :buttons="resetActions"
+          :is-open="openResetModal"
+          header="Reinitialiser"
+          @didDismiss="resetApp"
       />
     </ion-content>
   </ion-page>

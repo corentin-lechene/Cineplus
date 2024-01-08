@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {IonImg, IonItem, IonPage, IonText} from "@ionic/vue";
+import {IonImg, IonItem, IonText} from "@ionic/vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import BaseContent from "@/components/common/BaseContent.vue";
 import {computed, onMounted, ref} from "vue";

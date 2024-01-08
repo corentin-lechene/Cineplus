@@ -18,7 +18,7 @@ import {onMounted, ref} from "vue";
 import {Subscription, SubscriptionPayment} from "@/models";
 
 const name = ref<"ugc_illimite_26" | "ugc_illimite" | "ugc_illimite_duo">("ugc_illimite_26");
-const payment = ref("monthly");
+const payment = ref<"yearly" | "monthly">("monthly");
 const price = ref(17.90);
 const startAt = ref("1994-12-15");
 const endAt = ref(new Date().toISOString());
@@ -42,6 +42,7 @@ function updatePrice() {
       : name.value === "ugc_illimite"
         ? 21.90
         : 36.80
+  price.value = parseFloat((price.value * (payment.value === 'monthly' ? 1 : 12)).toFixed(2))
 }
 
 function onSaveSubscription() {
@@ -77,7 +78,7 @@ function onSaveSubscription() {
     <ion-list class="mb-4 rounded-xl drop-shadow-card">
       <ion-item>
         <ion-label>Paiement par</ion-label>
-        <ion-select v-model="payment" aria-label="payment" interface="popover" label="">
+        <ion-select v-model="payment" aria-label="payment" interface="popover" label="" @update:model-value="updatePrice()">
           <ion-select-option value="monthly">Mois</ion-select-option>
           <ion-select-option value="yearly">Année</ion-select-option>
         </ion-select>

@@ -10,7 +10,6 @@ import {
   IonCardTitle,
   IonContent,
   IonIcon,
-  IonPage,
   IonText,
 } from "@ionic/vue";
 import {MovieContainer} from "@/containers/movie.container";

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {IonContent, IonPage, IonFooter, IonText, IonCol, IonLabel} from "@ionic/vue";
+import {IonContent, IonFooter, IonText, IonCol, IonLabel} from "@ionic/vue";
 import {computed, onMounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
 
-import {Movie, ViewedMovie} from "@/models";
+import {Movie} from "@/models";
 import {MovieService} from "@/services/movie.service";
 import dayjs from "@/configs/dayjs.config";
 

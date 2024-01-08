@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {IonContent, IonPage} from "@ionic/vue";
+import {IonContent} from "@ionic/vue";
 import Header from "@/components/headers/Header.vue";
 </script>
 

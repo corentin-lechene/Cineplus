@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {IonModal, IonPage, IonList, IonNote} from "@ionic/vue";
+import {IonModal, IonList, IonNote} from "@ionic/vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import BaseContent from "@/components/common/BaseContent.vue";
 import {LoyaltyCard} from "@/models";
@@ -61,6 +61,7 @@ function saveLoyaltyCard(event: {
             :loyalty-card="item"
             :line="i === userStore.user.loyaltyCards.length - 1 ? 'none' : 'full'"
             thumbnail
+            slider
             @onClick="$router.push(`/loyalty-cards/${$event.id}`)"
         />
       </ion-list>

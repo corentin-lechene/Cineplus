@@ -6,7 +6,6 @@ import {
   IonHeader,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonPage,
   IonSearchbar,
   IonToolbar,
   SearchbarCustomEvent
