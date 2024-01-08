@@ -17,21 +17,21 @@ const localCinemas = ref<Cinema[]>([
     id: 0,
     name: "Rosny-Sous-Bois",
     brand: "UGC",
-    ticketPrice: 12,
+    ticketPrice: 13.50,
     address: "La rue de Rosny"
   },
   {
     id: 1,
     name: "Noisy-le-grand",
     brand: "UGC",
-    ticketPrice: 12,
+    ticketPrice: 13.50,
     address: "La rue de noisy"
   },
   {
     id: 2,
     name: "Bercy",
     brand: "UGC",
-    ticketPrice: 12,
+    ticketPrice: 13.50,
     address: "La rue de bercy"
   }
 ]);

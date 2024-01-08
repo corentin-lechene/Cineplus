@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<EmptyListItemProps>(), {
     >
       <EmptyImage
           slot="start"
-          :class="{ 'w-20 h-18': props.thumbnail, 'h-32 w-22': !props.thumbnail }"
+          :class="{ 'w-16 h-12': props.thumbnail, 'h-32 w-22': !props.thumbnail }"
           :thumbnail="props.thumbnail"
       />
       <div class="flex items-center h-full">
@@ -49,7 +49,7 @@ const props = withDefaults(defineProps<EmptyListItemProps>(), {
 
 <style scoped>
 ion-item {
-  --padding-start: 0.5em;
+  --padding-start: 0.65em;
   --padding-bottom: 0.5em;
   --padding-top: 0.5em;
 }

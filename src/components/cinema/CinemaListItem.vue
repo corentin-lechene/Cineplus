@@ -32,9 +32,10 @@ defineEmits(['onClick'])
     >
       <ion-img
           src="https://upload.wikimedia.org/wikipedia/fr/f/f8/Logo_UGC_2018.svg"
-          class="w-18 h-12 bg-gray-200 rounded-md"
+          class="w-16 h-12 bg-gray-200 rounded-md"
           alt="movie-image"
           slot="start"
+          style=" "
       ></ion-img>
       <div class="flex items-start h-full">
         <div class="flex flex-col gap-y-0.5 relative" style="max-width: 10em">
@@ -50,7 +51,7 @@ defineEmits(['onClick'])
 
 <style scoped>
 ion-item {
-  --padding-start: 0.5em;
+  --padding-start: 0.65em;
   --padding-bottom: 0.5em;
   --padding-top: 0.5em;
 }

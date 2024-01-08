@@ -17,7 +17,7 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
 </script>
 
 <template>
-  <ion-list v-if="section" :inset="false" class="ion-no-margin">
+  <ion-list v-if="section" :inset="false" class="ion-no-margin drop-shadow-card">
     <ion-item-group>
       <ion-item-divider>
         <ion-label>{{ title }}</ion-label>
@@ -34,7 +34,7 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
   </ion-list>
   <div v-else>
     <ion-list-header v-if="title">{{ title }}</ion-list-header>
-    <ion-list inset style="margin-top: 0 !important;">
+    <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
       <div v-if="items?.length === 0">
         <ion-note class="ion-padding-horizontal">{{ noDataMessage || 'Liste de vide' }}</ion-note>
       </div>

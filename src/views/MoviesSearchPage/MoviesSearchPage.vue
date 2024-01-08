@@ -6,6 +6,7 @@ import {
   IonHeader,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonPage,
   IonSearchbar,
   IonToolbar,
   SearchbarCustomEvent
@@ -59,22 +60,21 @@ onMounted(async () => {
 <template>
   <ion-page>
     <ion-header class="ion-no-border">
-      <ion-toolbar class="h-auto">
+      <ion-toolbar>
         <ion-searchbar
-          v-model="input"
-          :debounce="250"
-          animated
-          class="mt-1 ion-no-padding"
-          placeholder="Rechercher..."
-          show-cancel-button="focus"
-          @click="currentView = 'recent'"
-          @ionCancel="currentView = 'popular'"
-          @ionInput="searchMovies($event)"
+            v-model="input"
+            :debounce="250"
+            animated
+            class="mt-1 ion-no-padding"
+            placeholder="Rechercher..."
+            show-cancel-button="focus"
+            @click="currentView = 'recent'"
+            @ionCancel="currentView = 'popular'"
+            @ionInput="searchMovies($event)"
         />
       </ion-toolbar>
     </ion-header>
     <ion-content color="light">
-
       <!-- Popular     -->
       <MovieList v-if="currentView === 'popular'" :movies="popularMovies" section title="Films populaires"/>
 
@@ -99,7 +99,6 @@ onMounted(async () => {
 
 <style scoped>
 ion-toolbar {
-  padding-top: 0.5em !important;
   padding-left: 0.5em;
   padding-right: 0.5em;
 }

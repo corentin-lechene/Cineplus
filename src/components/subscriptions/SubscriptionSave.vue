@@ -17,9 +17,9 @@ import {
 import {onMounted, ref} from "vue";
 import {Subscription, SubscriptionPayment} from "@/models";
 
-const name = ref("ugc_illimite_26");
+const name = ref<"ugc_illimite_26" | "ugc_illimite" | "ugc_illimite_duo">("ugc_illimite_26");
 const payment = ref("monthly");
-const price = ref(0);
+const price = ref(17.90);
 const startAt = ref("1994-12-15");
 const endAt = ref(new Date().toISOString());
 
@@ -28,13 +28,21 @@ const emit = defineEmits(['onSave'])
 
 onMounted(() => {
   if (props.subscription) {
-    name.value = props.subscription.name;
+    name.value = props.subscription.name as "ugc_illimite_26" | "ugc_illimite" | "ugc_illimite_duo";
     price.value = props.subscription.price;
     payment.value = props.subscription.payment;
     startAt.value = props.subscription.startAt.toISOString();
     endAt.value = props.subscription.endAt?.toISOString() || "";
   }
 })
+
+function updatePrice() {
+  price.value = name.value === "ugc_illimite_26"
+      ? 17.90
+      : name.value === "ugc_illimite"
+        ? 21.90
+        : 36.80
+}
 
 function onSaveSubscription() {
   const subscription = Subscription.of(
@@ -53,7 +61,7 @@ function onSaveSubscription() {
 <template>
   <div class="ion-padding-horizontal py-8" style="background-color: var(--ion-color-light)">
     <div class="flex gap-x-2 justify-between mb-4">
-      <ion-segment v-model="name" value="buttons">
+      <ion-segment v-model="name" value="buttons" @update:model-value="updatePrice()">
         <ion-segment-button value="ugc_illimite_26">
           <ion-label>-26 ans</ion-label>
         </ion-segment-button>
@@ -66,7 +74,7 @@ function onSaveSubscription() {
       </ion-segment>
     </div>
 
-    <ion-list class="mb-4 rounded-xl">
+    <ion-list class="mb-4 rounded-xl drop-shadow-card">
       <ion-item>
         <ion-label>Paiement par</ion-label>
         <ion-select v-model="payment" aria-label="payment" interface="popover" label="">
@@ -84,7 +92,7 @@ function onSaveSubscription() {
       </ion-item>
     </ion-list>
 
-    <ion-list class="mb-4 rounded-xl">
+    <ion-list class="mb-4 rounded-xl drop-shadow-card">
       <ion-item lines="none">
         <ion-input v-model="price" label="Prix de l'abonnement"></ion-input>
       </ion-item>

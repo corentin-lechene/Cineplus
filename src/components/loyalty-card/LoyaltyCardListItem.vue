@@ -31,12 +31,12 @@ defineEmits(['onClick'])
         @click="$emit('onClick', loyaltyCard)"
     >
       <img
-          class="w-18 h-10 mr-3"
+          class="w-16 h-10 mr-3"
           v-if="loyaltyCard.imageUrl === 'ugc_illimite'"
           src="@/assets/images/ugc_illimite.png" alt="sub-img"
       />
       <img
-          class="w-18 h-10 mr-3"
+          class="w-16 h-10 mr-3"
           v-else-if="loyaltyCard.imageUrl === 'ugc_illimite_26'"
           src="@/assets/images/ugc_illimite_26.png" alt="sub-img"
       />
@@ -54,7 +54,7 @@ defineEmits(['onClick'])
 
 <style scoped>
 ion-item {
-  --padding-start: 0.5em;
+  --padding-start: 0.65em;
   --padding-bottom: 0.5em;
   --padding-top: 0.5em;
 }

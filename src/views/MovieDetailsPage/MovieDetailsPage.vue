@@ -33,9 +33,14 @@ const isMovieWatched = computed(() => {
   return userStore.user.watchedMovies.some(watchMovie => watchMovie.movie.id === movie.value?.id);
 });
 
-const isInWatchList = computed(() => {
-  if (!userStore.user || !movie.value) return false;
-  return userStore.user.watchList.some(watchList => watchList.movie.id === movie.value?.id);
+const addButtonColor = computed<"amber" | "gray">(() => {
+  if (!userStore.user || !movie.value) return "gray";
+  if(isMovieWatched.value) return "amber";
+  if(userStore.user.watchList.some(watchList => watchList.movie.id === movie.value?.id)) {
+    return "amber";
+  } else {
+    return "gray";
+  }
 });
 
 const releaseDate = computed(() => {
@@ -49,7 +54,7 @@ const releaseDate = computed(() => {
 
 
 function handleAddToWatchList() {
-  if (!movie.value || !userStore.user) return;
+  if (!movie.value || !userStore.user || isMovieWatched.value) return;
   try {
     userStore.addToWatchList(movie.value);
   } catch (e) {
@@ -86,7 +91,7 @@ onMounted(async () => {
         <!-- Image and title       -->
         <div class="relative">
           <!-- Buttons header        -->
-          <BaseHeader :add-button-color="isInWatchList ? 'amber' : 'gray'" add-button title="Détail du film"
+          <BaseHeader :add-button-color="addButtonColor" add-button title="Détail du film"
                       @onAdd="handleAddToWatchList()"/>
 
           <MovieImage :image-url="movie.posterUrls?.w500 || ''"/>

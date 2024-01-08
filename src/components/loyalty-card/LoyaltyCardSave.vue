@@ -49,7 +49,7 @@ onMounted(() => {
 <!--        </ion-item>-->
       </div>
 
-      <ion-list class="mb-4 rounded-xl">
+      <ion-list class="mb-4 rounded-xl drop-shadow-card">
         <ion-item>
           <ion-input v-model="firstname" label="Prénom"></ion-input>
         </ion-item>

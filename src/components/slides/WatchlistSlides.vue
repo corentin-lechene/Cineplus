@@ -47,7 +47,7 @@ onMounted(() => {
   </BaseSlide>
 
   <ion-card v-else class="flex flex-col justify-center items-center h-40 m-0 mt-2"
-            @click="$router.push('/search-movie')">
+            @click="$router.push('/movies/search')">
     <ion-text class="text-lg" color="medium">Vous n'avez pas encore ajouté de film</ion-text>
     <ion-text class="text-sm italic underline" color="medium">Ajouter un film à votre liste</ion-text>
   </ion-card>

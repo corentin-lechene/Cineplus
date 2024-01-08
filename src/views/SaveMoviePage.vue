@@ -13,7 +13,8 @@ import {
   IonListHeader,
   IonModal,
   IonTextarea,
-  IonToolbar
+  IonToolbar,
+  IonNote,
 } from "@ionic/vue";
 import {supabase} from "@/supabase"
 
@@ -40,7 +41,7 @@ const cinema = ref<Cinema>();
 const subscription = ref<Subscription>()
 const watchAt = ref(dayjs().toISOString());
 const room = ref("");
-const ticketPrice = ref(12);
+const ticketPrice = ref(0);
 const extraExpense = ref(0);
 const seat = ref("");
 const note = ref("");
@@ -145,13 +146,13 @@ async function fetchCinema() {
     <BaseContent>
       <div class="flex flex-col ion-content-scroll-host">
 
-        <ion-list-header>Film</ion-list-header>
-        <ion-list inset style="margin-top: 0 !important;">
+        <ion-list-header class="mb-1">Film</ion-list-header>
+        <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
           <MovieListItem v-if="movie" :movie="movie" thumbnail/>
         </ion-list>
 
-        <ion-list-header>Cinéma & Abonnement</ion-list-header>
-        <ion-list inset style="margin-top: 0 !important;">
+        <ion-list-header class="mb-1">Cinéma & Abonnement</ion-list-header>
+        <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
           <CinemaListItem v-if="cinema" :cinema="cinema" @click="openCinemasModal = true"/>
           <EmptyListItem v-else label="Ajouter un Cinéma" thumbnail @click="openCinemasModal = true"/>
 
@@ -160,19 +161,17 @@ async function fetchCinema() {
           <EmptyListItem v-else label="Ajouter un Abonnement" thumbnail @click="openSubscriptionsModal = true"/>
         </ion-list>
 
-        <ion-list-header>Date de visionnage</ion-list-header>
-        <ion-list inset style="margin-top: 0 !important;">
-          <ion-item>
-            <ion-datetime v-model="watchAt" class="max-w-full"></ion-datetime>
-          </ion-item>
+        <ion-list-header class="mb-1">Date de visionnage</ion-list-header>
+        <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
+          <ion-datetime v-model="watchAt" class="rounded-xl"></ion-datetime>
         </ion-list>
 
-        <ion-list inset>
+        <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
           <ion-item>
-            <ion-input v-model="room" label="Salle"></ion-input>
+            <ion-input v-model="room" label="Salle" placeholder="4"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-input v-model="seat" label="Place"></ion-input>
+            <ion-input v-model="seat" label="Place" placeholder="F6"></ion-input>
           </ion-item>
           <ion-item>
             <ion-input v-model="ticketPrice" label="Prix du ticket"></ion-input>
@@ -181,7 +180,7 @@ async function fetchCinema() {
             <ion-input v-model="extraExpense" label="Dépense"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-textarea v-model="note" :rows="3" label="Note personnelle"></ion-textarea>
+            <ion-textarea v-model="note" :rows="3" label="Note personnelle" placeholder="Votre ressenti ?"></ion-textarea>
           </ion-item>
         </ion-list>
       </div>
@@ -193,7 +192,7 @@ async function fetchCinema() {
           :is-open="openCinemasModal"
           @didDismiss="openCinemasModal = false"
       >
-        <CinemaList :cinemas="cinemas" @onSelected="cinema = $event; openCinemasModal = false"/>
+        <CinemaList :cinemas="cinemas" @onSelected="cinema = $event; openCinemasModal = false; ticketPrice = $event.ticketPrice || 0"/>
       </ion-modal>
       <!--      -->
       <ion-modal
@@ -204,9 +203,10 @@ async function fetchCinema() {
       >
         <BaseHeader arrow-back-button title="Tous les abonnements"/>
         <div class="ion-padding " style="background: var(--ion-color-light)">
-          <ion-list class="rounded-xl">
+          <ion-note v-if="allSubscriptions.length === 0" class="h-20 block text-center">Vous n'avez pas encore d'abonnement</ion-note>
+          <ion-list v-else class="rounded-xl drop-shadow-card">
             <SubscriptionListItem v-for="sub in allSubscriptions" :subscription="sub"
-                                  @click="subscription = sub; openSubscriptionsModal = false"/>
+                                  @click="subscription = sub; openSubscriptionsModal = false;"/>
           </ion-list>
         </div>
       </ion-modal>
@@ -229,14 +229,14 @@ async function fetchCinema() {
 </template>
 
 <style scoped>
+
 ion-modal {
   --height: auto;
 }
 
 ion-datetime {
-  --background: rgb(241, 241, 241);
-  --background-rgb: white;
-  --wheel-highlight-background: rgb(189, 189, 189);
-  --wheel-fade-background-rgb: 241, 241, 241;
+  --background: white;
+  --background-rgb: 255, 255, 255;
 }
+
 </style>

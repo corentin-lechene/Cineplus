@@ -43,7 +43,7 @@ defineEmits(['onClick'])
     >
       <img
           src="@/assets/images/ugc_illimite.png"
-          class="w-18 h-12 bg-gray-200 rounded-md"
+          class="w-16 h-12 bg-gray-200 rounded-md"
           alt="movie-image"
           slot="start"
       />
@@ -61,7 +61,7 @@ defineEmits(['onClick'])
 
 <style scoped>
 ion-item {
-  --padding-start: 0.5em;
+  --padding-start: 0.65em;
   --padding-bottom: 0.5em;
   --padding-top: 0.5em;
 }

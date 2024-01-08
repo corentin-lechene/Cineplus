@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {IonModal, IonPage, IonList} from "@ionic/vue";
+import {IonModal, IonPage, IonList, IonNote} from "@ionic/vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import BaseContent from "@/components/common/BaseContent.vue";
 import {LoyaltyCard} from "@/models";
@@ -55,7 +55,7 @@ function saveLoyaltyCard(event: {
       <div v-if="!userStore.user || userStore.user.loyaltyCards.length === 0">
         <ion-note>Vous n'avez pas enregistré de carte de fidélité.</ion-note>
       </div>
-      <ion-list v-else :items="userStore.user.loyaltyCards" class="rounded-xl">
+      <ion-list v-else :items="userStore.user.loyaltyCards" class="rounded-xl drop-shadow-card">
         <LoyaltyCardListItem
             v-for="(item, i) in userStore.user.loyaltyCards"
             :loyalty-card="item"

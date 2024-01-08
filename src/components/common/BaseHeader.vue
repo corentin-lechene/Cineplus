@@ -26,7 +26,7 @@ defineEmits(['onAdd'])
         <ion-title class="text-xl p-0">{{ title }}</ion-title>
         <ion-buttons slot="end">
           <ion-icon v-if="closeButton" :icon="close" class="text-2xl rounded-full bg-gray-200 p-1"></ion-icon>
-          <ion-icon v-if="addButton" :icon="addButtonColor === 'gray' ? add : checkmark" :class="`bg-${addButtonColor}-200`" class="text-2xl rounded-full p-1"
+          <ion-icon v-if="addButton" :icon="addButtonColor === 'gray' ? add : checkmark" :class="addButtonColor === 'gray' ? 'bg-gray-200' : 'bg-amber-300'" class="text-2xl rounded-full p-1"
                     @click="$emit('onAdd')"></ion-icon>
         </ion-buttons>
       </div>

@@ -67,7 +67,7 @@ const releaseDate = computed(() => {
 
 <style scoped>
 ion-item {
-  --padding-start: 0.5em;
+  --padding-start: 0.65em;
   --padding-bottom: 0.5em;
   --padding-top: 0.5em;
 }
