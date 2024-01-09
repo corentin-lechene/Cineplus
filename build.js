@@ -75,7 +75,7 @@ async function copyFolder(source, destination, options) {
     try {
         await fs.cp(source, destination, {
             recursive: true,
-            force: options.force || false }
+            force: options?.force || false }
         );
         console.log(`Dossier "${source}" copié avec succès.`);
     } catch(e) {
