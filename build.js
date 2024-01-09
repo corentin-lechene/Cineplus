@@ -23,18 +23,32 @@ async function buildApplication() {
         await runCommand(`npx cap add ${platform}`);
         await runCommand(`npx cap sync ${platform}`);
 
+        // Images
         switch (platform) {
             case "android":
-
+                const folders = [
+                    "mipmap-hdpi",
+                    "mipmap-mdpi",
+                    "mipmap-xhdpi",
+                    "mipmap-xxhdpi",
+                    "mipmap-xxxhdpi"
+                ]
+                for (const folder of folders) {
+                    await removeFolder(`android/app/src/main/res/${folder}`);
+                }
+                for (const folder of folders) {
+                    await copyFolder(
+                        `resources/android/${folder}`,
+                        `android/app/src/main/res/${folder}`,
+                        {force: true}
+                    );
+                }
                 break;
             case "ios":
-                await copyImage(
-                    "resources/logo.png",
-                    "ios/App/App/Assets.xcassets/AppIcon.appiconset/logo.png"
-                );
-                await useImage(
-                    "logo.png",
-                    "ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json"
+                await removeFolder("ios/App/App/Assets.xcassets");
+                await copyFolder(
+                    "resources/ios/Assets.xcassets",
+                    "ios/App/App/Assets.xcassets"
                 );
                 break;
         }
@@ -48,39 +62,24 @@ async function buildApplication() {
 }
 
 /* ---- */
-async function useImage(imageName, filePath) {
-    try {
-        // Lire le contenu du fichier JSON
-        const jsonString = await fs.readFile(filePath, 'utf-8');
-        const jsonData = JSON.parse(jsonString);
-
-        // Mettre à jour le nom du fichier
-        jsonData.images[0].filename = imageName;
-
-        // Convertir l'objet mis à jour en chaîne JSON
-        const updatedJsonString = JSON.stringify(jsonData, null, 2);
-
-        await fs.writeFile(filePath, updatedJsonString, 'utf-8');
-
-        console.log('Le nom du fichier a été mis à jour avec succès.');
-    } catch (error) {
-        console.error(`Erreur lors de la mise à jour du fichier JSON : ${error.message}`);
-    }
-}
-async function copyImage(sourcePath, destinationPath) {
-    try {
-        await fs.copyFile(sourcePath, destinationPath);
-        console.log('Image copiée avec succès.');
-    } catch (err) {
-        console.error('Erreur lors de la copie de l\'image:', err.message);
-    }
-}
 async function removeFolder(folderPath) {
     try {
         await fs.rm(folderPath, { recursive: true });
         console.log(`Dossier "${folderPath}" supprimé avec succès.`);
     } catch (error) {
         console.error(`Erreur lors de la suppression du dossier "${folderPath}": ${error.message}`);
+    }
+}
+
+async function copyFolder(source, destination, options) {
+    try {
+        await fs.cp(source, destination, {
+            recursive: true,
+            force: options.force || false }
+        );
+        console.log(`Dossier "${source}" copié avec succès.`);
+    } catch(e) {
+        console.error(e);
     }
 }
 function runCommand(command) {
