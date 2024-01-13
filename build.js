@@ -23,35 +23,8 @@ async function buildApplication() {
         await runCommand(`npx cap add ${platform}`);
         await runCommand(`npx cap sync ${platform}`);
 
-        // Images
-        switch (platform) {
-            case "android":
-                const folders = [
-                    "mipmap-hdpi",
-                    "mipmap-mdpi",
-                    "mipmap-xhdpi",
-                    "mipmap-xxhdpi",
-                    "mipmap-xxxhdpi"
-                ]
-                for (const folder of folders) {
-                    await removeFolder(`android/app/src/main/res/${folder}`);
-                }
-                for (const folder of folders) {
-                    await copyFolder(
-                        `resources/android/${folder}`,
-                        `android/app/src/main/res/${folder}`,
-                        {force: true}
-                    );
-                }
-                break;
-            case "ios":
-                await removeFolder("ios/App/App/Assets.xcassets");
-                await copyFolder(
-                    "resources/ios/Assets.xcassets",
-                    "ios/App/App/Assets.xcassets"
-                );
-                break;
-        }
+        await increaseVersion(platform);
+        await copyIcons(platform);
 
         await runCommand(`npx cap open ${platform}`);
 
@@ -62,6 +35,59 @@ async function buildApplication() {
 }
 
 /* ---- */
+async function increaseVersion(platform) {
+    try {
+        const packageJson = JSON.parse(await fs.readFile("./package.json", "utf-8"));
+        const buildVersion = parseInt(packageJson.buildVersion);
+
+        switch (platform) {
+            case "android":
+                const buildGradleOld = await fs.readFile("./android/app/build.gradle", "utf-8");
+                const buildGradleNew = buildGradleOld.toString().replace(/versionCode \d+/, `versionCode ${buildVersion + 1}`);
+
+                await fs.writeFile("./android/app/build.gradle", buildGradleNew);
+                break;
+            case "ios":
+                console.log("Not implemented yet");
+                break;
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+async function copyIcons(platform) {
+    // Images
+    switch (platform) {
+        case "android":
+            const folders = [
+                "mipmap-hdpi",
+                "mipmap-mdpi",
+                "mipmap-xhdpi",
+                "mipmap-xxhdpi",
+                "mipmap-xxxhdpi"
+            ]
+            for (const folder of folders) {
+                await removeFolder(`android/app/src/main/res/${folder}`);
+            }
+            for (const folder of folders) {
+                await copyFolder(
+                    `resources/android/${folder}`,
+                    `android/app/src/main/res/${folder}`,
+                    {force: true}
+                );
+            }
+            break;
+        case "ios":
+            await removeFolder("ios/App/App/Assets.xcassets");
+            await copyFolder(
+                "resources/ios/Assets.xcassets",
+                "ios/App/App/Assets.xcassets"
+            );
+            break;
+    }
+}
+
 async function removeFolder(folderPath) {
     try {
         await fs.rm(folderPath, { recursive: true });
