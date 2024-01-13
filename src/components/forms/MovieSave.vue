@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {IonFooter} from "@ionic/vue";
 
 import Header from "@/components/headers/Header.vue";
@@ -24,8 +24,7 @@ const form = ref({
 function formIsValid() {
   if(!dayjs(form.value.date).isValid()) return false;
   if(form.value.extra < 0) return false;
-  if(form.value.note.length > 255) return false;
-  return true;
+  return form.value.note.length <= 255;
 }
 
 function beforeSave() {

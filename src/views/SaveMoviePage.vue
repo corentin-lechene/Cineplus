@@ -12,7 +12,6 @@ import {
   IonList,
   IonListHeader,
   IonModal,
-  IonNote,
   IonTextarea,
   IonToolbar,
 } from "@ionic/vue";
