@@ -33,3 +33,4 @@ npm-debug.log*
 /www
 /ios/
 /android/
+/private_keys/
