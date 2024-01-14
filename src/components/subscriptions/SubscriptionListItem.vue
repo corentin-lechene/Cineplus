@@ -44,6 +44,7 @@ function deleteSubscription() {
         :button="props.clickable"
         :disabled="props.disabled"
         :lines="props.line"
+        mode="ios"
         @click="$emit('onClick', subscription)"
     >
       <img
