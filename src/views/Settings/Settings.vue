@@ -138,7 +138,7 @@ function openSetting(item: any) {
 function resetApp(e: CustomEvent) {
   if (e?.detail?.data?.action === 'delete') {
     openResetModal.value = true;
-    router.replace('/intro');
+    userStore.resetUser();
   } else {
     openResetModal.value = false;
   }
@@ -152,27 +152,27 @@ function resetApp(e: CustomEvent) {
 
     <BaseHeader title="Paramètres"/>
 
-    <ion-content :force-overscroll="false" class="ion-padding" color="tertiary">
+    <ion-content :force-overscroll="false" class="ion-padding" color="light">
 
       <BaseList title="Mon compte">
         <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
       </BaseList>
 
       <BaseList title="Préférences">
-        <ListItem v-bind="listPreferencesItems[0]"/>
+<!--        <ListItem v-bind="listPreferencesItems[0]"/>-->
         <ListItem v-bind="listPreferencesItems[1]"/>
-        <ListItem last v-bind="listPreferencesItems[2]"/>
+<!--        <ListItem last v-bind="listPreferencesItems[2]"/>-->
       </BaseList>
 
-      <BaseList title="Aide">
-        <ListItem v-for="(item, i) in listHelpItems" :key="i" v-bind="item" @onClick="openSetting"/>
-      </BaseList>
+<!--      <BaseList title="Aide">-->
+<!--        <ListItem v-for="(item, i) in listHelpItems" :key="i" v-bind="item" @onClick="openSetting"/>-->
+<!--      </BaseList>-->
 
       <BaseList title="Mention légal">
         <ListItem v-for="(item, i) in listLegalItems" :key="i" v-bind="item" @onClick="openSetting"/>
       </BaseList>
 
-      <app-button bg-color="light" color="danger" text="Réinitialiser" @onTap="openResetModal = true"/>
+      <app-button bg-color="white" color="danger" text="Réinitialiser" @onTap="openResetModal = true"/>
 
       <ion-action-sheet
           :buttons="resetActions"

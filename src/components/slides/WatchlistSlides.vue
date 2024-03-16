@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 
 import BaseSlide from "@/components/slides/BaseSlide.vue";
-import {WatchList} from "@/models";
 import {useUserStore} from "@/stores/user";
 import {onMounted} from "vue";
 import {IonCard, IonLabel, IonText} from "@ionic/vue";
@@ -21,7 +20,7 @@ onMounted(() => {
       :items="userStore.user.watchList"
       :slides-per-view="userStore.user.watchList.length === 1 ? 1 : 1.10"
       :space-between="10"
-      class="mt-2"
+      class="my-2"
   >
     <template #default="{item: watchList}: {item: WatchList}">
       <div v-if="watchList" class="relative w-full" @click="$router.push(`/movies/${watchList.movie.id}/details`)">

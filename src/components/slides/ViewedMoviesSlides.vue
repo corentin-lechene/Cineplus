@@ -4,7 +4,7 @@ import BaseSlide from "@/components/slides/BaseSlide.vue";
 import {WatchedMovie} from "@/models";
 import {useUserStore} from "@/stores/user";
 import {onMounted} from "vue";
-import {IonCard, IonLabel, IonText, IonGrid, IonCol, IonRow} from "@ionic/vue";
+import {IonCard, IonCol, IonGrid, IonLabel, IonRow, IonText} from "@ionic/vue";
 import dayjs from "dayjs";
 
 const userStore = useUserStore();
@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ion-grid class="p-0">
+  <ion-grid class="p-0 mt-2">
     <ion-row>
 
       <ion-col class="p-0">
@@ -37,7 +37,7 @@ onMounted(() => {
       :space-between="20"
   >
     <template #default="{item: watchedMovie}: {item: WatchedMovie}">
-      <div v-if="watchedMovie" class="flex flex-col gap-y-2 rounded-xl">
+      <div v-if="watchedMovie" class="flex flex-col gap-y-2 rounded-xl" style="max-width: 15em">
         <img
             v-if="watchedMovie.movie.posterUrls !== null"
             class="rounded-md"

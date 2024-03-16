@@ -8,6 +8,8 @@ interface MoviesListProps {
   movies: Movie[];
   title?: string;
   section?: boolean;
+  noDataMessage?: string;
+  button?: boolean;
 }
 
 const props = defineProps<MoviesListProps>();
@@ -15,7 +17,7 @@ defineEmits();
 </script>
 
 <template>
-  <BaseList :items="movies" :section="section" :title="title">
+  <BaseList :button="button" :items="movies" :no-data-message="noDataMessage" :section="section" :title="title">
     <template #default="{item}: {item: Movie}">
       <MovieListItem :movie="item" thumbnail @click="$router.push(`/movies/${item.id}/details`)"/>
     </template>

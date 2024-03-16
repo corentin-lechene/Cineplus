@@ -15,7 +15,7 @@
 import {computed} from "vue";
 import {IonText} from "@ionic/vue";
 
-type colors = "primary" | "secondary" | "tertiary" | "success" | "warning" | "danger" | "light" | "medium" | "dark";
+type colors = "primary" | "secondary" | "tertiary" | "success" | "warning" | "danger" | "light" | "medium" | "dark" | "white";
 
 interface AppButtonProps {
   color: colors;

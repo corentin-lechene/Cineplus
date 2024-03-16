@@ -12,6 +12,7 @@ import {
   IonList,
   IonListHeader,
   IonModal,
+  IonText,
   IonTextarea,
   IonToolbar,
 } from "@ionic/vue";
@@ -120,7 +121,7 @@ async function saveMovie() {
   console.log("watchMovie.subscription", watchedMovie.subscription)
 
   userStore.addToWatchedList(watchedMovie)
-  await router.replace(`/movies/${movie.value?.id}/details`);
+  router.back();
 }
 
 </script>

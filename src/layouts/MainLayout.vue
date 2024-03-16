@@ -15,20 +15,20 @@ const isIos = computed(() => {
 
 <template>
   <ion-page>
-    <ion-tabs>
+    <ion-tabs style="background-color: var(--ion-color-light)">
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar slot="bottom" :class="{'rounded-b-3xl': isIos}" class="m-1.5 py-2 rounded-lg">
-        <ion-tab-button href="/home" tab="home">
+      <ion-tab-bar slot="bottom" :class="{'rounded-b-3xl': isIos}" class="m-1.5 py-2 rounded-lg" style="background-color: white">
+        <ion-tab-button href="/home" style="background-color: white" tab="home">
           <ion-icon :icon="home"/>
           <ion-label>Accueil</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button href="/dashboard" tab="library">
+        <ion-tab-button href="/dashboard" style="background-color: white" tab="library">
           <ion-icon :icon="grid"/>
           <ion-label>Dashboard</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button href="/movies/search" tab="search">
+        <ion-tab-button href="/movies/search" style="background-color: white" tab="search">
           <ion-icon :icon="search"/>
           <ion-label>Rechercher</ion-label>
         </ion-tab-button>

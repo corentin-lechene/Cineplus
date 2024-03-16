@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonNote} from "@ionic/vue";
+import {IonButton, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonNote} from "@ionic/vue";
 
 interface BaseListProps {
   items: any[];
@@ -33,11 +33,12 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
 
   </ion-list>
   <div v-else>
-    <ion-list-header v-if="title">{{ title }}</ion-list-header>
-    <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
-      <div v-if="items?.length === 0">
-        <ion-note class="ion-padding-horizontal">{{ noDataMessage || 'Liste de vide' }}</ion-note>
-      </div>
+    <ion-list-header v-if="title" class="pl-0">
+      <ion-label>{{ title }}</ion-label>
+      <ion-button v-if="button">Voir tout</ion-button>
+    </ion-list-header>
+    <ion-list class="drop-shadow-card bg-inherit" inset style="margin-top: 0 !important;">
+      <ion-note v-if="items?.length === 0" class="ion-padding-horizontal">{{ noDataMessage || 'Liste vide' }}</ion-note>
       <slot v-for="(item, i) in items" :item="item" :index="i"></slot>
     </ion-list>
   </div>

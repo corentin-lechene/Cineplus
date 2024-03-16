@@ -7,7 +7,7 @@ import WatchlistSlides from "@/components/slides/WatchlistSlides.vue";
 
 <template>
   <ion-page>
-    <ion-header class="ion-no-border">
+    <ion-header class="">
       <ion-toolbar>
         <ion-grid class="">
           <ion-row>
@@ -27,7 +27,7 @@ import WatchlistSlides from "@/components/slides/WatchlistSlides.vue";
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :force-overscroll="false" class="rounded-lg ion-padding">
+    <ion-content :force-overscroll="false" class="rounded-lg ion-padding" color="light">
 
       <WatchlistSlides />
 
