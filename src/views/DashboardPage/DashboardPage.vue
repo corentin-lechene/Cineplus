@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 
 import {
+  IonButton,
   IonCard,
   IonCol,
   IonContent,
@@ -15,6 +16,13 @@ import {
 import MovieList from "@/components/movie/MovieList.vue";
 import {filmOutline, ticketOutline} from "ionicons/icons";
 import {useUserStore} from "@/stores/user";
+import {computed} from "vue";
+
+const ticketEarned = computed(() => {
+  const result = (useUserStore().profit - useUserStore().extraExpense) / useUserStore().sumTicketPrice;
+  if(isNaN(result)) return 0;
+  return Math.floor(result);
+})
 </script>
 
 <template>
@@ -32,12 +40,13 @@ import {useUserStore} from "@/stores/user";
     </ion-header>
 
     <ion-content :force-overscroll="false" class="rounded-lg" color="light">
-
+      <ion-button @click="useUserStore().populateUser()">populate</ion-button>
+      <ion-button @click="useUserStore().resetUser()">reset</ion-button>
       <div class="ion-padding grid grid-cols-2 grid-rows-2 gap-5 text-center">
         <ion-card class="flex flex-col justify-center items-center">
           <ion-icon :icon="ticketOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
-          <ion-text class="mt-2" color="medium">Bénéfices</ion-text>
-          <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ useUserStore().profit - useUserStore().extraExpense }}€</ion-text>
+          <ion-text class="mt-2" color="medium">Total bénéfices</ion-text>
+          <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ (useUserStore().profit - useUserStore().extraExpense).toFixed(2) }}€</ion-text>
         </ion-card>
         <ion-card class="flex flex-col justify-center items-center">
           <ion-icon :icon="filmOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
@@ -48,7 +57,7 @@ import {useUserStore} from "@/stores/user";
           <ion-icon :icon="ticketOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
           <ion-text class="mt-2" color="medium">Place gagnées</ion-text>
           <ion-text class="text-xl mt-1 font-semibold" color="dark">
-            {{ Math.floor((useUserStore().profit - useUserStore().extraExpense) / useUserStore().sumTicketPrice) }}
+            {{ ticketEarned }}
           </ion-text>
         </ion-card>
         <ion-card class="flex flex-col justify-center items-center row-start-2">
@@ -58,6 +67,7 @@ import {useUserStore} from "@/stores/user";
         </ion-card>
       </div>
 
+<!--      todo ajouter des balises pour dire "visionné le" et "tarif de la séance" -->
       <MovieList
           :movies="useUserStore().movieWatchedThisMonth.map(m => m.movie)"
           button

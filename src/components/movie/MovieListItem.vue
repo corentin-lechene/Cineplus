@@ -47,7 +47,7 @@ const releaseDate = computed(() => {
         :thumbnail="props.thumbnail"
       />
       <div class="flex items-start h-full">
-        <div class="flex flex-col gap-y-0.5 relative" style="max-width: 10em">
+        <div class="flex flex-col gap-y-0.5 relative" style="max-width: 11em; overflow: hidden">
           <ion-text :class="props.thumbnail ? 'whitespace-nowrap' : ''" class="title">
             {{ movie.title }}
           </ion-text>

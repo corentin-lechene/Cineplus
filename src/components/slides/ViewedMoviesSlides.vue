@@ -3,11 +3,17 @@
 import BaseSlide from "@/components/slides/BaseSlide.vue";
 import {WatchedMovie} from "@/models";
 import {useUserStore} from "@/stores/user";
-import {onMounted} from "vue";
+import {computed, onMounted} from "vue";
 import {IonCard, IonCol, IonGrid, IonLabel, IonRow, IonText} from "@ionic/vue";
 import dayjs from "dayjs";
 
 const userStore = useUserStore();
+
+const watchedMovies = computed(() => {
+  if (!userStore.user) return [];
+  return userStore.user.watchedMovies
+      .toSorted((a, b) => dayjs(b.watchedAt).unix() - dayjs(a.watchedAt).unix());
+});
 
 onMounted(() => {
   userStore.loadUser();
@@ -30,9 +36,9 @@ onMounted(() => {
     </ion-row>
   </ion-grid>
   <BaseSlide
-      v-if="userStore.user && userStore.user.watchedMovies.length > 0"
+      v-if="watchedMovies.length > 0"
       class="mt-2"
-      :items="userStore.user.watchedMovies"
+      :items="watchedMovies"
       :slides-per-view="2.3"
       :space-between="20"
   >
@@ -41,6 +47,7 @@ onMounted(() => {
         <img
             v-if="watchedMovie.movie.posterUrls !== null"
             class="rounded-md"
+            style="min-height: 13.5em"
             :src="watchedMovie.movie.posterUrls.w185"
             alt="img"
             @click="$router.push(`/movies/${watchedMovie.movie.id}/details`)"

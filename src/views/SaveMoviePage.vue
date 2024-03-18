@@ -40,8 +40,8 @@ const cinema = ref<Cinema>();
 const subscription = ref<Subscription>()
 const watchAt = ref(dayjs().toISOString());
 const room = ref("");
-const ticketPrice = ref(0);
-const extraExpense = ref(0);
+const ticketPrice = ref("0");
+const extraExpense = ref("0");
 const seat = ref("");
 const note = ref("");
 
@@ -76,10 +76,10 @@ onMounted(async () => {
       subscription.value = watchedMovie.subscription;
       movie.value = watchedMovie.movie
       watchAt.value = new Date(watchedMovie.watchedAt).toISOString()
-      ticketPrice.value = watchedMovie.ticketPrice;
+      ticketPrice.value = watchedMovie.ticketPrice.toString();
       room.value = watchedMovie.room || "";
       seat.value = watchedMovie.seat || "";
-      extraExpense.value = watchedMovie.extraExpense || 0
+      extraExpense.value = watchedMovie.extraExpense?.toString() || "0"
       note.value = watchedMovie.note || "";
     } catch (e) {
       console.error(e);
@@ -102,11 +102,11 @@ async function saveMovie() {
       movie.value,
       cinema.value,
       dayjs(watchAt.value).toDate(),
-      ticketPrice.value,
+      parseFloat(ticketPrice.value.replace(",", ".")),
       subscription.value,
       room.value,
       seat.value,
-      extraExpense.value,
+      parseFloat(extraExpense.value.replace(",", ".")),
       note.value
   );
 
@@ -180,7 +180,7 @@ async function saveMovie() {
           @didDismiss="openCinemasModal = false"
       >
         <CinemaList :cinemas="cinemas"
-                    @onSelected="cinema = $event; openCinemasModal = false; ticketPrice = $event.ticketPrice || 0"/>
+                    @onSelected="cinema = $event; openCinemasModal = false; ticketPrice = $event.ticketPrice?.toString() || '0'"/>
       </ion-modal>
       <!--      -->
       <ion-modal

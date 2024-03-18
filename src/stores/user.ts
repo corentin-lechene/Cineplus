@@ -58,6 +58,9 @@ export const useUserStore = defineStore('user', {
                     .filter(watchedMovie => !!watchedMovie.subscription && watchedMovie.subscription.id === subscription.id);
                 console.log("watchedMovies: ", watchedMovies.length);
 
+                for (const watchedMovie of watchedMovies) {
+                    console.log(watchedMovie.ticketPrice)
+                }
                 const totalTicketPrice = watchedMovies.reduce((acc, watchedMovie) => acc + watchedMovie.ticketPrice, 0);
                 console.log("totalTicketPrice: ", totalTicketPrice);
 
@@ -101,6 +104,7 @@ export const useUserStore = defineStore('user', {
         addToWatchedList(movie: WatchedMovie) {
             if (!this.user) return;
             WatchedActions.addToWatchedList(this.user, movie);
+            WatchlistActions.removeFromWatchlist(this.user, movie.movie);
             UserService.saveUser(this.user).catch(console.error);
         },
         removeFromWatchedList(movie: Movie) {
@@ -116,6 +120,11 @@ export const useUserStore = defineStore('user', {
         attachSubscription(subscription: Subscription, loyaltyCard: LoyaltyCard) {
             if (!this.user) return;
             SubscriptionActions.attachSubscription(subscription, loyaltyCard);
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        updateSubscription(subscription: Subscription) {
+            if (!this.user) return;
+            SubscriptionActions.update(subscription, this.user);
             UserService.saveUser(this.user).catch(console.error);
         },
         deleteLoyaltyCard(loyaltyCard: LoyaltyCard) {

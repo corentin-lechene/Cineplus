@@ -10,6 +10,15 @@ export class SubscriptionActions {
         }
     }
 
+    static update(subscription: Subscription, user: User) {
+        for (let i = 0; i < user.loyaltyCards.length; i++) {
+            for (let j = 0; j < user.loyaltyCards[i].subscriptions.length; j++) {
+                if (user.loyaltyCards[i].subscriptions[j].id === subscription.id) {
+                    user.loyaltyCards[i].subscriptions[j] = subscription;
+                }
+            }
+        }
+    }
     static delete(subscription: Subscription, user: User) {
         for (let i = 0; i < user.loyaltyCards.length; i++) {
             for (let j = 0; j < user.loyaltyCards[i].subscriptions.length; j++) {

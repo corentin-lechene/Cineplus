@@ -2,21 +2,11 @@
 
 import {computed, onMounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonContent,
-  IonIcon,
-  IonText,
-} from "@ionic/vue";
+import {IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonContent, IonText,} from "@ionic/vue";
 import {MovieContainer} from "@/containers/movie.container";
 import MovieImage from "@/components/movie/MovieImage.vue";
 import {Movie} from "@/models";
 import dayjs from "@/configs/dayjs.config";
-import {ellipseOutline} from "ionicons/icons";
 import {useUserStore} from "@/stores/user";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 
@@ -101,12 +91,12 @@ onMounted(async () => {
               <ion-text class="text-lg" color="light">{{ releaseDate }}</ion-text>
               <div class="flex items-center text-sm">
                 <ion-text color="light">{{ movie?.releasedAt.getFullYear() }}</ion-text>
-                <ion-icon :icon="ellipseOutline" class="text-xs mx-1" color="light"></ion-icon>
-                <ion-text v-for="(genre, i) in movie.genres.slice(0, 3)" color="light">
-                  {{ i === movie?.genres.length - 1 || i === 0 ? '' : ', ' }} {{ genre.name }}
-                </ion-text>
-                <ion-icon :icon="ellipseOutline" class="text-xs mx-1" color="light"></ion-icon>
-                <ion-text color="light">2h05</ion-text>
+<!--                <ion-icon :icon="ellipseOutline" class="text-xs mx-1" color="light"></ion-icon>-->
+<!--                <ion-text v-for="(genre, i) in movie.genres.slice(0, 3)" color="light">-->
+<!--                  {{ i === movie?.genres.length - 1 || i === 0 ? '' : ', ' }} {{ genre.name }}-->
+<!--                </ion-text>-->
+<!--                <ion-icon :icon="ellipseOutline" class="text-xs mx-1" color="light"></ion-icon>-->
+<!--                <ion-text color="light">2h05</ion-text>-->
               </div>
               <div class="flex gap-x-2 mt-3 mb-0 w-full">
                 <ion-button
