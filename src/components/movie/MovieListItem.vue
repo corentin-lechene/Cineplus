@@ -25,7 +25,7 @@ const props = withDefaults(defineProps<MovieListItemProps>(), {
 const releaseDate = computed(() => {
   if (!props.movie) return "loading";
   const releaseAt = dayjs(props.movie.releasedAt)
-  if(releaseAt.isBefore(new Date())) {
+  if(releaseAt.isBefore(dayjs())) {
     return `Sortie le ${releaseAt.format('DD MMMM YYYY')}`;
   }
   return `Sort le ${releaseAt.format('DD MMMM YYYY')}`;
@@ -47,7 +47,7 @@ const releaseDate = computed(() => {
         :thumbnail="props.thumbnail"
       />
       <div class="flex items-start h-full">
-        <div class="flex flex-col gap-y-0.5 relative" style="max-width: 11em; overflow: hidden">
+        <div class="flex flex-col gap-y-0.5 relative" style="max-width: 11em">
           <ion-text :class="props.thumbnail ? 'whitespace-nowrap' : ''" class="title">
             {{ movie.title }}
           </ion-text>

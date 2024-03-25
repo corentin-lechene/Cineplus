@@ -35,7 +35,7 @@ const addButtonColor = computed<"amber" | "gray">(() => {
 const releaseDate = computed(() => {
   if (!movie.value) return "loading";
   const releaseAt = dayjs(movie.value.releasedAt)
-  if (releaseAt.isAfter(new Date())) {
+  if (releaseAt.isBefore(dayjs())) {
     return `Sortie le ${releaseAt.format('DD MMMM YYYY')}`;
   }
   return `Sort le ${releaseAt.format('DD MMMM YYYY')}`;
