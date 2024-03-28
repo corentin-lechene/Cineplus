@@ -32,14 +32,15 @@ const name = computed(() => {
   if(subscription.value?.name === "ugc_illimite_duo") return "UGC Illimité Duo";
   return "";
 });
-const startAt = computed(() => {
-  if (!subscription.value) return "";
-  return dayjs(subscription.value.startAt).format('DD MMMM YYYY');
-});
-const endAt = computed(() => {
-  if (!subscription.value) return "";
-  if (!subscription.value.endAt) return "Pas d'expiration"
-  return dayjs(subscription.value.endAt).format('DD MMMM YYYY');
+const subscriptionMonth = computed(() => {
+  if (!subscription.value) return 0;
+  const startAt = dayjs(subscription.value.startAt);
+  const endAt = dayjs(subscription.value.endAt);
+  console.log("(getProfitBySub) startAt: ", startAt.format('LLLL'), " -> ", endAt.format('LLLL'));
+
+  const diff = Math.ceil(endAt.diff(startAt, 'month', true));
+  console.log("diff: ", diff)
+  return diff;
 });
 
 onMounted(() => {
@@ -90,25 +91,28 @@ function editSubscription(editSubscription: Subscription) {
             <div class="flex items-start h-full py-2">
               <div class="flex flex-col relative" style="max-width: 15em">
                 <ion-text class="text-xl whitespace-nowrap">{{ name }}</ion-text>
-                <ion-text class="text-sm" color="medium">Du {{ startAt }}</ion-text>
-                <ion-text class="text-sm" color="medium">Au {{ endAt }}</ion-text>
-                <ion-text class="text-sm" color="medium">Abonnement de {{subscription.price}}€ / {{subscription.payment === 'yearly' ? "An" : "Mois"}}</ion-text>
+                <ion-text class="text-sm" color="medium">
+                  {{ subscriptionMonth }} mois d'abonnement{{ subscriptionMonth > 1 ? 's' : '' }}
+                </ion-text>
+                <ion-text class="text-sm" color="medium">
+                  Abonnement de {{subscription.price}}€ / {{subscription.payment === 'yearly' ? "An" : "Mois"}}
+                </ion-text>
               </div>
             </div>
           </ion-item>
           <div class="flex justify-around py-4 rounded-b-xl" style="background: white">
             <div class="flex flex-col items-center justify-center text-center">
               <ion-text class="text-lg mb-1">{{ movieWatchedBySubscriptionId(subscription.id) }}</ion-text>
-              <ion-text class="text-sm leading-3">Nombre de séances</ion-text>
+              <ion-text class="text-sm leading-3">Séances</ion-text>
             </div>
-<!--            <div class="flex flex-col items-center justify-center text-center">-->
-<!--              <ion-text class="text-lg mb-1">22,90</ion-text>-->
-<!--              <ion-text class="text-sm leading-3">Béféfices</ion-text>-->
-<!--            </div>-->
-<!--            <div class="flex flex-col items-center justify-center text-center">-->
-<!--              <ion-text class="text-lg mb-1">8</ion-text>-->
-<!--              <ion-text class="text-sm leading-3">Place économisées</ion-text>-->
-<!--            </div>-->
+            <div class="flex flex-col items-center justify-center text-center">
+              <ion-text class="text-lg mb-1">{{ userStore.getProfitBySubscription(subscription).toFixed(2) }} €</ion-text>
+              <ion-text class="text-sm leading-3">Béféfices</ion-text>
+            </div>
+            <div class="flex flex-col items-center justify-center text-center">
+              <ion-text class="text-lg mb-1">{{ userStore.getExtraExpenseBySubscription(subscription).toFixed(2) }} €</ion-text>
+              <ion-text class="text-sm leading-3">Dépenses</ion-text>
+            </div>
           </div>
         </div>
 

@@ -46,12 +46,12 @@ const ticketEarned = computed(() => {
         <ion-card class="flex flex-col justify-center items-center">
           <ion-icon :icon="ticketOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
           <ion-text class="mt-2" color="medium">Total bénéfices</ion-text>
-          <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ (useUserStore().profit - useUserStore().extraExpense).toFixed(2) }}€</ion-text>
+          <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ useUserStore().profit.toFixed(2) }}€</ion-text>
         </ion-card>
         <ion-card class="flex flex-col justify-center items-center">
           <ion-icon :icon="filmOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
           <ion-text class="mt-2 leading-4" color="medium">Dépenses supplémentaires</ion-text>
-          <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ useUserStore().extraExpense }}€</ion-text>
+          <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ useUserStore().extraExpense.toFixed(2) }}€</ion-text>
         </ion-card>
         <ion-card class="flex flex-col justify-center items-center row-start-2">
           <ion-icon :icon="ticketOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>

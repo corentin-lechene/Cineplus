@@ -26,7 +26,7 @@ export const useUserStore = defineStore('user', {
         },
         sumTicketPrice(state) {
             if (!state.user) return 0;
-            const sum = state.user.watchedMovies.reduce((acc, watchedMovie) => acc + watchedMovie.ticketPrice, 0);
+            const sum = state.user.watchedMovies.reduce((acc, watchedMovie) => acc + watchedMovie.ticketPrice, 0.0);
             return sum / state.user.watchedMovies.length
         },
         movieWatched(state) {
@@ -35,7 +35,7 @@ export const useUserStore = defineStore('user', {
         },
         extraExpense(state) {
             if (!state.user) return 0;
-            return state.user.watchedMovies.reduce((acc, watchedMovie) => acc + (watchedMovie.extraExpense || 0), 0);
+            return state.user.watchedMovies.reduce((acc, watchedMovie) => acc + (watchedMovie.extraExpense || 0.0), 0.0);
         },
         profit(state) {
             if (!state.user) return 0;
@@ -47,29 +47,8 @@ export const useUserStore = defineStore('user', {
                 .flatMap(loyaltyCard => loyaltyCard.subscriptions)
                 .toSorted((a, b) => dayjs(a.startAt).isBefore(dayjs(b.startAt)) ? -1 : 1);
             for (const subscription of subscriptions) {
-                const startAt = dayjs(subscription.startAt);
-                const endAt = dayjs(subscription.endAt);
-                console.log("startAt: ", startAt.format('LLLL'), " -> ", endAt.format('LLLL'));
-
-                const diff = Math.ceil(endAt.diff(startAt, 'month', true));
-                console.log("diff: ", diff)
-
-                const watchedMovies = state.user.watchedMovies
-                    .filter(watchedMovie => !!watchedMovie.subscription && watchedMovie.subscription.id === subscription.id);
-                console.log("watchedMovies: ", watchedMovies.length);
-
-                for (const watchedMovie of watchedMovies) {
-                    console.log(watchedMovie.ticketPrice)
-                }
-                const totalTicketPrice = watchedMovies.reduce((acc, watchedMovie) => acc + watchedMovie.ticketPrice, 0);
-                console.log("totalTicketPrice: ", totalTicketPrice);
-
-                const subscriptionPrice = subscription.price * diff;
-                console.log("subscriptionPrice: ", subscriptionPrice);
-
-                profit += (totalTicketPrice - subscriptionPrice);
-                console.log("profit: ", profit);
-
+                profit += SubscriptionActions.getProfitBySubscription(state.user, subscription);
+                profit -= SubscriptionActions.getExtraExpenseBySubscription(state.user, subscription);
                 console.log("-----------------")
             }
 
@@ -77,6 +56,20 @@ export const useUserStore = defineStore('user', {
         }
     },
     actions: {
+        getExtraExpenseBySubscription(subscription: Subscription) {
+            if (!this.user) return 0;
+            return SubscriptionActions.getExtraExpenseBySubscription(this.user, subscription);
+        },
+        getProfitBySubscription(subscription: Subscription) {
+            if (!this.user) return 0;
+            const profit = SubscriptionActions.getProfitBySubscription(this.user, subscription);
+            const extraExpense = SubscriptionActions.getExtraExpenseBySubscription(this.user, subscription);
+            return profit - extraExpense;
+        },
+        getTicketEarnedBySubscription(subscription: Subscription) {
+            if (!this.user) return 0;
+            return SubscriptionActions.getTicketEarnedBySubscription(this.user, subscription);
+        },
         newUser(user: User) {
             this.user = user;
             UserService.saveUser(user).catch(console.error);
@@ -174,7 +167,7 @@ export const useUserStore = defineStore('user', {
                 WatchedMovie.of(movie, cinema, subThreeMonth.add(1, 'month').add(1, 'day').toDate(), 10, sub1),
                 WatchedMovie.of(movie, cinema, subThreeMonth.add(1, 'month').add(5, 'day').toDate(), 10, sub1),
                 WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(1, 'day').toDate(), 15, sub2),
-                WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(10, 'day').toDate(), 15, sub2),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(10, 'day').toDate(), 15, sub2, "", "", 0.0123),
             );
             UserService.saveUser(this.user).catch(console.error);
         }
