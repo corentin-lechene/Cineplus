@@ -14,7 +14,7 @@ import {
   IonToolbar
 } from "@ionic/vue";
 import MovieList from "@/components/movie/MovieList.vue";
-import {filmOutline, ticketOutline} from "ionicons/icons";
+import {cashOutline, filmOutline, iceCreamOutline, ticketOutline} from "ionicons/icons";
 import {useUserStore} from "@/stores/user";
 import {computed} from "vue";
 
@@ -44,12 +44,12 @@ const ticketEarned = computed(() => {
       <ion-button @click="useUserStore().resetUser()">reset</ion-button>
       <div class="ion-padding grid grid-cols-2 grid-rows-2 gap-5 text-center">
         <ion-card class="flex flex-col justify-center items-center">
-          <ion-icon :icon="ticketOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
+          <ion-icon :icon="cashOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
           <ion-text class="mt-2" color="medium">Total bénéfices</ion-text>
           <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ useUserStore().profit.toFixed(2) }}€</ion-text>
         </ion-card>
         <ion-card class="flex flex-col justify-center items-center">
-          <ion-icon :icon="filmOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
+          <ion-icon :icon="iceCreamOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
           <ion-text class="mt-2 leading-4" color="medium">Dépenses supplémentaires</ion-text>
           <ion-text class="text-xl mt-1 font-semibold" color="dark">{{ useUserStore().extraExpense.toFixed(2) }}€</ion-text>
         </ion-card>
