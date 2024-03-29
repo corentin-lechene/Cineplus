@@ -16,13 +16,14 @@ import {
 } from "@ionic/vue";
 import {onMounted, ref} from "vue";
 import {Subscription, SubscriptionPayment} from "@/models";
+import dayjs from "@/configs/dayjs.config";
 
 const id = ref();
 const name = ref<"ugc_illimite_26" | "ugc_illimite" | "ugc_illimite_duo">("ugc_illimite_26");
 const payment = ref<"yearly" | "monthly">("monthly");
 const price = ref(17.90);
-const startAt = ref("1994-12-15");
-const endAt = ref(new Date().toISOString());
+const startAt = ref(dayjs().format("YYYY-MM-DD"));
+const endAt = ref(dayjs().add(1, 'month').format("YYYY-MM-DD"));
 
 const props = defineProps<{ subscription?: Subscription }>()
 const emit = defineEmits(['onSave'])

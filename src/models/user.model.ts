@@ -3,10 +3,20 @@ import {Preferences} from "@/models/preference.model";
 import {WatchList} from "@/models/watch-list.model";
 import {WatchedMovie} from "@/models/watched-movie.model";
 import {LoyaltyCard} from "@/models/loyalty-card.model";
+import dayjs from "dayjs";
 
+export type Backup = {
+    id: string;
+    type: "auto" | "manual";
+    createdAt: Date;
+    data: {
+        user: string
+    };
+}
 
 export class User {
     readonly id: number;
+    backup?: Backup;
     profile: Profile;
     preferences: Preferences;
     loyaltyCards: LoyaltyCard[]
@@ -23,6 +33,6 @@ export class User {
     }
 
     static of(profile: Profile, preferences: Preferences): User {
-        return new User(0, profile, preferences, [], [], []);
+        return new User(dayjs().unix(), profile, preferences, [], [], []);
     }
 }

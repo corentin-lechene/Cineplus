@@ -3,11 +3,13 @@
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user";
 import {computed, ref} from "vue";
-import {IonActionSheet, IonContent} from "@ionic/vue";
+import {IonActionSheet, IonContent, IonModal} from "@ionic/vue";
 
 import BaseList from "@/components/lists/BaseList.vue";
 import {
   cardOutline,
+  cloudDoneOutline,
+  cloudOutline,
   handLeftOutline,
   helpCircleOutline,
   informationOutline,
@@ -19,6 +21,7 @@ import {
 import ListItem from "@/components/lists/ListItem.vue";
 import AppButton from "@/components/buttons/AppButton.vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
+import CloudBackups from "@/components/backups/CloudBackups.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -31,6 +34,7 @@ const fullName = computed(() => {
 });
 
 const openResetModal = ref(false);
+const openCloudModalSave = ref(false);
 
 const resetActions = [
   {
@@ -61,7 +65,7 @@ const listAccountItems = computed(() => {
       icon: personOutline,
     },
     {
-      label: 'Carte de fidélité',
+      label: 'Cartes de fidélité',
       route: 'loyalty-cards',
       value: "",
       icon: cardOutline,
@@ -150,7 +154,12 @@ function resetApp(e: CustomEvent) {
 <template>
   <ion-page>
 
-    <BaseHeader title="Paramètres"/>
+    <BaseHeader
+        :right-button="userStore.user?.backup ? cloudDoneOutline : cloudOutline"
+        :right-button-color="userStore.user?.backup ? 'bg-green-200' : 'bg-gray-200 '"
+        title="Paramètres"
+        @on-cloud="openCloudModalSave = true"
+    />
 
     <ion-content :force-overscroll="false" class="ion-padding" color="light">
 
@@ -180,11 +189,23 @@ function resetApp(e: CustomEvent) {
           header="Reinitialiser"
           @didDismiss="resetApp"
       />
+      <ion-modal
+          :breakpoints="[0, 1]"
+          :initial-breakpoint="1"
+          :is-open="openCloudModalSave"
+          @didDismiss="openCloudModalSave = false"
+      >
+        <CloudBackups @onClose="openCloudModalSave = false" />
+      </ion-modal>
     </ion-content>
   </ion-page>
 </template>
 
 <style scoped>
+ion-modal {
+  --height: auto;
+}
+
 ion-toolbar {
   --background: white;
   --border-style: none;

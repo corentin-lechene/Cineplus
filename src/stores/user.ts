@@ -1,11 +1,12 @@
 import {defineStore} from 'pinia'
-import {Cinema, LoyaltyCard, Movie, Preferences, Profile, Subscription, User, WatchedMovie} from "@/models";
+import {Backup, Cinema, LoyaltyCard, Movie, Preferences, Profile, Subscription, User, WatchedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
 import {WatchlistActions} from "@/stores/user-actions/watchlist.action";
 import {WatchedActions} from "@/stores/user-actions/watched.action";
 import {LoyaltyCardActions} from "@/stores/user-actions/loyalty-card.action";
 import {SubscriptionActions} from "@/stores/user-actions/subscription.action";
 import dayjs from "@/configs/dayjs.config";
+import {BackupService} from "@/services/backup.service";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -56,6 +57,24 @@ export const useUserStore = defineStore('user', {
         }
     },
     actions: {
+        async saveBackup() {
+            if(!this.user) return;
+            const backup: Partial<Backup> = {
+                data: {
+                    user: JSON.stringify(this.user)
+                },
+                type: "auto",
+                createdAt: new Date(),
+            }
+            this.user.backup = await BackupService.save(backup, this.user)
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        useBackup(backup: Backup) {
+            if (!this.user) return;
+            this.user = JSON.parse(backup.data.user) as User;
+            this.user.backup = backup;
+            UserService.saveUser(this.user).catch(console.error);
+        },
         getExtraExpenseBySubscription(subscription: Subscription) {
             if (!this.user) return 0;
             return SubscriptionActions.getExtraExpenseBySubscription(this.user, subscription);
@@ -72,7 +91,9 @@ export const useUserStore = defineStore('user', {
         },
         newUser(user: User) {
             this.user = user;
-            UserService.saveUser(user).catch(console.error);
+            UserService.saveUser(user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         updateUser(user: User) {
             this.user = user;
@@ -87,48 +108,66 @@ export const useUserStore = defineStore('user', {
         addToWatchList(movie: Movie) {
             if (!this.user) return;
             WatchlistActions.addToWatchlist(this.user, movie);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         removeFromWatchList(movie: Movie) {
             if (!this.user) return;
             WatchlistActions.removeFromWatchlist(this.user, movie);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         addToWatchedList(movie: WatchedMovie) {
             if (!this.user) return;
             WatchedActions.addToWatchedList(this.user, movie);
             WatchlistActions.removeFromWatchlist(this.user, movie.movie);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         removeFromWatchedList(movie: Movie) {
             if (!this.user) return;
             WatchedActions.removeFromWatchedList(this.user, movie);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         createLoyaltyCard(loyaltyCard: LoyaltyCard) {
             if (!this.user) return;
             LoyaltyCardActions.createLoyaltyCard(this.user, loyaltyCard)
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         attachSubscription(subscription: Subscription, loyaltyCard: LoyaltyCard) {
             if (!this.user) return;
             SubscriptionActions.attachSubscription(subscription, loyaltyCard);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         updateSubscription(subscription: Subscription) {
             if (!this.user) return;
             SubscriptionActions.update(subscription, this.user);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         deleteLoyaltyCard(loyaltyCard: LoyaltyCard) {
             if (!this.user) return;
             LoyaltyCardActions.deleteLoyaltyCard(this.user, loyaltyCard);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         deleteSubscription(subscription: Subscription) {
             if (!this.user) return;
             SubscriptionActions.delete(subscription, this.user);
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         resetUser() {
             this.user = null;
@@ -169,7 +208,9 @@ export const useUserStore = defineStore('user', {
                 WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(1, 'day').toDate(), 15, sub2),
                 WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(10, 'day').toDate(), 15, sub2, "", "", 0.0123),
             );
-            UserService.saveUser(this.user).catch(console.error);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         }
     }
 });

@@ -8,11 +8,13 @@ withDefaults(defineProps<{
   addButton?: boolean,
   addButtonColor?: "gray" | "amber",
   title: string,
+  rightButton?: string;
+  rightButtonColor?: string;
 }>(), {
   addButtonColor: 'gray'
 });
 
-defineEmits(['onAdd'])
+defineEmits(['onAdd', 'onCloud', 'onClose'])
 </script>
 
 <template>
@@ -25,9 +27,12 @@ defineEmits(['onAdd'])
         </ion-buttons>
         <ion-title class="text-xl p-0">{{ title }}</ion-title>
         <ion-buttons slot="end">
-          <ion-icon v-if="closeButton" :icon="close" class="text-2xl rounded-full bg-gray-200 p-1"></ion-icon>
+          <ion-icon v-if="closeButton" :icon="close" class="text-2xl rounded-full bg-gray-200 p-1"
+                    @click="$emit('onClose')"></ion-icon>
           <ion-icon v-if="addButton" :icon="addButtonColor === 'gray' ? add : checkmark" :class="addButtonColor === 'gray' ? 'bg-gray-200' : 'bg-amber-300'" class="text-2xl rounded-full p-1"
                     @click="$emit('onAdd')"></ion-icon>
+          <ion-icon v-if="rightButton" :class="rightButtonColor" :icon="rightButton" class="text-2xl rounded-full p-1.5"
+                    @click="$emit('onCloud')"></ion-icon>
         </ion-buttons>
       </div>
     </ion-toolbar>

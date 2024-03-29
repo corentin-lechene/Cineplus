@@ -21,6 +21,14 @@ const props = withDefaults(defineProps<SubscriptionListItemProps>(), {
   slider: false,
 });
 
+const name = computed(() => {
+  if (!props.subscription) return "";
+  if(props.subscription?.name === "ugc_illimite") return "UGC Illimité";
+  if(props.subscription?.name === "ugc_illimite_26") return "UGC Illimité -26 ans";
+  if(props.subscription?.name === "ugc_illimite_duo") return "UGC Illimité Duo";
+  return "";
+});
+
 const subscriptionDate = computed(() => {
   const startAt = dayjs(props.subscription.startAt).format('DD MMM YYYY');
   const endAt = props.subscription.endAt;
@@ -55,7 +63,7 @@ function deleteSubscription() {
       />
       <div class="flex items-start h-full">
         <div class="flex flex-col relative">
-          <ion-text class="text-lg whitespace-nowrap">{{ subscription.name }}</ion-text>
+          <ion-text class="text-lg whitespace-nowrap">{{ name }}</ion-text>
           <ion-text class="text-sm" color="medium">{{ subscriptionDate }}</ion-text>
         </div>
       </div>
