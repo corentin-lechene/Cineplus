@@ -13,11 +13,11 @@ interface MoviesListProps {
 }
 
 const props = defineProps<MoviesListProps>();
-defineEmits();
+defineEmits(['onViewAll']);
 </script>
 
 <template>
-  <BaseList :button="button" :items="movies" :no-data-message="noDataMessage" :section="section" :title="title">
+  <BaseList :button="button" :items="movies" :no-data-message="noDataMessage" :section="section" :title="title" @view-all="$emit('onViewAll')">
     <template #default="{item}: {item: Movie}">
       <MovieListItem :movie="item" thumbnail @click="$router.push(`/movies/${item.id}/details`)"/>
     </template>

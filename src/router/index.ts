@@ -50,11 +50,11 @@ const routes: Array<RouteRecordRaw> = [
     {
       path: '/movies/watch-list',
       component: () => import('@/views/Movies/WatchList.vue'),
-    },
+    },*/
     {
       path: '/movies/watched',
-      component: () => import('@/views/Movies/WatchedMovies.vue'),
-    },*/
+      component: () => import('@/views/Movies/WatchedMoviesPage.vue'),
+    },
     {
         path: '/movies/watched/new',
         component: () => import('@/views/SaveMoviePage.vue'),
@@ -63,11 +63,6 @@ const routes: Array<RouteRecordRaw> = [
         path: '/movies/:movie_id/details',
         component: () => import('@/views/MovieDetailsPage/MovieDetailsPage.vue'),
     },
-    /*{
-      path: '/dashboard',
-      component: () => import('@/views/Dashboard/Dashboard.vue'),
-    },
-    */
     {
         path: '/settings',
         component: () => import('@/views/Settings/Settings.vue'),

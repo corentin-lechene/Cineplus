@@ -50,7 +50,6 @@ function onSave() {
 
   if(firstnameError.value !== "" || lastnameError.value !== "" || cardNumberError.value !== "") {
     ToastService.error("Formulaire invalide");
-    console.log("laa")
     return;
   }
 

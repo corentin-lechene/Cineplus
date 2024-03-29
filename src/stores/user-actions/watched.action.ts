@@ -3,7 +3,6 @@ import {Movie, User, WatchedMovie} from "@/models";
 export class WatchedActions {
     static addToWatchedList(user: User, watchedMovie: WatchedMovie) {
         const index = user.watchedMovies.findIndex(watchedMovieUser => watchedMovieUser.movie.id === watchedMovie.movie.id);
-        console.log("index: ", index);
         if(index === -1) {
             user.watchedMovies.push(watchedMovie);
         } else {

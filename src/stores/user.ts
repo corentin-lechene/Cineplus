@@ -13,6 +13,10 @@ export const useUserStore = defineStore('user', {
         user: null as User | null,
     }),
     getters: {
+        getAllWatchedMovies(state): WatchedMovie[] {
+            if (!state.user) return [];
+            return state.user.watchedMovies.sort((a, b) => dayjs(a.watchedAt).isBefore(dayjs(b.watchedAt)) ? 1 : -1);
+        },
         movieWatchedThisMonth(state) {
             if (!state.user) return [];
             return state.user.watchedMovies

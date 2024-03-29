@@ -74,6 +74,7 @@ const ticketEarned = computed(() => {
           class="ion-margin-horizontal"
           no-data-message="Aucun film ce mois-ci"
           title="Ce mois-ci"
+          @on-view-all="$router.push('/movies/watched')"
       />
     </ion-content>
 

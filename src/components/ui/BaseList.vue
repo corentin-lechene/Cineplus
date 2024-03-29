@@ -11,7 +11,7 @@ interface BaseListProps {
 }
 
 const props = defineProps<BaseListProps>();
-defineEmits(['onClick']);
+defineEmits(['onClick', 'viewAll']);
 defineSlots<{ default(props: { item: any, index: number }): any, header(props: {}): void }>();
 
 </script>
@@ -35,7 +35,7 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
   <div v-else>
     <ion-list-header v-if="title" class="pl-0">
       <ion-label>{{ title }}</ion-label>
-      <ion-button v-if="button">Voir tout</ion-button>
+      <ion-button v-if="button" @click="$emit('viewAll')">Voir tout</ion-button>
     </ion-list-header>
     <ion-list class="drop-shadow-card bg-inherit" inset style="margin-top: 0 !important;">
       <ion-note v-if="items?.length === 0" class="ion-padding-horizontal">{{ noDataMessage || 'Liste vide' }}</ion-note>
