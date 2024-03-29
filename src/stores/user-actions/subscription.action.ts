@@ -33,26 +33,26 @@ export class SubscriptionActions {
         if(!user) return 0;
         const startAt = dayjs(subscription.startAt);
         const endAt = dayjs(subscription.endAt);
-        console.log("(getProfitBySub) startAt: ", startAt.format('LLLL'), " -> ", endAt.format('LLLL'));
+        // console.log("(getProfitBySub) startAt: ", startAt.format('LLLL'), " -> ", endAt.format('LLLL'));
 
         const diff = Math.ceil(endAt.diff(startAt, 'month', true));
-        console.log("diff: ", diff)
+        // console.log("diff: ", diff)
 
         const watchedMovies = user.watchedMovies
             .filter(watchedMovie => !!watchedMovie.subscription && watchedMovie.subscription.id === subscription.id);
-        console.log("watchedMovies: ", watchedMovies.length);
+        // console.log("watchedMovies: ", watchedMovies.length);
 
         for (const watchedMovie of watchedMovies) {
-            console.log(watchedMovie.ticketPrice)
+            // console.log(watchedMovie.ticketPrice)
         }
         const totalTicketPrice = watchedMovies.reduce((acc, watchedMovie) => acc + (watchedMovie.ticketPrice || 0.0), 0.0);
-        console.log("totalTicketPrice: ", totalTicketPrice);
+        // console.log("totalTicketPrice: ", totalTicketPrice);
 
         const subscriptionPrice = subscription.price * diff;
-        console.log("subscriptionPrice: ", subscriptionPrice);
+        // console.log("subscriptionPrice: ", subscriptionPrice);
 
         const profit = (totalTicketPrice - subscriptionPrice);
-        console.log("profit: ", profit);
+        // console.log("profit: ", profit);
         return profit
     }
 

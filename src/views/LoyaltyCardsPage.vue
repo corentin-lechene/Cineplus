@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import {IonModal, IonList, IonNote} from "@ionic/vue";
+import {IonList, IonModal, IonNote} from "@ionic/vue";
 import BaseHeader from "@/components/common/BaseHeader.vue";
 import BaseContent from "@/components/common/BaseContent.vue";
 import {LoyaltyCard} from "@/models";
@@ -21,8 +21,7 @@ function saveLoyaltyCard(event: {
   imageName: string,
   ugc: boolean
 }) {
-  const values = Object.values(event);
-  if (!values.every(value => !!value)) {
+  if (event.firstname.length < 3 || event.lastname.length < 3 || event.cardNumber.length < 6 || !event.ugc || !event.imageName) {
     return ToastService.error("Formulaire invalide");
   }
   if (!userStore.user) {

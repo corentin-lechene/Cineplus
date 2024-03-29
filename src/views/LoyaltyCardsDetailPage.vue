@@ -37,6 +37,28 @@ onMounted(() => {
 });
 
 
+function updateLoyaltyCard(loyaltyCardParam: { id: number, firstname: string, lastname: string, imageName: string, cardNumber: string}) {
+  if (!loyaltyCardParam) {
+    return ToastService.error("Le formulaire est invalide");
+  }
+  if (!userStore.user) {
+    return;
+  }
+
+  const lc = LoyaltyCard.of(
+      loyaltyCardParam.id,
+      loyaltyCardParam.firstname,
+      loyaltyCardParam.lastname,
+      "ugc",
+      loyaltyCardParam.imageName,
+      loyaltyCardParam.cardNumber,
+  );
+  userStore.updateLoyaltyCard(lc);
+  ToastService.success("Carte de fidélité mise à jour");
+  loyaltyCard.value = lc;
+  openLoyaltyCardSave.value = false;
+}
+
 function saveSubscription(subscription: Subscription) {
   if (!userStore.user || !loyaltyCard.value) return;
   if (!subscription) {
@@ -79,7 +101,7 @@ function saveSubscription(subscription: Subscription) {
           :is-open="openLoyaltyCardSave"
           @didDismiss="openLoyaltyCardSave = false"
       >
-        <LoyaltyCardSave :loyalty-card="loyaltyCard"/>
+        <LoyaltyCardSave :loyalty-card="loyaltyCard" @on-save="updateLoyaltyCard($event)"/>
       </ion-modal>
       <ion-modal
           :breakpoints="[0, 1]"

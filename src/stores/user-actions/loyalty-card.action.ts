@@ -11,6 +11,13 @@ export class LoyaltyCardActions {
         }
     }
 
+    static updateLoyaltyCard(user: User, loyaltyCard: LoyaltyCard) {
+        const index = user.loyaltyCards.findIndex(lc => lc.id === loyaltyCard.id);
+        if(index !== -1) {
+            user.loyaltyCards[index] = loyaltyCard;
+        }
+    }
+
     static deleteLoyaltyCard(user: User, loyaltyCard: LoyaltyCard) {
         user.loyaltyCards = user.loyaltyCards.filter(lc => lc.id !== loyaltyCard.id);
     }

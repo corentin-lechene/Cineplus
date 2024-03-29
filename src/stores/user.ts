@@ -40,7 +40,7 @@ export const useUserStore = defineStore('user', {
         },
         profit(state) {
             if (!state.user) return 0;
-            console.log("-----------------")
+            // console.log("-----------------")
 
             let profit = 0;
             // parcourir les mois de chaque abonnement
@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', {
             for (const subscription of subscriptions) {
                 profit += SubscriptionActions.getProfitBySubscription(state.user, subscription);
                 profit -= SubscriptionActions.getExtraExpenseBySubscription(state.user, subscription);
-                console.log("-----------------")
+                // console.log("-----------------")
             }
 
             return profit
@@ -137,6 +137,13 @@ export const useUserStore = defineStore('user', {
         createLoyaltyCard(loyaltyCard: LoyaltyCard) {
             if (!this.user) return;
             LoyaltyCardActions.createLoyaltyCard(this.user, loyaltyCard)
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
+        updateLoyaltyCard(loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            LoyaltyCardActions.updateLoyaltyCard(this.user, loyaltyCard);
             UserService.saveUser(this.user)
                 .then(async () => await this.saveBackup())
                 .catch(console.error);

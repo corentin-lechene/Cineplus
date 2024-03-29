@@ -4,6 +4,7 @@ import {IonButton, IonCheckbox, IonImg, IonInput, IonItem, IonList} from "@ionic
 import {onMounted, ref} from "vue";
 import BaseSlide from "@/components/slides/BaseSlide.vue";
 import {LoyaltyCard} from "@/models";
+import {ToastService} from "@/services/toast.service";
 
 const firstname = ref("");
 const lastname = ref("");
@@ -13,6 +14,10 @@ const ugc = ref(true)
 
 const props = defineProps<{ loyaltyCard?: LoyaltyCard }>()
 const emits = defineEmits(['onSave'])
+
+const firstnameError = ref("");
+const lastnameError = ref("");
+const cardNumberError = ref("");
 
 onMounted(() => {
   if (props.loyaltyCard) {
@@ -25,7 +30,32 @@ onMounted(() => {
 
 
 function onSave() {
+  if(firstname.value.length < 3) {
+    firstnameError.value = "Le prénom doit contenir au moins 3 caractères";
+  } else {
+    firstnameError.value = "";
+  }
+
+  if(lastname.value.length < 3) {
+    lastnameError.value = "Le nom doit contenir au moins 3 caractères";
+  } else {
+    lastnameError.value = "";
+  }
+
+  if(cardNumber.value.length < 6) {
+    cardNumberError.value = "Le numéro de carte doit contenir au moins 6 caractères";
+  } else {
+    cardNumberError.value = "";
+  }
+
+  if(firstnameError.value !== "" || lastnameError.value !== "" || cardNumberError.value !== "") {
+    ToastService.error("Formulaire invalide");
+    console.log("laa")
+    return;
+  }
+
   emits('onSave', {
+    id: props.loyaltyCard?.id,
     firstname: firstname.value,
     lastname: lastname.value,
     cardNumber: cardNumber.value,
@@ -62,13 +92,16 @@ function onSave() {
 
     <ion-list class="mb-4 rounded-xl drop-shadow-card">
       <ion-item>
-        <ion-input v-model="firstname" label="Prénom"></ion-input>
+        <ion-input v-model.trim="firstname" label="Prénom"></ion-input>
+        <small v-if="firstnameError" class="text-red-500 mb-2">{{ firstnameError }}</small>
       </ion-item>
       <ion-item>
-        <ion-input v-model="lastname" label="Nom"></ion-input>
+        <ion-input v-model.trim="lastname" label="Nom"></ion-input>
+        <small v-if="firstnameError" class="text-red-500 mb-2">{{ lastnameError }}</small>
       </ion-item>
       <ion-item lines="none">
-        <ion-input v-model="cardNumber" label="N° de carte"></ion-input>
+        <ion-input v-model.trim="cardNumber" label="N° de carte"></ion-input>
+        <small v-if="firstnameError" class="text-red-500 mb-2">{{ cardNumberError }}</small>
       </ion-item>
     </ion-list>
 
