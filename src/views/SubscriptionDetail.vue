@@ -75,8 +75,8 @@ function editSubscription(editSubscription: Subscription) {
 
 <template>
   <ion-page>
-    <BaseHeader title="Détail de l'abonnement"/>
-    <BaseContent class="ion-padding">
+    <BaseHeader v-once title="Détail de l'abonnement"/>
+    <BaseContent v-once class="ion-padding">
       <div v-if="!subscription || !userStore.user">Loading...</div>
       <div v-else>
 
@@ -116,9 +116,9 @@ function editSubscription(editSubscription: Subscription) {
           </div>
         </div>
 
-        <BaseList :items="watchedMovies" class="mt-2" title="Tous les films">
+        <BaseList v-once :items="watchedMovies" class="mt-2" title="Tous les films">
           <template #default="{item: watchMovie}: {item: WatchedMovie}">
-            <MovieWatchedListItem :watched-movie="watchMovie" thumbnail type="watched"
+            <MovieWatchedListItem v-once :watched-movie="watchMovie" thumbnail type="watched"
                            @click="$router.push(`/movies/${watchMovie.movie.id}/details`)"/>
           </template>
         </BaseList>

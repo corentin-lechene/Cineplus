@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<MovieWatchListItemProps>(), {
 });
 
 const subscriptionName = computed(() => {
-  if (!props.watchedMovie.subscription) return "";
+  if (!props.watchedMovie.subscription) return "Pas d'abonnement";
   if(props.watchedMovie.subscription?.name === "ugc_illimite") return "UGC Illimité";
   if(props.watchedMovie.subscription?.name === "ugc_illimite_26") return "UGC Illimité -26 ans";
   if(props.watchedMovie.subscription?.name === "ugc_illimite_duo") return "UGC Illimité Duo";

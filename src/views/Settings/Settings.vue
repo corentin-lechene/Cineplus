@@ -155,6 +155,7 @@ function resetApp(e: CustomEvent) {
   <ion-page>
 
     <BaseHeader
+        v-once
         :right-button="userStore.user?.backup ? cloudDoneOutline : cloudOutline"
         :right-button-color="userStore.user?.backup ? 'bg-green-200' : 'bg-gray-200 '"
         title="Paramètres"
@@ -163,13 +164,13 @@ function resetApp(e: CustomEvent) {
 
     <ion-content :force-overscroll="false" class="ion-padding" color="light">
 
-      <BaseList title="Mon compte">
+      <BaseList v-once title="Mon compte">
         <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
       </BaseList>
 
-      <BaseList title="Préférences">
+      <BaseList v-once title="Préférences">
 <!--        <ListItem v-bind="listPreferencesItems[0]"/>-->
-        <ListItem v-bind="listPreferencesItems[1]"/>
+        <ListItem v-once v-bind="listPreferencesItems[1]"/>
 <!--        <ListItem last v-bind="listPreferencesItems[2]"/>-->
       </BaseList>
 
@@ -177,8 +178,8 @@ function resetApp(e: CustomEvent) {
 <!--        <ListItem v-for="(item, i) in listHelpItems" :key="i" v-bind="item" @onClick="openSetting"/>-->
 <!--      </BaseList>-->
 
-      <BaseList title="Mention légal">
-        <ListItem v-for="(item, i) in listLegalItems" :key="i" v-bind="item" @onClick="openSetting"/>
+      <BaseList v-once title="Mention légal">
+        <ListItem v-for="(item, i) in listLegalItems" v-once :key="i" v-bind="item" @onClick="openSetting"/>
       </BaseList>
 
       <app-button bg-color="white" color="danger" text="Réinitialiser" @onTap="openResetModal = true"/>
@@ -195,7 +196,7 @@ function resetApp(e: CustomEvent) {
           :is-open="openCloudModalSave"
           @didDismiss="openCloudModalSave = false"
       >
-        <CloudBackups @onClose="openCloudModalSave = false" />
+        <CloudBackups v-once @onClose="openCloudModalSave = false" />
       </ion-modal>
     </ion-content>
   </ion-page>
