@@ -10,9 +10,9 @@ import router from "@/router";
 import {useUserStore} from "@/stores/user";
 import dayjs from "@/configs/dayjs.config";
 import BaseList from "@/components/ui/BaseList.vue";
-import MovieListItem from "@/components/movie/MovieListItem.vue";
 import SubscriptionSave from "@/components/subscriptions/SubscriptionSave.vue";
 import {ToastService} from "@/services/toast.service";
+import MovieWatchedListItem from "@/components/movie/MovieWatchedListItem.vue";
 
 const userStore = useUserStore();
 
@@ -118,7 +118,7 @@ function editSubscription(editSubscription: Subscription) {
 
         <BaseList :items="watchedMovies" class="mt-2" title="Tous les films">
           <template #default="{item: watchMovie}: {item: WatchedMovie}">
-            <MovieListItem :movie="watchMovie.movie" thumbnail
+            <MovieWatchedListItem :watched-movie="watchMovie" thumbnail type="watched"
                            @click="$router.push(`/movies/${watchMovie.movie.id}/details`)"/>
           </template>
         </BaseList>

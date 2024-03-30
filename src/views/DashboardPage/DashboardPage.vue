@@ -69,8 +69,9 @@ const ticketEarned = computed(() => {
 
 <!--      todo ajouter des balises pour dire "visionné le" et "tarif de la séance" -->
       <MovieList
-          :movies="useUserStore().movieWatchedThisMonth.map(m => m.movie)"
+          :movies="useUserStore().movieWatchedThisMonth"
           button
+          type="watched"
           class="ion-margin-horizontal"
           no-data-message="Aucun film ce mois-ci"
           title="Ce mois-ci"

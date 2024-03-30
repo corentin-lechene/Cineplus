@@ -10,7 +10,7 @@ import {useUserStore} from "@/stores/user";
 <ion-page>
   <BaseHeader title="Films vus" />
   <ion-content class="ion-padding-horizontal">
-    <MovieList :movies="useUserStore().movieWatchedThisMonth.map(m => m.movie)" title="Tous les films vus" />
+    <MovieList :movies="useUserStore().movieWatchedThisMonth" title="Tous les films vus" type="watched" />
   </ion-content>
 </ion-page>
 </template>
