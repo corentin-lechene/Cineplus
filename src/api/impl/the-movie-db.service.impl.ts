@@ -44,19 +44,14 @@ export class TheMovieDbServiceImpl implements MovieApiService {
     }
 
     async fetchMovieById(id: string): Promise<Movie> {
-        try {
-            const url = `${this.baseUrl}/movie/${id}?language=fr`;
-            const res = await fetch(url, this.options);
-            if (!res.ok) {
-                return Movie.of(0, '', '', '', '', new Date(), [], 0);
-            }
-
-            const data: TheMovieDb.Movie = await res.json();
-            return this.toMovie(data);
-        } catch (e) {
-            console.error(e);
+        const url = `${this.baseUrl}/movie/${id}?language=fr`;
+        const res = await fetch(url, this.options);
+        if (!res.ok) {
             throw new Error('Movie not found');
         }
+
+        const data: TheMovieDb.Movie = await res.json();
+        return this.toMovie(data);
     }
 
     async fetchMoviesByQuery(query: string, page: number = 1): Promise<Movie[]> {

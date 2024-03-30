@@ -6,7 +6,7 @@ withDefaults(defineProps<{
   arrowBackButton?: boolean,
   closeButton?: boolean,
   addButton?: boolean,
-  addButtonColor?: "gray" | "amber",
+  addButtonColor?: "gray" | "amber" | "green",
   title: string,
   rightButton?: string;
   rightButtonColor?: string;
@@ -29,7 +29,9 @@ defineEmits(['onAdd', 'onCloud', 'onClose'])
         <ion-buttons slot="end">
           <ion-icon v-if="closeButton" :icon="close" class="text-2xl rounded-full bg-gray-200 p-1"
                     @click="$emit('onClose')"></ion-icon>
-          <ion-icon v-if="addButton" :icon="addButtonColor === 'gray' ? add : checkmark" :class="addButtonColor === 'gray' ? 'bg-gray-200' : 'bg-amber-300'" class="text-2xl rounded-full p-1"
+          <ion-icon v-if="addButton" :class="addButtonColor === 'gray' ? 'bg-gray-200' : addButtonColor === 'green' ? 'bg-green-500' : 'bg-amber-300'"
+                    :icon="addButtonColor === 'gray' ? add : checkmark"
+                    class="text-2xl rounded-full p-1"
                     @click="$emit('onAdd')"></ion-icon>
           <ion-icon v-if="rightButton" :class="rightButtonColor" :icon="rightButton" class="text-2xl rounded-full p-1.5"
                     @click="$emit('onCloud')"></ion-icon>

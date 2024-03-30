@@ -6,6 +6,7 @@ import {useUserStore} from "@/stores/user";
 import {computed, onMounted} from "vue";
 import {IonCard, IonCol, IonGrid, IonLabel, IonRow, IonText} from "@ionic/vue";
 import dayjs from "dayjs";
+import ImageNotFound from "@/components/images/ImageNotFound.vue";
 
 const userStore = useUserStore();
 
@@ -52,7 +53,7 @@ onMounted(() => {
             alt="img"
             @click="$router.push(`/movies/${watchedMovie.movie.id}/details`)"
         >
-        <div v-else class="text-center py-10">Image not found</div>
+        <ImageNotFound v-else @click="$router.push(`/movies/${watchedMovie.movie.id}/details`)" />
 
         <div class="flex flex-col">
           <ion-text color="dark" class="whitespace-nowrap overflow-hidden text-ellipsis">

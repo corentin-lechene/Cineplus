@@ -9,6 +9,7 @@ import {Movie} from "@/models";
 import dayjs from "@/configs/dayjs.config";
 import {useUserStore} from "@/stores/user";
 import BaseHeader from "@/components/common/BaseHeader.vue";
+import {ToastService} from "@/services/toast.service";
 
 const route = useRoute();
 const router = useRouter();
@@ -22,9 +23,9 @@ const isMovieWatched = computed(() => {
   return userStore.user.watchedMovies.some(watchMovie => watchMovie.movie.id === movie.value?.id);
 });
 
-const addButtonColor = computed<"amber" | "gray">(() => {
+const addButtonColor = computed<"amber" | "gray" | "green" >(() => {
   if (!userStore.user || !movie.value) return "gray";
-  if(isMovieWatched.value) return "amber";
+  if(isMovieWatched.value) return "green";
   if(userStore.user.watchList.some(watchList => watchList.movie.id === movie.value?.id)) {
     return "amber";
   } else {
@@ -63,7 +64,13 @@ onMounted(async () => {
   }
 
   const movieService = MovieContainer.getMovieService();
-  movie.value = await movieService.fetchMovieById(movieId);
+  try {
+    movie.value = await movieService.fetchMovieById(movieId);
+  } catch(e) {
+    await ToastService.error("Erreur lors de la récupération du film");
+    console.error(e);
+    router.back();
+  }
 });
 </script>
 <!-- fixme essayer de faire d'une différente manière
