@@ -196,7 +196,7 @@ function resetApp(e: CustomEvent) {
           :is-open="openCloudModalSave"
           @didDismiss="openCloudModalSave = false"
       >
-        <CloudBackups v-once @onClose="openCloudModalSave = false" />
+        <CloudBackups @onClose="openCloudModalSave = false" />
       </ion-modal>
     </ion-content>
   </ion-page>
