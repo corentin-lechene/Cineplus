@@ -73,7 +73,7 @@ function editSubscription(editSubscription: Subscription) {
 
 function redirectAddMovieToSubscription() {
   if (!subscription.value) return;
-  router.push(`/movies/watched/new?subscription_id=${subscription.value.id}`);
+  router.push(`/movies/watched/new?subscription_id=${subscription.value.id}&reset=true`);
 }
 </script>
 

@@ -38,7 +38,7 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
     <ion-list-header v-if="title" class="pl-0">
       <ion-label>{{ title }}</ion-label>
       <ion-button v-if="addButton" @click="$emit('onAddButton')">
-        <ion-icon slot="icon-only" :icon="add"></ion-icon>
+        <ion-icon slot="icon-only" :icon="add" color="dark"></ion-icon>
       </ion-button>
       <ion-button v-else-if="button" @click="$emit('viewAll')">Voir tout</ion-button>
     </ion-list-header>

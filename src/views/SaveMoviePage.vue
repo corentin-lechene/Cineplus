@@ -30,6 +30,7 @@ import CinemaList from "@/components/cinema/CinemaList.vue";
 import CinemaListItem from "@/components/cinema/CinemaListItem.vue";
 import {useUserStore} from "@/stores/user";
 import SubscriptionListItem from "@/components/subscriptions/SubscriptionListItem.vue";
+import MovieSearch from "@/components/movie/MovieSearch.vue";
 
 const route = useRoute();
 const userStore = useUserStore();
@@ -45,6 +46,7 @@ const extraExpense = ref("0");
 const seat = ref("");
 const note = ref("");
 
+const openMoviesModal = ref(false);
 const openCinemasModal = ref(false);
 const openSubscriptionsModal = ref(false);
 
@@ -95,6 +97,18 @@ onMounted(async () => {
 
 
 async function saveMovie() {
+  if("reset" in route.query) {
+    movie.value = undefined;
+    cinema.value = undefined;
+    subscription.value = undefined;
+    watchAt.value = dayjs().toISOString();
+    room.value = "";
+    ticketPrice.value = "0";
+    extraExpense.value = "0";
+    seat.value = "";
+    note.value = "";
+  }
+
   if (!movie.value || !cinema.value) {
     await ToastService.error("Veuillez sélectionner un cinéma");
     return;
@@ -143,6 +157,7 @@ async function saveMovie() {
         <ion-list-header class="mb-1">Film</ion-list-header>
         <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
           <MovieListItem v-if="movie" :movie="movie" thumbnail/>
+          <EmptyListItem v-else label="Sélectionner le film" thumbnail @click="openMoviesModal = true"/>
         </ion-list>
 
         <ion-list-header class="mb-1">Cinéma & Abonnement</ion-list-header>
@@ -180,6 +195,14 @@ async function saveMovie() {
         </ion-list>
       </div>
 
+      <ion-modal
+          :breakpoints="[0, 1]"
+          :initial-breakpoint="1"
+          :is-open="openMoviesModal"
+          @didDismiss="openMoviesModal = false"
+      >
+        <MovieSearch @onSelected="movie = $event; openMoviesModal = false" />
+      </ion-modal>
       <ion-modal
           :breakpoints="[0, 1]"
           :initial-breakpoint="1"
