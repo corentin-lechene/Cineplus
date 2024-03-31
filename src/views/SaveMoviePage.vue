@@ -65,6 +65,19 @@ const allSubscriptions = computed<Subscription[]>(() => {
 })
 
 onMounted(async () => {
+  if("reset" in route.query) {
+    movie.value = undefined;
+    cinema.value = undefined;
+    subscription.value = undefined;
+    watchAt.value = dayjs().toISOString();
+    room.value = "";
+    ticketPrice.value = "0";
+    extraExpense.value = "0";
+    seat.value = "";
+    note.value = "";
+  }
+
+
   if ("movie_id" in route.query) {
     try {
       const movieService = MovieContainer.getMovieService();
@@ -97,18 +110,6 @@ onMounted(async () => {
 
 
 async function saveMovie() {
-  if("reset" in route.query) {
-    movie.value = undefined;
-    cinema.value = undefined;
-    subscription.value = undefined;
-    watchAt.value = dayjs().toISOString();
-    room.value = "";
-    ticketPrice.value = "0";
-    extraExpense.value = "0";
-    seat.value = "";
-    note.value = "";
-  }
-
   if (!movie.value || !cinema.value) {
     await ToastService.error("Veuillez sélectionner un cinéma");
     return;
