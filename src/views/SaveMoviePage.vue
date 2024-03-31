@@ -60,7 +60,6 @@ const allSubscriptions = computed<Subscription[]>(() => {
       subs.push(subscriptionOfLoyaltyCard);
     }
   }
-  console.log(userStore.user.loyaltyCards.map(loyaltyCard => loyaltyCard.subscriptions))
   return subs;
 })
 
@@ -174,7 +173,7 @@ async function saveMovie() {
 
         <ion-list-header class="mb-1">Film</ion-list-header>
         <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
-          <MovieListItem v-if="movie" :movie="movie" thumbnail/>
+          <MovieListItem v-if="movie" :movie="movie" thumbnail @click="$route.query.subscription_id ? openMoviesModal = true : ''"/>
           <EmptyListItem v-else label="Sélectionner le film" thumbnail @click="openMoviesModal = true"/>
         </ion-list>
 
