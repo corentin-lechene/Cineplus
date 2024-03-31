@@ -33,18 +33,18 @@ onMounted(async () => {
 </script>
 
 <template>
-<div>
+<div style="background: var(--ion-color-light)">
   <BaseHeader arrow-back-button title="Recherche d'un film" />
   <ion-searchbar
       v-model="input"
+      class="pt-0"
       :debounce="250"
-      animated
-      class="mt-1 ion-no-padding"
       placeholder="Rechercher..."
-      show-cancel-button="focus"
+      show-clear-button="focus"
       @ionCancel="currentView = 'popular'"
       @ionInput="searchMovies($event)"
   />
+
   <!-- Popular     -->
   <BaseList v-if="currentView === 'popular'" :items="popularMovies.slice(0, 5)" section title="Films populaires">
     <template #default="{item}: {item: Movie}">
