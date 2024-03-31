@@ -87,8 +87,10 @@ onMounted(async () => {
     }
   }
 
-  // await fetchCinema();
-
+  if("subscription_id" in route.query) {
+    const subscriptionId = parseInt(route.query.subscription_id as string);
+    subscription.value = allSubscriptions.value.find(sub => sub.id === subscriptionId);
+  }
 });
 
 

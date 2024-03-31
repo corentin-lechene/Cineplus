@@ -69,7 +69,11 @@ function editSubscription(editSubscription: Subscription) {
       console.error(e);
       ToastService.error("Erreur lors de la modification de l'abonnement");
   }
+}
 
+function redirectAddMovieToSubscription() {
+  if (!subscription.value) return;
+  router.push(`/movies/watched/new?subscription_id=${subscription.value.id}`);
 }
 </script>
 
@@ -116,7 +120,8 @@ function editSubscription(editSubscription: Subscription) {
           </div>
         </div>
 
-        <BaseList v-once :items="watchedMovies" class="mt-2" title="Tous les films">
+        <BaseList v-once :items="watchedMovies" addButton class="mt-2" title="Tous les films"
+                  @on-add-button="redirectAddMovieToSubscription()">
           <template #default="{item: watchMovie}: {item: WatchedMovie}">
             <MovieWatchedListItem v-once :watched-movie="watchMovie" thumbnail type="watched"
                            @click="$router.push(`/movies/${watchMovie.movie.id}/details`)"/>

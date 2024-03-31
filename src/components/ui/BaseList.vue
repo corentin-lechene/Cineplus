@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 
-import {IonButton, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonNote} from "@ionic/vue";
+import {IonButton, IonIcon, IonItemDivider, IonItemGroup, IonLabel, IonList, IonListHeader, IonNote} from "@ionic/vue";
+import {add} from "ionicons/icons";
 
 interface BaseListProps {
   items: any[];
@@ -8,10 +9,11 @@ interface BaseListProps {
   section?: boolean,
   noDataMessage?: string;
   button?: boolean;
+  addButton?: boolean;
 }
 
 const props = defineProps<BaseListProps>();
-defineEmits(['onClick', 'viewAll']);
+defineEmits(['onClick', 'viewAll', 'onAddButton']);
 defineSlots<{ default(props: { item: any, index: number }): any, header(props: {}): void }>();
 
 </script>
@@ -35,7 +37,10 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
   <div v-else>
     <ion-list-header v-if="title" class="pl-0">
       <ion-label>{{ title }}</ion-label>
-      <ion-button v-if="button" @click="$emit('viewAll')">Voir tout</ion-button>
+      <ion-button v-if="addButton" @click="$emit('onAddButton')">
+        <ion-icon slot="icon-only" :icon="add"></ion-icon>
+      </ion-button>
+      <ion-button v-else-if="button" @click="$emit('viewAll')">Voir tout</ion-button>
     </ion-list-header>
     <ion-list class="drop-shadow-card bg-inherit" inset style="margin-top: 0 !important;">
       <ion-note v-if="items?.length === 0" class="ion-padding-horizontal">{{ noDataMessage || 'Liste vide' }}</ion-note>
@@ -45,6 +50,9 @@ defineSlots<{ default(props: { item: any, index: number }): any, header(props: {
 </template>
 
 <style scoped>
+ion-button::part(native) {
+  padding: 0;
+}
 ion-list {
   -webkit-margin-start: 0 !important;
   -webkit-margin-end: 0 !important;
