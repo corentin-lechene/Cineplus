@@ -17,6 +17,7 @@ import {
   notificationsOutline,
   personOutline,
   sunnyOutline,
+  walletOutline,
 } from "ionicons/icons";
 import ListItem from "@/components/lists/ListItem.vue";
 import AppButton from "@/components/buttons/AppButton.vue";
@@ -31,6 +32,15 @@ const fullName = computed(() => {
   return userStore.user.loyaltyCards[userStore.user.loyaltyCards.length - 1]!.firstname
       + ' ' +
       userStore.user.loyaltyCards[userStore.user.loyaltyCards.length - 1]!.lastname
+});
+
+const subscription = computed(() => userStore.subscriptionActive)
+const subscriptionName = computed(() => {
+  if (!subscription.value) return "Pas d'abonnement";
+  if(subscription.value?.name === "ugc_illimite") return "UGC Illimité";
+  if(subscription.value?.name === "ugc_illimite_26") return "UGC Illimité -26 ans";
+  if(subscription.value?.name === "ugc_illimite_duo") return "UGC Illimité Duo";
+  return "";
 });
 
 const openResetModal = ref(false);
@@ -65,10 +75,16 @@ const listAccountItems = computed(() => {
       icon: personOutline,
     },
     {
+      label: 'Abonnement',
+      value: subscription.value?.name || null,
+      icon: cardOutline,
+      clickable: true,
+    },
+    {
       label: 'Cartes de fidélité',
       route: 'loyalty-cards',
       value: "",
-      icon: cardOutline,
+      icon: walletOutline,
       clickable: true,
       last: true
     }
@@ -139,6 +155,14 @@ function openSetting(item: any) {
   }
 }
 
+function openSubscriptionDetail() {
+  if (subscription.value) {
+    const loyaltyCard = userStore.user?.loyaltyCards
+        .find(lc => lc.subscriptions.find(sub => sub.id === subscription.value?.id));
+    router.push(`/loyalty-cards/${loyaltyCard?.id}/subscriptions/${subscription.value?.id}`)
+  }
+}
+
 function resetApp(e: CustomEvent) {
   if (e?.detail?.data?.action === 'delete') {
     openResetModal.value = true;
@@ -165,7 +189,16 @@ function resetApp(e: CustomEvent) {
     <ion-content :force-overscroll="false" class="ion-padding" color="light">
 
       <BaseList v-once title="Mon compte">
-        <ListItem v-for="(item, i) in listAccountItems" :key="i" v-bind="item" @on-click="openSetting"/>
+        <ListItem v-bind="listAccountItems[0]"/>
+        <ListItem
+            v-if="subscription"
+            :clickable="listAccountItems[1].clickable"
+            :icon="listAccountItems[1].icon"
+            :label="listAccountItems[1].label"
+            :value="subscriptionName"
+            @on-click="openSubscriptionDetail()"
+        />
+        <ListItem v-bind="listAccountItems[2]" @on-click="openSetting"/>
       </BaseList>
 
       <BaseList v-once title="Préférences">

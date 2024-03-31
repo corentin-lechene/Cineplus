@@ -13,6 +13,12 @@ export const useUserStore = defineStore('user', {
         user: null as User | null,
     }),
     getters: {
+        subscriptionActive(state) {
+            if(!state.user) return null;
+            return state.user.loyaltyCards
+                .flatMap(loyaltyCard => loyaltyCard.subscriptions)
+                .find(subscription => dayjs().isBetween(dayjs(subscription.startAt), dayjs(subscription.endAt), 'day', '[]'));
+        },
         getAllWatchedMovies(state): WatchedMovie[] {
             if (!state.user) return [];
             return state.user.watchedMovies.sort((a, b) => dayjs(a.watchedAt).isBefore(dayjs(b.watchedAt)) ? 1 : -1);
