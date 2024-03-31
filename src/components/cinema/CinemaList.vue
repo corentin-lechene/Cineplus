@@ -15,24 +15,24 @@ interface CinemaListProps {
 const localCinemas = ref<Cinema[]>([
   {
     id: 0,
-    name: "Rosny-Sous-Bois",
+    name: "Rosny",
     brand: "UGC",
-    ticketPrice: 13.50,
-    address: "La rue de Rosny"
+    ticketPrice: 14.60,
+    address: "16, rue Conrad Adenauer 93110 ROSNY SOUS BOIS"
   },
   {
     id: 1,
     name: "Noisy-le-grand",
     brand: "UGC",
-    ticketPrice: 13.50,
-    address: "La rue de noisy"
+    ticketPrice: 14.60,
+    address: "Centre Commercial Arcades BP200 93193 NOISY-LE-GRAND"
   },
   {
     id: 2,
     name: "Bercy",
     brand: "UGC",
-    ticketPrice: 13.50,
-    address: "La rue de bercy"
+    ticketPrice: 12.90,
+    address: "2, cour Saint Emilion 75012 PARIS"
   }
 ]);
 
@@ -41,7 +41,6 @@ const props = defineProps<CinemaListProps>();
 const emit = defineEmits<{ (e: 'onSelected', cinema: Cinema): Cinema }>();
 
 function onSelectCinema(cinema: Cinema) {
-  console.log(cinema);
   emit("onSelected", cinema);
 }
 
@@ -49,7 +48,7 @@ function onSelectCinema(cinema: Cinema) {
 
 <template>
   <div style="background: var(--ion-color-light)">
-    <BaseHeader title="Cinemas" close-button arrow-back-button />
+    <BaseHeader arrow-back-button title="Cinemas" />
     <BaseList class="ion-padding-horizontal" :items="localCinemas" :section="section" :title="title">
       <template #default="{item}: {item: Cinema}">
         <CinemaListItem :cinema="item" thumbnail @onClick="onSelectCinema" />

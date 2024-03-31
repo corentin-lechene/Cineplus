@@ -94,7 +94,13 @@ onMounted(async () => {
 
 async function saveMovie() {
   if (!movie.value || !cinema.value) {
-    await ToastService.error("Le formulaire est invalide");
+    await ToastService.error("Veuillez sélectionner un cinéma");
+    return;
+  }
+
+  // check negative values
+  if (parseFloat(ticketPrice.value.replace(",", ".")) < 0 || parseFloat(extraExpense.value.replace(",", ".")) < 0) {
+    await ToastService.error("Le prix du ticket et la dépense doivent être supérieurs à 0");
     return;
   }
 
@@ -172,7 +178,6 @@ async function saveMovie() {
         </ion-list>
       </div>
 
-      <!--    à réflechir car onSelected ? onClick ? CinemaListChoose, CinemaList -->
       <ion-modal
           :breakpoints="[0, 1]"
           :initial-breakpoint="1"

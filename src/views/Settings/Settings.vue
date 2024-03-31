@@ -83,7 +83,7 @@ const listAccountItems = computed(() => {
     {
       label: 'Cartes de fidélité',
       route: 'loyalty-cards',
-      value: "",
+      value: userStore.user?.loyaltyCards.length.toString() || "0",
       icon: walletOutline,
       clickable: true,
       last: true

@@ -4,6 +4,7 @@ import BaseSlide from "@/components/slides/BaseSlide.vue";
 import {useUserStore} from "@/stores/user";
 import {onMounted} from "vue";
 import {IonCard, IonLabel, IonText} from "@ionic/vue";
+import {WatchList} from "@/models";
 
 const userStore = useUserStore();
 
@@ -35,8 +36,8 @@ onMounted(() => {
         </div>
 
         <!-- Absolute           -->
-        <div class="flex absolute bottom-0 rounded-b-lg bg-black bg-opacity-60 w-full h-1/4">
-          <ion-text class="m-auto whitespace-nowrap overflow-hidden text-ellipsis px-4" color="light">
+        <div class="flex absolute bottom-0 bg-gradient-to-t from-black to-transparent w-full h-1/4">
+          <ion-text class="m-auto whitespace-nowrap overflow-hidden text-ellipsis px-4 font-semibold" color="white">
             {{ watchList.movie.title }}
           </ion-text>
         </div>

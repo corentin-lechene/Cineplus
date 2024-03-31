@@ -17,6 +17,7 @@ import {
 import {onMounted, ref} from "vue";
 import {Subscription, SubscriptionPayment} from "@/models";
 import dayjs from "@/configs/dayjs.config";
+import {ToastService} from "@/services/toast.service";
 
 const id = ref();
 const name = ref<"ugc_illimite_26" | "ugc_illimite" | "ugc_illimite_duo">("ugc_illimite_26");
@@ -50,11 +51,15 @@ function updatePrice() {
 }
 
 function onSaveSubscription() {
+  if(price.value < 0) {
+    return ToastService.error("Le prix de l'abonnement doit être supérieur à 0");
+  }
+  
   const subscription = Subscription.of(
       id.value || 0,
       "UGC",
       name.value,
-      price.value,
+      price.value || 0,
       payment.value as SubscriptionPayment,
       new Date(startAt.value),
       new Date(endAt.value),

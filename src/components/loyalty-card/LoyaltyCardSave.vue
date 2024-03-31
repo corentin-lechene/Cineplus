@@ -37,12 +37,14 @@ function onSave() {
   }
 
   if(lastname.value.length < 3) {
+    console.log("laaaa")
     lastnameError.value = "Le nom doit contenir au moins 3 caractères";
   } else {
     lastnameError.value = "";
   }
 
   if(cardNumber.value.length < 6) {
+    console.log("ic")
     cardNumberError.value = "Le numéro de carte doit contenir au moins 6 caractères";
   } else {
     cardNumberError.value = "";
@@ -50,6 +52,7 @@ function onSave() {
 
   if(firstnameError.value !== "" || lastnameError.value !== "" || cardNumberError.value !== "") {
     ToastService.error("Formulaire invalide");
+    console.log("la")
     return;
   }
 
@@ -96,11 +99,11 @@ function onSave() {
       </ion-item>
       <ion-item>
         <ion-input v-model.trim="lastname" label="Nom"></ion-input>
-        <small v-if="firstnameError" class="text-red-500 mb-2">{{ lastnameError }}</small>
+        <small v-if="lastnameError" class="text-red-500 mb-2">{{ lastnameError }}</small>
       </ion-item>
       <ion-item lines="none">
         <ion-input v-model.trim="cardNumber" label="N° de carte"></ion-input>
-        <small v-if="firstnameError" class="text-red-500 mb-2">{{ cardNumberError }}</small>
+        <small v-if="cardNumberError" class="text-red-500 mb-2">{{ cardNumberError }}</small>
       </ion-item>
     </ion-list>
 
