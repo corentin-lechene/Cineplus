@@ -109,6 +109,17 @@ onMounted(async () => {
 });
 
 
+function onSelectedMovie(movieSelected: Movie) {
+  // check if already watched
+  if (userStore.user?.watchedMovies.find(wm => wm.movie.id === movieSelected.id)) {
+    ToastService.error("Ce film a déjà été visionné");
+    return;
+  }
+
+  movie.value = movieSelected;
+  openMoviesModal.value = false;
+}
+
 async function saveMovie() {
   if (!movie.value || !cinema.value) {
     await ToastService.error("Veuillez sélectionner un cinéma");
@@ -118,6 +129,12 @@ async function saveMovie() {
   // check negative values
   if (parseFloat(ticketPrice.value.replace(",", ".")) < 0 || parseFloat(extraExpense.value.replace(",", ".")) < 0) {
     await ToastService.error("Le prix du ticket et la dépense doivent être supérieurs à 0");
+    return;
+  }
+
+  // check date
+  if (dayjs(watchAt.value).isAfter(dayjs().add(1, 'day'))) {
+    await ToastService.error("La date de visionnage ne peut pas être dans le futur");
     return;
   }
 
@@ -173,7 +190,7 @@ async function saveMovie() {
 
         <ion-list-header class="mb-1">Date de visionnage</ion-list-header>
         <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
-          <ion-datetime v-model="watchAt" class="rounded-xl"></ion-datetime>
+          <ion-datetime v-model="watchAt" :max="dayjs().add(1, 'day').format('YYYY-MM-DD')" class="rounded-xl"></ion-datetime>
         </ion-list>
 
         <ion-list class="drop-shadow-card" inset style="margin-top: 0 !important;">
@@ -202,7 +219,7 @@ async function saveMovie() {
           :is-open="openMoviesModal"
           @didDismiss="openMoviesModal = false"
       >
-        <MovieSearch @onSelected="movie = $event; openMoviesModal = false" />
+        <MovieSearch @onSelected="onSelectedMovie($event)" />
       </ion-modal>
       <ion-modal
           :breakpoints="[0, 1]"
