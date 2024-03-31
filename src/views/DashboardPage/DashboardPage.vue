@@ -19,7 +19,7 @@ import {useUserStore} from "@/stores/user";
 import {computed} from "vue";
 
 const ticketEarned = computed(() => {
-  const result = (useUserStore().profit - useUserStore().extraExpense) / useUserStore().sumTicketPrice;
+  const result = useUserStore().profit / useUserStore().sumTicketPrice;
   if(isNaN(result)) return 0;
   return Math.floor(result);
 })
