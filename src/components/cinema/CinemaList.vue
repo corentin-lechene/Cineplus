@@ -33,6 +33,13 @@ const localCinemas = ref<Cinema[]>([
     brand: "UGC",
     ticketPrice: 12.90,
     address: "2, cour Saint Emilion 75012 PARIS"
+  },
+  {
+    id: 3,
+    name: "LES HALLES",
+    brand: "UGC",
+    ticketPrice: 15.50,
+    address: "Forum des Halles - Niveau -3 75001 PARIS"
   }
 ]);
 

@@ -48,7 +48,9 @@ export class SubscriptionActions {
         const totalTicketPrice = watchedMovies.reduce((acc, watchedMovie) => acc + (watchedMovie.ticketPrice || 0.0), 0.0);
         // console.log("totalTicketPrice: ", totalTicketPrice);
 
-        const subscriptionPrice = subscription.price * diff;
+        const subscriptionPrice = subscription.payment === "monthly"
+            ? subscription.price * diff
+            : (subscription.price) * diff;
         // console.log("subscriptionPrice: ", subscriptionPrice);
 
         const profit = (totalTicketPrice - subscriptionPrice);
