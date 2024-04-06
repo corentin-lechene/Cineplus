@@ -132,7 +132,7 @@ onMounted(async () => {
 
         <ion-card class="rounded-xl">
           <ion-card-header>
-            <ion-card-title>{{ movie?.title }}</ion-card-title>
+            <ion-card-title>Synopsis</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             {{ movie?.overview }}
