@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 
 import {
-  IonButton,
   IonCard,
   IonCol,
   IonContent,
@@ -40,8 +39,6 @@ const ticketEarned = computed(() => {
     </ion-header>
 
     <ion-content :force-overscroll="false" class="rounded-lg" color="light">
-      <ion-button @click="useUserStore().populateUser()">populate</ion-button>
-      <ion-button @click="useUserStore().resetUser()">reset</ion-button>
       <div class="ion-padding grid grid-cols-2 grid-rows-2 gap-5 text-center">
         <ion-card class="flex flex-col justify-center items-center">
           <ion-icon :icon="cashOutline" class="bg-gray-100 p-5 rounded-full" size="large"></ion-icon>
