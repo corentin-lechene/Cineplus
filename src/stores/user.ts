@@ -1,147 +1,233 @@
 import {defineStore} from 'pinia'
-import {Movie, Subscription, User, ViewedMovie} from "@/models";
+import {Backup, Cinema, LoyaltyCard, Movie, Preferences, Profile, Subscription, User, WatchedMovie} from "@/models";
 import {UserService} from "@/services/user.service";
-import {PickerColumn, PickerColumnOption} from "@ionic/vue";
-import dayjs from "dayjs";
-import {DateUtil} from "@/utils/date.util";
-import {SubscriptionService} from "@/services/subscription.service";
+import {WatchlistActions} from "@/stores/user-actions/watchlist.action";
+import {WatchedActions} from "@/stores/user-actions/watched.action";
+import {LoyaltyCardActions} from "@/stores/user-actions/loyalty-card.action";
+import {SubscriptionActions} from "@/stores/user-actions/subscription.action";
+import dayjs from "@/configs/dayjs.config";
+import {BackupService} from "@/services/backup.service";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: null as User | null,
-        selectedYear: {text: 'Tous', value: 'all'} as { text: string | 'all', value: string | 'all' }
     }),
     getters: {
-        fullName(): string {
-            if (!this.user || (!this.user.firstname && !this.user.lastname)) return 'John Doe';
-            return `${this.user.firstname ?? ''} ${this.user.lastname ?? ''}`;
+        subscriptionActive(state) {
+            if(!state.user) return null;
+            return state.user.loyaltyCards
+                .flatMap(loyaltyCard => loyaltyCard.subscriptions)
+                .find(subscription => dayjs().isBetween(dayjs(subscription.startAt), dayjs(subscription.endAt), 'day', '[]'));
         },
-        /* movies */
-        watchlist(): Movie[] {
-            if (!this.user) return [];
-            return this.user.watchlist;
+        getAllWatchedMovies(state): WatchedMovie[] {
+            if (!state.user) return [];
+            return state.user.watchedMovies.sort((a, b) => dayjs(a.watchedAt).isBefore(dayjs(b.watchedAt)) ? 1 : -1);
         },
-        viewedMovies(): ViewedMovie[] {
-            if (!this.user) return [];
-            return this.user.viewedMovies
-                .sort((a, b) => dayjs(b.viewedAt).diff(dayjs(a.viewedAt)))
-                .filter(vm => {
-                    if (this.selectedYear.value === "all") return true;
-                    return vm.viewedAt.getFullYear().toString() === this.selectedYear.value;
-                });
+        movieWatchedThisMonth(state) {
+            if (!state.user) return [];
+            return state.user.watchedMovies
+                .filter(watchedMovie => dayjs().isSame(watchedMovie.watchedAt, 'month'));
         },
-        /* stats */
-        profits(): number {
-            if(!this.user) return 0;
-            if(!this.lastSubscription) return 0;
+        lastSubscription(state): Subscription | null | undefined {
+            if (!state.user) return null;
+            return state.user.loyaltyCards
+                .flatMap(loyaltyCard => loyaltyCard.subscriptions)
+                .toSorted((a, b) => dayjs(a.startAt).isBefore(dayjs(b.startAt)) ? -1 : 1)
+                .at(-1);
+        },
+        sumTicketPrice(state) {
+            if (!state.user) return 0;
+            const sum = state.user.watchedMovies.reduce((acc, watchedMovie) => acc + watchedMovie.ticketPrice, 0.0);
+            return sum / state.user.watchedMovies.length
+        },
+        movieWatched(state) {
+            if (!state.user) return 0;
+            return state.user.watchedMovies.filter(watchedMovie => !!watchedMovie.subscription).length;
+        },
+        extraExpense(state) {
+            if (!state.user) return 0;
+            return state.user.watchedMovies.reduce((acc, watchedMovie) => acc + (watchedMovie.extraExpense || 0.0), 0.0);
+        },
+        profit(state) {
+            if (!state.user) return 0;
+            // console.log("-----------------")
 
-            let currSub = this.user.subscriptions[0];
-            let dateDiff = DateUtil.getDiff(currSub.startAt, currSub.expireAt);
-            if(this.user.viewedMovies.length === 0) {
-                return -parseFloat((currSub.price * dateDiff).toFixed(2));
+            let profit = 0;
+            // parcourir les mois de chaque abonnement
+            const subscriptions = state.user.loyaltyCards
+                .flatMap(loyaltyCard => loyaltyCard.subscriptions)
+                .toSorted((a, b) => dayjs(a.startAt).isBefore(dayjs(b.startAt)) ? -1 : 1);
+            for (const subscription of subscriptions) {
+                profit += SubscriptionActions.getProfitBySubscription(state.user, subscription);
+                profit -= SubscriptionActions.getExtraExpenseBySubscription(state.user, subscription);
+                // console.log("-----------------")
             }
 
-
-            let index = 0;
-            let profits1 = 0;
-
-            console.log("-------------- start -----------------")
-            for (const subscription of this.user.subscriptions) {
-                const viewedMovies = this.user.viewedMovies
-                    .filter(vm => vm.subscription?.id === subscription.id)
-                    .sort((a, b) => dayjs(a.viewedAt).diff(dayjs(b.viewedAt)));
-
-                if(viewedMovies.length === 0) continue;
-                const lastDate = subscription.expireAt ? subscription.expireAt : new Date();
-                const diff = DateUtil.getDiff(subscription.startAt, lastDate);
-
-                //(4 * 10) - (17 * 1)
-                //(1 * 11) - (17 * 1)
-                console.log(`index: ${index} \n(${viewedMovies.length} * ${subscription.ticketPrice}) -\n(${subscription.price} * ${diff})`);
-                console.log(`equal: ${viewedMovies.length * subscription.ticketPrice - subscription.price * diff}`)
-                profits1 += (
-                  viewedMovies.length * subscription.ticketPrice -
-                  subscription.price * diff
-                );
-
-                console.log("profits1: ", profits1);
-
-                index += 1;
-            }
-
-           return parseFloat(profits1.toFixed(2));
-        },
-
-        getYears(): PickerColumn[] {
-            if (!this.user) return [];
-            const name = "years";
-            const columnOptions: PickerColumnOption[] = [{text: "Tous", value: "all"}];
-            for (const userMovie of this.user.viewedMovies) {
-                const year = dayjs(userMovie.viewedAt).year();
-                if (!columnOptions.find(y => y.value === year)) {
-                    columnOptions.push({text: String(year), value: year});
-                }
-            }
-            return [{name, options: columnOptions}];
-        },
-
-        /* subscriptions */
-        lastSubscription(): Subscription | null {
-            if (!this.user) return null;
-            const sub = this.user.subscriptions;
-            return sub[sub.length - 1] ?? null;
+            return profit
         }
     },
     actions: {
-        /* user */
+        async saveBackup() {
+            if(!this.user) return;
+            const backup: Partial<Backup> = {
+                data: {
+                    user: JSON.stringify(this.user)
+                },
+                type: "auto",
+                createdAt: new Date(),
+            }
+            this.user.backup = await BackupService.save(backup, this.user)
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        useBackup(backup: Backup) {
+            if (!this.user) return;
+            this.user = JSON.parse(backup.data.user) as User;
+            this.user.backup = backup;
+            UserService.saveUser(this.user).catch(console.error);
+        },
+        getExtraExpenseBySubscription(subscription: Subscription) {
+            if (!this.user) return 0;
+            return SubscriptionActions.getExtraExpenseBySubscription(this.user, subscription);
+        },
+        getProfitBySubscription(subscription: Subscription) {
+            if (!this.user) return 0;
+            const profit = SubscriptionActions.getProfitBySubscription(this.user, subscription);
+            const extraExpense = SubscriptionActions.getExtraExpenseBySubscription(this.user, subscription);
+            return profit - extraExpense;
+        },
+        getTicketEarnedBySubscription(subscription: Subscription) {
+            if (!this.user) return 0;
+            return SubscriptionActions.getTicketEarnedBySubscription(this.user, subscription);
+        },
+        newUser(user: User) {
+            this.user = user;
+            UserService.saveUser(user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
+        updateUser(user: User) {
+            this.user = user;
+            UserService.saveUser(user).catch(console.error);
+        },
         async loadUser() {
-            this.user = this.user ?? await UserService.getUser();
+            this.user = await UserService.getUser();
         },
-        async getUser() {
-            return this.user ?? await UserService.getUser();
+        reloadUser() {
+            this.loadUser().catch(console.error);
         },
-        async setUser(user: User) {
-            await UserService.saveUser(user);
-            this.user = user;
-        },
-        async updateUser(user: User) {
-            await UserService.saveUser(user);
-            this.user = user;
-        },
-        /* movies */
         addToWatchList(movie: Movie) {
             if (!this.user) return;
-            this.user.watchlist.push(movie);
-            UserService.saveUser(this.user).catch();
+            WatchlistActions.addToWatchlist(this.user, movie);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
         removeFromWatchList(movie: Movie) {
             if (!this.user) return;
-            this.user.watchlist = this.user.watchlist.filter(m => m.id !== movie.id);
-            UserService.saveUser(this.user).catch();
+            WatchlistActions.removeFromWatchlist(this.user, movie);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
-        addToViewedMovie(viewedMovie: ViewedMovie) {
+        addToWatchedList(movie: WatchedMovie) {
             if (!this.user) return;
-            this.user.viewedMovies.push(viewedMovie);
-            UserService.saveUser(this.user).catch();
+            WatchedActions.addToWatchedList(this.user, movie);
+            WatchlistActions.removeFromWatchlist(this.user, movie.movie);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
-        removeFromViewedMovie(viewedMovie: ViewedMovie) {
+        removeFromWatchedList(movie: Movie) {
             if (!this.user) return;
-            this.user.viewedMovies = this.user.viewedMovies.filter(vm => vm.movie.id !== viewedMovie.movie.id);
-            UserService.saveUser(this.user).catch();
+            WatchedActions.removeFromWatchedList(this.user, movie);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
-        /* subs */
-        async newSubscription(subscription: Subscription) {
-          if(!this.user) return;
-          if(!SubscriptionService.isValid(subscription)) {
-              throw new Error('Invalid subscription');
-          }
-          this.user.subscriptions.push(subscription);
-          await UserService.saveUser(this.user);
+        createLoyaltyCard(loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            LoyaltyCardActions.createLoyaltyCard(this.user, loyaltyCard)
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         },
-        /* app */
+        updateLoyaltyCard(loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            LoyaltyCardActions.updateLoyaltyCard(this.user, loyaltyCard);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
+        attachSubscription(subscription: Subscription, loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            SubscriptionActions.attachSubscription(subscription, loyaltyCard);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
+        updateSubscription(subscription: Subscription) {
+            if (!this.user) return;
+            SubscriptionActions.update(subscription, this.user);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
+        deleteLoyaltyCard(loyaltyCard: LoyaltyCard) {
+            if (!this.user) return;
+            LoyaltyCardActions.deleteLoyaltyCard(this.user, loyaltyCard);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
+        deleteSubscription(subscription: Subscription) {
+            if (!this.user) return;
+            SubscriptionActions.delete(subscription, this.user);
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
+        },
         resetUser() {
             this.user = null;
-            UserService.deleteUser().catch();
+            UserService.deleteUser().catch(console.error);
+        },
+        populateUser() {
+            this.user = User.of(
+                Profile.of('John', 'Doe'),
+                Preferences.of(),
+            );
+
+            const loyaltyCard = LoyaltyCard.of(0, '', '', '', '');
+            this.createLoyaltyCard(loyaltyCard);
+
+
+            const movie = Movie.of(0, '', '', '', '', new Date(), [], 0);
+            const cinema = Cinema.of(0, '', '', 0, '');
+
+            const now = dayjs();
+            const subThreeMonth = now.subtract(4, 'month');
+
+            // commencé il y a 3 mois et cela a duré 2 mois
+            const sub1 = Subscription.of(0, '', '', 10, 'monthly', subThreeMonth.toDate(), subThreeMonth.add(3, 'month').toDate());
+            // commencé 1 mois après le dernier abonnement
+            const sub2 = Subscription.of(1, '', '', 20, 'monthly', subThreeMonth.add(2 + 2, 'month').toDate());
+
+            this.attachSubscription(sub1, loyaltyCard);
+            this.attachSubscription(sub2, loyaltyCard);
+
+            console.log(dayjs(sub1.startAt).format('LLLL'), ' -> ', dayjs(sub1.endAt).format('LLLL'))
+            console.log(dayjs(sub2.startAt).format('LLLL'))
+            this.user.watchedMovies.push(
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(0, 'month').add(1, 'day').toDate(), 10, sub1),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(0, 'month').add(5, 'day').toDate(), 10, sub1),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(0, 'month').add(8, 'day').toDate(), 10, sub1),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(1, 'month').add(1, 'day').toDate(), 10, sub1),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(1, 'month').add(5, 'day').toDate(), 10, sub1),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(1, 'day').toDate(), 15, sub2),
+                WatchedMovie.of(movie, cinema, subThreeMonth.add(3, 'month').add(10, 'day').toDate(), 15, sub2, "", "", 0.0123),
+            );
+            UserService.saveUser(this.user)
+                .then(async () => await this.saveBackup())
+                .catch(console.error);
         }
     }
 });

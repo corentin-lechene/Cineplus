@@ -14,7 +14,7 @@ const slots = defineSlots();
 </script>
 
 <template>
-  <ion-list inset class="">
+  <ion-list class="drop-shadow-card" inset>
     <ion-list-header v-if="$slots.header">
       <slot name="header"></slot>
     </ion-list-header>

@@ -1,27 +1,30 @@
-import { exec } from 'node:child_process';
-import { promises as fs } from 'node:fs';
+import {exec} from 'node:child_process';
+import {promises as fs} from 'node:fs';
 import {config} from "dotenv";
 
 config();
 
 async function buildApplication() {
     try {
-        const platform = "ios";
+        /**
+         *
+         * @type {"android" | "ios"}
+         */
+        const platform = process.argv.slice(2).at(0);
+        if(!['android', 'ios'].includes(platform)) {
+            console.error("Unknown platform");
+            process.exit(1);
+        }
+
         await removeFolder(`./dist`);
         await removeFolder(`./${platform}`);
 
         await runCommand(`ionic build`);
         await runCommand(`npx cap add ${platform}`);
-        await runCommand(`npx cap copy`);
-        await runCommand(`npx cap sync`);
-        await copyImage(
-            "resources/logo.png",
-            "ios/App/App/Assets.xcassets/AppIcon.appiconset/logo.png"
-        );
-        await useImage(
-            "logo.png",
-            "ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json"
-        );
+        await runCommand(`npx cap sync ${platform}`);
+
+        await increaseVersion(platform);
+        await copyIcons(platform);
 
         await runCommand(`npx cap open ${platform}`);
 
@@ -32,39 +35,77 @@ async function buildApplication() {
 }
 
 /* ---- */
-async function useImage(imageName, filePath) {
+async function increaseVersion(platform) {
     try {
-        // Lire le contenu du fichier JSON
-        const jsonString = await fs.readFile(filePath, 'utf-8');
-        const jsonData = JSON.parse(jsonString);
+        const packageJson = JSON.parse(await fs.readFile("./package.json", "utf-8"));
+        const buildVersion = parseInt(packageJson.buildVersion);
 
-        // Mettre à jour le nom du fichier
-        jsonData.images[0].filename = imageName;
+        switch (platform) {
+            case "android":
+                const buildGradleOld = await fs.readFile("./android/app/build.gradle", "utf-8");
+                const buildGradleNew = buildGradleOld.toString().replace(/versionCode \d+/, `versionCode ${buildVersion + 1}`);
 
-        // Convertir l'objet mis à jour en chaîne JSON
-        const updatedJsonString = JSON.stringify(jsonData, null, 2);
-
-        await fs.writeFile(filePath, updatedJsonString, 'utf-8');
-
-        console.log('Le nom du fichier a été mis à jour avec succès.');
-    } catch (error) {
-        console.error(`Erreur lors de la mise à jour du fichier JSON : ${error.message}`);
+                await fs.writeFile("./android/app/build.gradle", buildGradleNew);
+                break;
+            case "ios":
+                console.log("Not implemented yet");
+                break;
+        }
+    } catch(e) {
+        console.error(e);
     }
 }
-async function copyImage(sourcePath, destinationPath) {
-    try {
-        await fs.copyFile(sourcePath, destinationPath);
-        console.log('Image copiée avec succès.');
-    } catch (err) {
-        console.error('Erreur lors de la copie de l\'image:', err.message);
+
+async function copyIcons(platform) {
+    // Images
+    switch (platform) {
+        case "android":
+            const folders = [
+                "mipmap-hdpi",
+                "mipmap-mdpi",
+                "mipmap-xhdpi",
+                "mipmap-xxhdpi",
+                "mipmap-xxxhdpi"
+            ]
+            for (const folder of folders) {
+                await removeFolder(`android/app/src/main/res/${folder}`);
+            }
+            for (const folder of folders) {
+                await copyFolder(
+                    `resources/android/${folder}`,
+                    `android/app/src/main/res/${folder}`,
+                    {force: true}
+                );
+            }
+            break;
+        case "ios":
+            await removeFolder("ios/App/App/Assets.xcassets");
+            await copyFolder(
+                "resources/ios/Assets.xcassets",
+                "ios/App/App/Assets.xcassets"
+            );
+            break;
     }
 }
+
 async function removeFolder(folderPath) {
     try {
         await fs.rm(folderPath, { recursive: true });
         console.log(`Dossier "${folderPath}" supprimé avec succès.`);
     } catch (error) {
         console.error(`Erreur lors de la suppression du dossier "${folderPath}": ${error.message}`);
+    }
+}
+
+async function copyFolder(source, destination, options) {
+    try {
+        await fs.cp(source, destination, {
+            recursive: true,
+            force: options?.force || false }
+        );
+        console.log(`Dossier "${source}" copié avec succès.`);
+    } catch(e) {
+        console.error(e);
     }
 }
 function runCommand(command) {

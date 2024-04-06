@@ -1,5 +1,5 @@
 import {toastController} from "@ionic/vue";
-import {alert, checkmark, close} from "ionicons/icons";
+import {alert, alertCircleOutline, checkmark, close} from "ionicons/icons";
 
 interface ToastOptions {
     message: string;
@@ -35,13 +35,19 @@ export class ToastService {
 
     static async error(message: string, options?: ToastOptions) {
         const toast = await toastController.create({
-            icon: close,
+            icon: alertCircleOutline,
             duration: options?.duration || 3000,
             message: message,
             color: "danger",
             position: 'top',
             animated: true,
-            cssClass: []
+            cssClass: [],
+            buttons: [
+                {
+                    icon: close,
+                    role: 'cancel',
+                }
+            ]
         });
         await toast.present();
     }

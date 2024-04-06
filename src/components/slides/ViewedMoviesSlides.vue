@@ -1,13 +1,20 @@
 <script setup lang="ts">
 
 import BaseSlide from "@/components/slides/BaseSlide.vue";
-import {ViewedMovie} from "@/models";
+import {WatchedMovie} from "@/models";
 import {useUserStore} from "@/stores/user";
-import {onMounted} from "vue";
-import {IonCard, IonLabel, IonText, IonGrid, IonCol, IonRow} from "@ionic/vue";
+import {computed, onMounted} from "vue";
+import {IonCard, IonCol, IonGrid, IonLabel, IonRow, IonText} from "@ionic/vue";
 import dayjs from "dayjs";
+import ImageNotFound from "@/components/images/ImageNotFound.vue";
 
 const userStore = useUserStore();
+
+const watchedMovies = computed(() => {
+  if (!userStore.user) return [];
+  return userStore.user.watchedMovies
+      .toSorted((a, b) => dayjs(b.watchedAt).unix() - dayjs(a.watchedAt).unix());
+});
 
 onMounted(() => {
   userStore.loadUser();
@@ -16,7 +23,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <ion-grid class="p-0">
+  <ion-grid class="p-0 mt-2">
     <ion-row>
 
       <ion-col class="p-0">
@@ -30,29 +37,30 @@ onMounted(() => {
     </ion-row>
   </ion-grid>
   <BaseSlide
-      v-if="userStore.viewedMovies.length > 0"
+      v-if="watchedMovies.length > 0"
       class="mt-2"
-      :items="userStore.viewedMovies"
+      :items="watchedMovies"
       :slides-per-view="2.3"
       :space-between="20"
   >
-    <template #default="{item: viewedMovie}: {item: ViewedMovie}">
-      <div v-if="viewedMovie" class="flex flex-col gap-y-2 rounded-xl">
+    <template #default="{item: watchedMovie}: {item: WatchedMovie}">
+      <div v-if="watchedMovie" class="flex flex-col gap-y-2 rounded-xl" style="max-width: 15em">
         <img
-            v-if="viewedMovie.movie.hasPoster"
+            v-if="watchedMovie.movie.posterUrls !== null"
             class="rounded-md"
-            :src="viewedMovie.movie.posterUrl.w185"
+            :src="watchedMovie.movie.posterUrls.w185"
+            style="min-height: 13.5em"
             alt="img"
-            @click="$router.push(`movie-details/${viewedMovie.movie.id}`)"
+            @click="$router.push(`/movies/${watchedMovie.movie.id}/details`)"
         >
-        <div v-else class="text-center py-10">Image not found</div>
+        <ImageNotFound v-else @click="$router.push(`/movies/${watchedMovie.movie.id}/details`)" />
 
         <div class="flex flex-col">
           <ion-text color="dark" class="whitespace-nowrap overflow-hidden text-ellipsis">
-            {{ viewedMovie.movie.title }}
+            {{ watchedMovie.movie.title }}
           </ion-text>
           <ion-text color="medium" class="text-xs">
-            Vu le {{ dayjs(viewedMovie.viewedAt).format('DD MMM YYYY') }}
+            Vu le {{ dayjs(watchedMovie.watchedAt).format('DD MMM YYYY') }}
           </ion-text>
         </div>
       </div>
