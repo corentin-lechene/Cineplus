@@ -2,7 +2,7 @@
   "name": "cineplus",
   "private": true,
   "version": "1.1.0",
-  "buildVersion": 6,
+  "buildVersion": 7,
   "type": "module",
   "scripts": {
     "dev": "vite",
