@@ -167,6 +167,7 @@ function resetApp(e: CustomEvent) {
   if (e?.detail?.data?.action === 'delete') {
     openResetModal.value = true;
     userStore.resetUser();
+    router.replace('/home');
   } else {
     openResetModal.value = false;
   }
